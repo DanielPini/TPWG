@@ -115,8 +115,8 @@ class OverworldMap {
 window.OverworldMaps = {
   LivingRoom: {
     id: "LivingRoom",
-    lowerSrc: "./images/maps/TPWGmaps/Living.png",
-    upperSrc: "./images/maps/TPWGmaps/LivingUpper.png",
+    lowerSrc: "./images/maps/TPWGMaps/Living.png",
+    upperSrc: "./images/maps/TPWGMaps/LivingUpper.png",
     configObjects: {
       hero: {
         type: "Person",
