@@ -1,79 +1,79 @@
 window.Enemies = {
-  "erio": {
+  erio: {
     name: "Erio",
-    src: "/images/characters/people/erio.png",
+    src: "images/characters/people/erio.png",
     pizzas: {
-      "a": {
+      a: {
         pizzaId: "s001",
         maxHp: 50,
         level: 1,
       },
-      "b": {
+      b: {
         pizzaId: "s002",
         maxHp: 50,
         level: 1,
       },
-    }
+    },
   },
-  "beth": {
+  beth: {
     name: "Beth",
-    src: "/images/characters/people/npc1.png",
+    src: "images/characters/people/npc1.png",
     pizzas: {
-      "a": {
+      a: {
         hp: 1,
         pizzaId: "f001",
         maxHp: 50,
         level: 1,
       },
-    }
+    },
   },
-  "chefRootie": {
+  chefRootie: {
     name: "Rootie",
-    src: "/images/characters/people/secondBoss.png",
+    src: "images/characters/people/secondBoss.png",
     pizzas: {
-      "a": {
+      a: {
         pizzaId: "f002",
         maxHp: 30,
         level: 2,
-      }
-    }
+      },
+    },
   },
-  "streetNorthBattle": {
+  streetNorthBattle: {
     name: "Pizza Thug",
-    src: "/images/characters/people/npc8.png",
+    src: "images/characters/people/npc8.png",
     pizzas: {
-      "a": {
+      a: {
         pizzaId: "s001",
         maxHp: 20,
         level: 1,
-      }
-    }
+      },
+    },
   },
-  "diningRoomBattle": {
+  diningRoomBattle: {
     name: "Pizza Thug",
-    src: "/images/characters/people/npc8.png",
+    src: "images/characters/people/npc8.png",
     pizzas: {
-      "a": {
+      a: {
         pizzaId: "s001",
         maxHp: 15,
         level: 1,
       },
-      "b": {
+      b: {
         pizzaId: "s002",
         maxHp: 15,
         level: 1,
-      }
-    }
+      },
+    },
   },
-  "streetBattle": {
+  streetBattle: {
     name: "Pizza Thug",
-    src: "/images/characters/people/npc8.png",
+    src: "images/characters/people/npc8.png",
     pizzas: {
-      "a": {
+      a: {
         pizzaId: "f002",
         maxHp: 25,
         level: 1,
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};

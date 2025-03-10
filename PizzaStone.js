@@ -3,12 +3,12 @@ class PizzaStone extends GameObject {
     super(config);
     this.sprite = new Sprite({
       gameObject: this,
-      src: "/images/characters/pizza-stone.png",
+      src: "images/characters/pizza-stone.png",
       animations: {
-        "used-down"   : [ [0,0] ],
-        "unused-down" : [ [1,0] ],
+        "used-down": [[0, 0]],
+        "unused-down": [[1, 0]],
       },
-      currentAnimation: "used-down"
+      currentAnimation: "used-down",
     });
     this.storyFlag = config.storyFlag;
     this.pizzas = config.pizzas;
@@ -16,25 +16,24 @@ class PizzaStone extends GameObject {
     this.talking = [
       {
         required: [this.storyFlag],
-        events: [
-          { type: "textMessage", text: "You have already used this." },
-        ]
+        events: [{ type: "textMessage", text: "You have already used this." }],
       },
       {
         events: [
-          { type: "textMessage", text: "Approaching the legendary pizza stone..." },
+          {
+            type: "textMessage",
+            text: "Approaching the legendary pizza stone...",
+          },
           { type: "craftingMenu", pizzas: this.pizzas },
           { type: "addStoryFlag", flag: this.storyFlag },
-        ]
-      }
-    ]
-
+        ],
+      },
+    ];
   }
 
   update() {
-   this.sprite.currentAnimation = playerState.storyFlags[this.storyFlag]
-    ? "used-down"
-    : "unused-down";
+    this.sprite.currentAnimation = playerState.storyFlags[this.storyFlag]
+      ? "used-down"
+      : "unused-down";
   }
-
 }
