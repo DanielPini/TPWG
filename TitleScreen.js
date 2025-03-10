@@ -8,7 +8,7 @@ class TitleScreen {
     return [
       {
         label: "New Game",
-        description: "Start a new pizza adventure.",
+        description: "Explore the world of The Parts We Give.",
         handler: () => {
           this.close();
           resolve();
@@ -31,7 +31,7 @@ class TitleScreen {
     this.element = document.createElement("div");
     this.element.classList.add("TitleScreen");
     this.element.innerHTML = `
-      <img class="TitleScreen_logo" src="./images/logo.png" alt="Pizza Legends" />
+      <img class="TitleScreen_logo" src="./images/TPWGTitle.png" alt="Pizza Legends" />
     `;
   }
 
