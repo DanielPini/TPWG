@@ -1,7 +1,7 @@
 window.Enemies = {
   erio: {
     name: "Erio",
-    src: "images/characters/people/erio.png",
+    src: "./images/characters/people/erio.png",
     pizzas: {
       a: {
         pizzaId: "s001",
@@ -17,7 +17,7 @@ window.Enemies = {
   },
   beth: {
     name: "Beth",
-    src: "images/characters/people/npc1.png",
+    src: "./images/characters/people/npc1.png",
     pizzas: {
       a: {
         hp: 1,
@@ -29,7 +29,7 @@ window.Enemies = {
   },
   chefRootie: {
     name: "Rootie",
-    src: "images/characters/people/secondBoss.png",
+    src: "./images/characters/people/secondBoss.png",
     pizzas: {
       a: {
         pizzaId: "f002",
@@ -40,7 +40,7 @@ window.Enemies = {
   },
   streetNorthBattle: {
     name: "Pizza Thug",
-    src: "images/characters/people/npc8.png",
+    src: "./images/characters/people/npc8.png",
     pizzas: {
       a: {
         pizzaId: "s001",
@@ -51,7 +51,7 @@ window.Enemies = {
   },
   diningRoomBattle: {
     name: "Pizza Thug",
-    src: "images/characters/people/npc8.png",
+    src: "./images/characters/people/npc8.png",
     pizzas: {
       a: {
         pizzaId: "s001",
@@ -67,7 +67,7 @@ window.Enemies = {
   },
   streetBattle: {
     name: "Pizza Thug",
-    src: "images/characters/people/npc8.png",
+    src: "./images/characters/people/npc8.png",
     pizzas: {
       a: {
         pizzaId: "f002",
