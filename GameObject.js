@@ -5,6 +5,7 @@ class GameObject {
     this.x = config.x || 0;
     this.y = config.y || 0;
     this.direction = config.direction || "down";
+    this.scale = config.scale || 1;
     this.sprite = new Sprite({
       gameObject: this,
       src: config.src || "/images/characters/people/hero.png",
@@ -23,16 +24,14 @@ class GameObject {
     //If we have a behavior, kick off after a short delay
     setTimeout(() => {
       this.doBehaviorEvent(map);
-    }, 10)
+    }, 10);
   }
 
-  update() {
-  }
+  update() {}
 
-  async doBehaviorEvent(map) { 
-
+  async doBehaviorEvent(map) {
     //I don't have config to do anything
-    if (this.behaviorLoop.length === 0 ) {
+    if (this.behaviorLoop.length === 0) {
       return;
     }
 
@@ -42,8 +41,8 @@ class GameObject {
         clearTimeout(this.retryTimeout);
       }
       this.retryTimeout = setTimeout(() => {
-        this.doBehaviorEvent(map)
-      }, 1000)
+        this.doBehaviorEvent(map);
+      }, 1000);
       return;
     }
 
@@ -53,19 +52,15 @@ class GameObject {
 
     //Create an event instance out of our next event config
     const eventHandler = new OverworldEvent({ map, event: eventConfig });
-    await eventHandler.init(); 
+    await eventHandler.init();
 
     //Setting the next event to fire
     this.behaviorLoopIndex += 1;
     if (this.behaviorLoopIndex === this.behaviorLoop.length) {
       this.behaviorLoopIndex = 0;
-    } 
+    }
 
     //Do it again!
     this.doBehaviorEvent(map);
-    
-
   }
-
-
 }
