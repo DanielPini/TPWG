@@ -71,6 +71,24 @@ class OverworldMap {
     });
   }
 
+  // Right after objects are mounted and the hero is in place:
+  triggerLoadCutscenes() {
+    Object.keys(this.cutsceneSpaces).forEach((coord) => {
+      this.cutsceneSpaces[coord].forEach((cutScene) => {
+        if (cutScene.triggerOnLoad) {
+          // Optionally check disqualify flags as before:
+          if (
+            cutScene.disqualify &&
+            cutScene.disqualify.some((sf) => playerState.storyFlags[sf])
+          ) {
+            return;
+          }
+          this.startCutscene(cutScene.events);
+        }
+      });
+    });
+  }
+
   async startCutscene(events) {
     this.isCutscenePlaying = true;
 
@@ -95,6 +113,15 @@ class OverworldMap {
     });
     if (!this.isCutscenePlaying && match && match.talking.length) {
       const relevantScenario = match.talking.find((scenario) => {
+        // If disqualify flags exist and any are set in playerState, skip this scenario:
+        console.log(scenario);
+        if (
+          scenario.disqualify &&
+          scenario.disqualify.some((sf) => playerState.storyFlags[sf])
+        ) {
+          return false;
+        }
+        // Otherwise ensure all required flags are set, if there are any:
         return (scenario.required || []).every((sf) => {
           return playerState.storyFlags[sf];
         });
@@ -107,7 +134,18 @@ class OverworldMap {
     const hero = this.gameObjects["hero"];
     const match = this.cutsceneSpaces[`${hero.x},${hero.y}`];
     if (!this.isCutscenePlaying && match) {
-      this.startCutscene(match[0].events);
+      const relevantCutscene = match.find((cutScene) => {
+        if (
+          cutScene.disqualify &&
+          cutScene.disqualify.some((sf) => playerState.storyFlags[sf])
+        ) {
+          return false;
+        }
+        return true;
+      });
+      if (relevantCutscene) {
+        this.startCutscene(match[0].events);
+      }
     }
   }
 }
@@ -121,8 +159,9 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(28),
-        y: utils.withGrid(23),
+        x: utils.withGrid(17),
+        y: utils.withGrid(27),
+        direction: "up",
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
       },
@@ -382,6 +421,65 @@ window.OverworldMaps = {
       return walls;
     })(),
     cutsceneSpaces: {
+      [utils.asGridCoord(17, 27)]: [
+        {
+          triggerOnLoad: true,
+          disqualify: ["SEEN_INTRO"],
+          events: [
+            { type: "addStoryFlag", flag: "SEEN_INTRO" },
+            {
+              type: "textMessage",
+              text: "* Welcome to a Work in Progress version of The Parts We Give | The Game *",
+            },
+            {
+              type: "textMessage",
+              text: "* The game was created and Published by Daniel Pini and FABLE ARTS based on and accompanying Christine Pan's Operetta. *",
+            },
+            // { type: "walk", who: "kitchenNpcA", direction: "down" },
+            // {
+            //   type: "stand",
+            //   who: "kitchenNpcA",
+            //   direction: "right",
+            //   time: 200,
+            // },
+            // { type: "stand", who: "hero", direction: "left", time: 200 },
+            // { type: "textMessage", text: "Ahem. Is this your best work?" },
+            // {
+            //   type: "textMessage",
+            //   text: "These pepperonis are completely unstable! The pepper shapes are all wrong!",
+            // },
+            // {
+            //   type: "textMessage",
+            //   text: "Don't even get me started on the mushrooms.",
+            // },
+            // { type: "textMessage", text: "You will never make it in pizza!" },
+            // {
+            //   type: "stand",
+            //   who: "kitchenNpcA",
+            //   direction: "right",
+            //   time: 200,
+            // },
+            // { type: "walk", who: "kitchenNpcA", direction: "up" },
+            // { type: "stand", who: "kitchenNpcA", direction: "up", time: 300 },
+            // { type: "stand", who: "hero", direction: "down", time: 400 },
+            {
+              type: "textMessage",
+              text: "* Please feel free to explore the map and characters. *",
+            },
+            {
+              type: "textMessage",
+              text: "* We hope you enjoy. *",
+            },
+            // {
+            //   type: "changeMap",
+            //   map: "Street",
+            //   x: utils.withGrid(5),
+            //   y: utils.withGrid(10),
+            //   direction: "down",
+            // },
+          ],
+        },
+      ],
       //   [utils.asGridCoord(7,4)]: [
       //     {
       //       events: [

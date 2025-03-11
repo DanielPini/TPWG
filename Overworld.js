@@ -91,6 +91,7 @@ class Overworld {
     this.map = new OverworldMap(mapConfig);
     this.map.overworld = this;
     this.map.mountObjects();
+    this.map.triggerLoadCutscenes();
 
     if (heroInitialState) {
       const { hero } = this.map.gameObjects;
@@ -111,12 +112,12 @@ class Overworld {
     //Create a new Progress tracker
     this.progress = new Progress();
 
-    //Show the title screen
-    // this.titleScreen = new TitleScreen({
-    //   progress: this.progress,
-    // });
-    // const useSaveFile = await this.titleScreen.init(container);
-    const useSaveFile = false;
+    // Show the title screen
+    this.titleScreen = new TitleScreen({
+      progress: this.progress,
+    });
+    const useSaveFile = await this.titleScreen.init(container);
+    // const useSaveFile = false;
 
     //Potentially load saved data
     let initialHeroState = null;
