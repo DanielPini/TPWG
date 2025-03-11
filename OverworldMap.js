@@ -121,8 +121,8 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(17),
-        y: utils.withGrid(28),
+        x: utils.withGrid(28),
+        y: utils.withGrid(23),
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
       },
@@ -203,197 +203,601 @@ window.OverworldMaps = {
       //   pizzas: ["v001", "f001"],
       // },
     },
-    walls: {
-      // Outside bounds
-      [utils.asGridCoord(3, 4)]: true,
-      [utils.asGridCoord(3, 5)]: true,
-      [utils.asGridCoord(3, 6)]: true,
-      [utils.asGridCoord(3, 7)]: true,
-      [utils.asGridCoord(3, 8)]: true,
-      [utils.asGridCoord(3, 9)]: true,
-      [utils.asGridCoord(3, 10)]: true,
-      [utils.asGridCoord(3, 11)]: true,
-      [utils.asGridCoord(3, 12)]: true,
-      [utils.asGridCoord(3, 13)]: true,
-      [utils.asGridCoord(3, 14)]: true,
-      [utils.asGridCoord(3, 15)]: true,
-      [utils.asGridCoord(3, 16)]: true,
-      [utils.asGridCoord(3, 17)]: true,
-      [utils.asGridCoord(3, 18)]: true,
-      [utils.asGridCoord(3, 19)]: true,
-      [utils.asGridCoord(4, 4)]: true,
-      [utils.asGridCoord(5, 4)]: true,
-      [utils.asGridCoord(6, 4)]: true,
-      [utils.asGridCoord(7, 4)]: true,
-      [utils.asGridCoord(8, 4)]: true,
-      [utils.asGridCoord(9, 4)]: true,
-      [utils.asGridCoord(10, 4)]: true,
-      [utils.asGridCoord(11, 4)]: true,
-      [utils.asGridCoord(12, 4)]: true,
-      [utils.asGridCoord(13, 4)]: true,
-      [utils.asGridCoord(14, 4)]: true,
-      [utils.asGridCoord(15, 4)]: true,
-      [utils.asGridCoord(15, 5)]: true,
-      [utils.asGridCoord(15, 6)]: true,
-      [utils.asGridCoord(15, 7)]: true,
-      [utils.asGridCoord(16, 4)]: true,
-      [utils.asGridCoord(17, 4)]: true,
-      [utils.asGridCoord(18, 4)]: true,
-      [utils.asGridCoord(19, 4)]: true,
-      [utils.asGridCoord(20, 4)]: true,
-      [utils.asGridCoord(21, 4)]: true,
-      [utils.asGridCoord(22, 4)]: true,
-      [utils.asGridCoord(23, 4)]: true,
-      [utils.asGridCoord(24, 4)]: true,
-      [utils.asGridCoord(24, 5)]: true,
-      [utils.asGridCoord(24, 6)]: true,
-      [utils.asGridCoord(24, 7)]: true,
-      [utils.asGridCoord(24, 8)]: true,
-      [utils.asGridCoord(24, 9)]: true,
-      [utils.asGridCoord(24, 10)]: true,
-      [utils.asGridCoord(24, 11)]: true,
-      [utils.asGridCoord(24, 12)]: true,
-      [utils.asGridCoord(24, 13)]: true,
-      [utils.asGridCoord(24, 14)]: true,
-      [utils.asGridCoord(25, 8)]: true,
-      [utils.asGridCoord(26, 8)]: true,
-      [utils.asGridCoord(27, 8)]: true,
-      [utils.asGridCoord(28, 8)]: true,
-      [utils.asGridCoord(28, 9)]: true,
-      [utils.asGridCoord(28, 10)]: true,
-      [utils.asGridCoord(28, 11)]: true,
-      [utils.asGridCoord(28, 12)]: true,
-      [utils.asGridCoord(28, 13)]: true,
-      [utils.asGridCoord(28, 14)]: true,
-      [utils.asGridCoord(29, 15)]: true,
-      [utils.asGridCoord(30, 16)]: true,
-      [utils.asGridCoord(29, 17)]: true,
-      [utils.asGridCoord(29, 18)]: true,
-      [utils.asGridCoord(29, 19)]: true,
-      [utils.asGridCoord(29, 20)]: true,
-      [utils.asGridCoord(29, 21)]: true,
-      [utils.asGridCoord(29, 22)]: true,
-      [utils.asGridCoord(30, 23)]: true,
-      [utils.asGridCoord(29, 24)]: true,
-      [utils.asGridCoord(28, 25)]: true,
-      [utils.asGridCoord(27, 26)]: true,
-      [utils.asGridCoord(26, 25)]: true,
-      [utils.asGridCoord(25, 25)]: true,
-      [utils.asGridCoord(24, 24)]: true,
-      [utils.asGridCoord(23, 23)]: true,
-      [utils.asGridCoord(24, 22)]: true,
-      [utils.asGridCoord(24, 21)]: true,
-      [utils.asGridCoord(24, 20)]: true,
-      [utils.asGridCoord(24, 19)]: true,
-      [utils.asGridCoord(23, 19)]: true,
-      [utils.asGridCoord(22, 19)]: true,
-      [utils.asGridCoord(21, 19)]: true,
-      [utils.asGridCoord(20, 19)]: true,
-      [utils.asGridCoord(20, 20)]: true,
-      [utils.asGridCoord(20, 21)]: true,
-      [utils.asGridCoord(20, 22)]: true,
-      [utils.asGridCoord(20, 23)]: true,
-      [utils.asGridCoord(20, 24)]: true,
-      [utils.asGridCoord(20, 25)]: true,
-      [utils.asGridCoord(20, 26)]: true,
-      [utils.asGridCoord(20, 27)]: true,
-      [utils.asGridCoord(19, 28)]: true,
-      [utils.asGridCoord(18, 28)]: true,
-      [utils.asGridCoord(17, 29)]: true,
-      [utils.asGridCoord(16, 28)]: true,
-      [utils.asGridCoord(15, 28)]: true,
-      [utils.asGridCoord(14, 27)]: true,
-      [utils.asGridCoord(14, 26)]: true,
-      [utils.asGridCoord(14, 25)]: true,
-      [utils.asGridCoord(14, 24)]: true,
-      [utils.asGridCoord(14, 23)]: true,
-      [utils.asGridCoord(14, 22)]: true,
-      [utils.asGridCoord(14, 21)]: true,
-      [utils.asGridCoord(14, 20)]: true,
-      [utils.asGridCoord(14, 19)]: true,
-      [utils.asGridCoord(13, 19)]: true,
-      [utils.asGridCoord(12, 19)]: true,
-      [utils.asGridCoord(11, 19)]: true,
-      [utils.asGridCoord(10, 19)]: true,
-      [utils.asGridCoord(9, 19)]: true,
-      [utils.asGridCoord(8, 19)]: true,
-      [utils.asGridCoord(7, 19)]: true,
-      [utils.asGridCoord(6, 19)]: true,
-      [utils.asGridCoord(5, 19)]: true,
-      [utils.asGridCoord(4, 19)]: true,
-      // Study table and chair
-      [utils.asGridCoord(5, 17)]: true,
-      [utils.asGridCoord(5, 18)]: true,
-      [utils.asGridCoord(6, 16)]: true,
-      [utils.asGridCoord(6, 17)]: true,
-      [utils.asGridCoord(6, 18)]: true,
-      [utils.asGridCoord(7, 17)]: true,
-      [utils.asGridCoord(7, 18)]: true,
-      // Dining table and chairs
-      [utils.asGridCoord(12, 11)]: true,
-      [utils.asGridCoord(13, 9)]: true,
-      [utils.asGridCoord(13, 10)]: true,
-      [utils.asGridCoord(13, 11)]: true,
-      [utils.asGridCoord(13, 12)]: true,
-      [utils.asGridCoord(13, 13)]: true,
-      [utils.asGridCoord(14, 10)]: true,
-      [utils.asGridCoord(14, 11)]: true,
-      [utils.asGridCoord(14, 12)]: true,
-      [utils.asGridCoord(15, 9)]: true,
-      [utils.asGridCoord(15, 10)]: true,
-      [utils.asGridCoord(15, 11)]: true,
-      [utils.asGridCoord(15, 12)]: true,
-      [utils.asGridCoord(15, 13)]: true,
-      [utils.asGridCoord(16, 10)]: true,
-      [utils.asGridCoord(16, 11)]: true,
-      [utils.asGridCoord(16, 12)]: true,
-      [utils.asGridCoord(17, 9)]: true,
-      [utils.asGridCoord(17, 10)]: true,
-      [utils.asGridCoord(17, 11)]: true,
-      [utils.asGridCoord(17, 12)]: true,
-      [utils.asGridCoord(17, 13)]: true,
-      [utils.asGridCoord(18, 11)]: true,
-      // Bar stools
-      [utils.asGridCoord(23, 9)]: true,
-      [utils.asGridCoord(23, 11)]: true,
-      [utils.asGridCoord(23, 13)]: true,
-      // Piano
-      [utils.asGridCoord(6, 5)]: true,
-      [utils.asGridCoord(7, 5)]: true,
-      [utils.asGridCoord(7, 6)]: true,
-      [utils.asGridCoord(8, 5)]: true,
-      // Sofa
-      [utils.asGridCoord(11, 5)]: true,
-      [utils.asGridCoord(12, 5)]: true,
+    walls: (function () {
+      let walls = {};
+      [
+        // Top wall
+        "4, 4",
+        "5, 4",
+        "6, 4",
+        "7, 4",
+        "8, 4",
+        "9, 4",
+        "10, 4",
+        "11, 4",
+        "12, 4",
+        "13, 4",
+        "14, 4",
+        "15, 4",
+        "15, 5",
+        "15, 6",
+        "15, 7",
+        "16, 4",
+        "17, 4",
+        "18, 4",
+        "19, 4",
+        "20, 4",
+        "21, 4",
+        "22, 4",
+        "23, 4",
+        "24, 4",
+        // Dividing wall to balcony
+        "24, 5",
+        "24, 6",
+        "24, 7",
+        "24, 8",
+        "24, 9",
+        "24, 10",
+        "24, 11",
+        "24, 12",
+        "24, 13",
+        "24, 14",
+        // Balcony balastrade
+        "25, 8",
+        "26, 8",
+        "27, 8",
+        "28, 8",
+        // Kitchen wall
+        "28, 9",
+        "28, 10",
+        "28, 11",
+        "28, 12",
+        "28, 13",
+        "28, 14",
+        "29, 15",
+        "30, 16",
+        "29, 17",
+        "29, 18",
+        "29, 19",
+        "29, 20",
+        "29, 21",
+        "29, 22",
+        "30, 23",
+        "29, 24",
+        "28, 25",
+        "27, 26",
+        "26, 25",
+        "25, 25",
+        "24, 24",
+        "23, 23",
+        "24, 22",
+        "24, 21",
+        "24, 20",
+        // Middle bottom wall
+        "24, 19",
+        "23, 19",
+        "22, 19",
+        "21, 19",
+        "20, 19",
+        // Entrance Hallway
+        "20, 20",
+        "20, 21",
+        "20, 22",
+        "20, 23",
+        "20, 24",
+        "20, 25",
+        "20, 26",
+        "20, 27",
+        "19, 28",
+        "18, 28",
+        "17, 29",
+        "16, 28",
+        "15, 28",
+        "14, 27",
+        "14, 26",
+        "14, 25",
+        "14, 24",
+        "14, 23",
+        "14, 22",
+        "14, 21",
+        "14, 20",
+        // Left Bottom wall
+        "14, 19",
+        "13, 19",
+        "12, 19",
+        "11, 19",
+        "10, 19",
+        "9, 19",
+        "8, 19",
+        "7, 19",
+        "6, 19",
+        "5, 19",
+        "4, 19",
+        // Left wall
+        "3, 4",
+        "3, 5",
+        "3, 6",
+        "3, 7",
+        "3, 8",
+        "3, 9",
+        "3, 10",
+        "3, 11",
+        "3, 12",
+        "3, 13",
+        "3, 14",
+        "3, 15",
+        "3, 16",
+        "3, 17",
+        "3, 18",
+        "3, 19",
+        // Assets
+        // Study table and chair
+        "5, 17",
+        "5, 18",
+        "6, 16",
+        "6, 17",
+        "6, 18",
+        "7, 17",
+        "7, 18",
+        // Dining table and chairs
+        "12, 11",
+        "13, 9",
+        "13, 10",
+        "13, 11",
+        "13, 12",
+        "13, 13",
+        "14, 10",
+        "14, 11",
+        "14, 12",
+        "15, 9",
+        "15, 10",
+        "15, 11",
+        "15, 12",
+        "15, 13",
+        "16, 10",
+        "16, 11",
+        "16, 12",
+        "17, 9",
+        "17, 10",
+        "17, 11",
+        "17, 12",
+        "17, 13",
+        "18, 11",
+        // Bar stools
+        "23, 9",
+        "23, 11",
+        "23, 13",
+        // Piano
+        "6, 5",
+        "7, 5",
+        "7, 6",
+        "8, 5",
+        // Sofa
+        "11, 5",
+        "12, 5",
+      ].forEach((coord) => {
+        let [x, y] = coord.split(",");
+        walls[utils.asGridCoord(x, y)] = true;
+      });
+      return walls;
+    })(),
+    cutsceneSpaces: {
+      //   [utils.asGridCoord(7,4)]: [
+      //     {
+      //       events: [
+      //         { who: "npcB", type: "walk",  direction: "left" },
+      //         { who: "npcB", type: "stand",  direction: "up", time: 500 },
+      //         { type: "textMessage", text:"You can't be in there!"},
+      //         { who: "npcB", type: "walk",  direction: "right" },
+      //         { who: "hero", type: "walk",  direction: "down" },
+      //         { who: "hero", type: "walk",  direction: "left" },
+      //       ]
+      //     }
+      //   ],
+      [utils.asGridCoord(29, 16)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "Kid",
+              x: utils.withGrid(1),
+              y: utils.withGrid(13),
+              direction: "right",
+            },
+          ],
+        },
+      ],
+      [utils.asGridCoord(29, 23)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "Bathroom",
+              x: utils.withGrid(1),
+              y: utils.withGrid(8),
+              direction: "right",
+            },
+          ],
+        },
+      ],
+      [utils.asGridCoord(27, 25)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "MasterBedroom",
+              x: utils.withGrid(8),
+              y: utils.withGrid(3),
+              direction: "down",
+            },
+          ],
+        },
+      ],
+      [utils.asGridCoord(24, 23)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "Laundry",
+              x: utils.withGrid(6),
+              y: utils.withGrid(8),
+              direction: "left",
+            },
+          ],
+        },
+      ],
     },
-    // cutsceneSpaces: {
-    //   [utils.asGridCoord(7,4)]: [
-    //     {
-    //       events: [
-    //         { who: "npcB", type: "walk",  direction: "left" },
-    //         { who: "npcB", type: "stand",  direction: "up", time: 500 },
-    //         { type: "textMessage", text:"You can't be in there!"},
-    //         { who: "npcB", type: "walk",  direction: "right" },
-    //         { who: "hero", type: "walk",  direction: "down" },
-    //         { who: "hero", type: "walk",  direction: "left" },
-    //       ]
-    //     }
-    //   ],
-    //   [utils.asGridCoord(5,10)]: [
-    //     {
-    //       events: [
-    //         {
-    //           type: "changeMap",
-    //           map: "Kitchen",
-    //           x: utils.withGrid(2),
-    //           y: utils.withGrid(2),
-    //           direction: "down"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
   },
+  Kid: {
+    id: "Kid",
+    lowerSrc: "./images/maps/TPWGMaps/Kid.png",
+    upperSrc: "",
+    configObjects: {
+      hero: {
+        type: "Person",
+        isPlayerControlled: true,
+        x: utils.withGrid(1),
+        y: utils.withGrid(9),
+        src: "./images/characters/people/Sister.png",
+        scale: 0.9,
+      },
+    },
+    walls: (function () {
+      let walls = {};
+      [
+        // Top wall
+        "2, 4",
+        "3, 4",
+        "4, 4",
+        "5, 4",
+        "6, 4",
+        "7, 4",
+        "8, 4",
+        "9, 4",
+        // Right wall
+        "10, 5",
+        "10, 6",
+        "10, 7",
+        "10, 8",
+        "10, 9",
+        "10, 10",
+        "10, 11",
+        "10, 12",
+        "10, 13",
+        "10, 14",
+        "10, 15",
+        // Bottom wall
+        "2, 16",
+        "3, 16",
+        "4, 16",
+        "5, 16",
+        "6, 16",
+        "7, 16",
+        "8, 16",
+        "9, 16",
+        // Right wall
+        // Left wall
+        "1, 5",
+        "1, 6",
+        "1, 7",
+        "1, 8",
+        "1, 9",
+        "1, 10",
+        "1, 11",
+        "1, 12",
+        "0, 13",
+        "1, 14",
+        "1, 15",
+        // Assets
+        // Desk and chair
+        "6, 14",
+        "6, 15",
+        "7, 13",
+        "7 ,14",
+        "7, 15",
+        "8, 14",
+        "8, 15",
+        // Beds
+        // Left
+        "2, 5",
+        "3, 5",
+        "2, 6",
+        "3, 6",
+        "2, 7",
+        "3, 7",
+        // Right
+        "7, 5",
+        "8, 5",
+        "7, 6",
+        "8, 6",
+        "7, 7",
+        "8, 7",
+      ].forEach((coord) => {
+        let [x, y] = coord.split(",");
+        walls[utils.asGridCoord(x, y)] = true;
+      });
+      return walls;
+    })(),
+    cutsceneSpaces: {
+      [utils.asGridCoord(1, 13)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "LivingRoom",
+              x: utils.withGrid(29),
+              y: utils.withGrid(16),
+              direction: "left",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  Bathroom: {
+    id: "Bathroom",
+    lowerSrc: "./images/maps/TPWGMaps/Bathroom.png",
+    upperSrc: "",
+    configObjects: {
+      hero: {
+        type: "Person",
+        isPlayerControlled: true,
+        x: utils.withGrid(1),
+        y: utils.withGrid(8),
+        src: "./images/characters/people/Sister.png",
+        scale: 0.9,
+      },
+    },
+    walls: (function () {
+      let walls = {};
+      [
+        // Top wall
+        "2, 3",
+        "3, 3",
+        "4, 3",
+        "5, 3",
+        "6, 3",
+        "7, 3",
+        "8, 3",
+        "9, 3",
+        // Right wall
+        "10, 4",
+        "10, 5",
+        "10, 6",
+        "10, 7",
+        "10, 8",
+        "10, 9",
+        "10, 10",
+        // Bottom wall
+        "2, 11",
+        "3, 11",
+        "4, 11",
+        "5, 11",
+        "6, 11",
+        "7, 11",
+        "8, 11",
+        "9, 11",
+        // Left wall
+        // Right wall
+        "1, 4",
+        "1, 5",
+        "1, 6",
+        "1, 7",
+        "0, 8",
+        "1, 9",
+        "1, 10",
+        // Assets
+      ].forEach((coord) => {
+        let [x, y] = coord.split(",");
+        walls[utils.asGridCoord(x, y)] = true;
+      });
+      return walls;
+    })(),
+    cutsceneSpaces: {
+      [utils.asGridCoord(1, 8)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "LivingRoom",
+              x: utils.withGrid(29),
+              y: utils.withGrid(23),
+              direction: "left",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  MasterBedroom: {
+    id: "MasterBedroom",
+    lowerSrc: "./images/maps/TPWGMaps/MasterBedroom.png",
+    upperSrc: "",
+    configObjects: {
+      hero: {
+        type: "Person",
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(3),
+        src: "./images/characters/people/Sister.png",
+        scale: 0.9,
+      },
+    },
+    walls: (function () {
+      let walls = {};
+      [
+        // Top wall
+        "1, 3",
+        "2, 3",
+        "3, 3",
+        "4, 3",
+        "5, 3",
+        "6, 3",
+        "7, 3",
+        "8, 2",
+        "9, 3",
+        // Right wall
+        "10, 4",
+        "10, 5",
+        "10, 6",
+        "10, 7",
+        "10, 8",
+        "10, 9",
+        "10, 10",
+        "10, 11",
+        // Bottom wall
+        "1, 12",
+        "2, 12",
+        "3, 12",
+        "4, 12",
+        "5, 12",
+        "6, 12",
+        "7, 12",
+        "8, 12",
+        "9, 12",
+        // Left wall
+        "0, 4",
+        "0, 5",
+        "0, 6",
+        "0, 7",
+        "0, 8",
+        "0, 9",
+        "0, 10",
+        "0, 11",
+        // Assets
+        // Closet
+        "1, 4",
+        "2, 4",
+        "3, 4",
+        "4, 4",
+        "5, 4",
+        // Stools
+        // Upper
+        "6, 4",
+        // Lower
+        "3, 11",
+        // Bed
+        "4, 8",
+        "4, 9",
+        "4, 10",
+        "4, 11",
+        "5, 8",
+        "5, 9",
+        "5, 10",
+        "5, 11",
+        "6, 8",
+        "6, 9",
+        "6, 10",
+        "6, 11",
+      ].forEach((coord) => {
+        let [x, y] = coord.split(",");
+        walls[utils.asGridCoord(x, y)] = true;
+      });
+      return walls;
+    })(),
+    cutsceneSpaces: {
+      [utils.asGridCoord(8, 3)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "LivingRoom",
+              x: utils.withGrid(27),
+              y: utils.withGrid(25),
+              direction: "up",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  Laundry: {
+    id: "Laundry",
+    lowerSrc: "./images/maps/TPWGMaps/Laundry.png",
+    upperSrc: "",
+    configObjects: {
+      hero: {
+        type: "Person",
+        isPlayerControlled: true,
+        x: utils.withGrid(9),
+        y: utils.withGrid(5),
+        src: "./images/characters/people/Sister.png",
+        scale: 0.9,
+      },
+    },
+    walls: (function () {
+      let walls = {};
+      [
+        // Top wall
+        "1, 3",
+        "2, 3",
+        "3, 3",
+        "4, 3",
+        "5, 3",
+        // Right wall
+        "6, 4",
+        "6, 5",
+        "6, 6",
+        "6, 7",
+        "7, 8",
+        "6, 9",
+        // Bottom wall
+        "1, 10",
+        "2, 10",
+        "3, 10",
+        "4, 10",
+        "5, 10",
+        // Left wall
+        "0, 4",
+        "0, 5",
+        "0, 6",
+        "0, 7",
+        "0, 8",
+        "0, 9",
+        // Assets
+      ].forEach((coord) => {
+        let [x, y] = coord.split(",");
+        walls[utils.asGridCoord(x, y)] = true;
+      });
+      return walls;
+    })(),
+    cutsceneSpaces: {
+      [utils.asGridCoord(6, 8)]: [
+        {
+          events: [
+            {
+              type: "changeMap",
+              map: "LivingRoom",
+              x: utils.withGrid(24),
+              y: utils.withGrid(23),
+              direction: "right",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   DemoRoom: {
     id: "DemoRoom",
     lowerSrc: "./images/maps/DemoLower.png",

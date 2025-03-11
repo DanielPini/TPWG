@@ -92,22 +92,17 @@ class Sprite {
     const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
     const scale = this.gameObject.scale || 1;
 
-    this.isShadowLoaded && ctx.drawImage(this.shadow, x, y);
+    this.isShadowLoaded && ctx.drawImage(this.shadow, x, y + 1);
 
     const [frameX, frameY] = this.frame;
 
     if (this.isLoaded) {
       ctx.save();
-      ctx.translate(x + 2, y);
+      ctx.translate(x + 2, y + 2);
       ctx.scale(scale, scale);
       ctx.drawImage(this.image, frameX * 32, frameY * 32, 32, 32, 0, 0, 32, 32);
       ctx.restore();
     }
-    // this.isLoaded && ctx.save()
-    // this.isLoaded && ctx.scale(scale, scale);
-
-    // this.isLoaded &&
-    //   ctx.drawImage(this.image, frameX * 32, frameY * 32, 32, 32, x, y, 32, 32);
 
     this.updateAnimationProgress();
   }
