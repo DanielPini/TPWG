@@ -159,8 +159,8 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(17),
-        y: utils.withGrid(27),
+        x: utils.withGrid(10),
+        y: utils.withGrid(25),
         direction: "up",
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
@@ -246,174 +246,169 @@ window.OverworldMaps = {
       let walls = {};
       [
         // Top wall
-        "4, 4",
-        "5, 4",
-        "6, 4",
-        "7, 4",
-        "8, 4",
-        "9, 4",
-        "10, 4",
-        "11, 4",
-        "12, 4",
-        "13, 4",
-        "14, 4",
-        "15, 4",
-        "15, 5",
-        "15, 6",
-        "15, 7",
-        "16, 4",
-        "17, 4",
-        "18, 4",
-        "19, 4",
-        "20, 4",
-        "21, 4",
-        "22, 4",
-        "23, 4",
-        "24, 4",
-        // Dividing wall to balcony
-        "24, 5",
-        "24, 6",
-        "24, 7",
-        "24, 8",
-        "24, 9",
-        "24, 10",
-        "24, 11",
-        "24, 12",
-        "24, 13",
-        "24, 14",
-        // Balcony balastrade
-        "25, 8",
-        "26, 8",
-        "27, 8",
-        "28, 8",
-        // Kitchen wall
-        "28, 9",
-        "28, 10",
-        "28, 11",
-        "28, 12",
-        "28, 13",
-        "28, 14",
-        "29, 15",
-        "30, 16",
-        "29, 17",
-        "29, 18",
-        "29, 19",
-        "29, 20",
-        "29, 21",
-        "29, 22",
-        "30, 23",
-        "29, 24",
-        "28, 25",
-        "27, 26",
-        "26, 25",
-        "25, 25",
-        "24, 24",
-        "23, 23",
-        "24, 22",
-        "24, 21",
-        "24, 20",
-        // Middle bottom wall
-        "24, 19",
-        "23, 19",
-        "22, 19",
-        "21, 19",
-        "20, 19",
-        // Entrance Hallway
-        "20, 20",
-        "20, 21",
-        "20, 22",
-        "20, 23",
-        "20, 24",
-        "20, 25",
-        "20, 26",
-        "20, 27",
-        "19, 28",
-        "18, 28",
-        "17, 29",
-        "16, 28",
-        "15, 28",
-        "14, 27",
-        "14, 26",
-        "14, 25",
-        "14, 24",
-        "14, 23",
-        "14, 22",
-        "14, 21",
-        "14, 20",
-        // Left Bottom wall
-        "14, 19",
-        "13, 19",
-        "12, 19",
-        "11, 19",
-        "10, 19",
-        "9, 19",
-        "8, 19",
-        "7, 19",
-        "6, 19",
-        "5, 19",
-        "4, 19",
-        // Left wall
-        "3, 4",
+        "0, 5",
+        "1, 5",
+        "2, 5",
         "3, 5",
-        "3, 6",
-        "3, 7",
-        "3, 8",
-        "3, 9",
-        "3, 10",
-        "3, 11",
-        "3, 12",
-        "3, 13",
-        "3, 14",
-        "3, 15",
-        "3, 16",
-        "3, 17",
-        "3, 18",
-        "3, 19",
-        // Assets
-        // Study table and chair
-        "5, 17",
-        "5, 18",
-        "6, 16",
-        "6, 17",
-        "6, 18",
-        "7, 17",
-        "7, 18",
-        // Dining table and chairs
-        "12, 11",
-        "13, 9",
-        "13, 10",
-        "13, 11",
-        "13, 12",
-        "13, 13",
-        "14, 10",
-        "14, 11",
-        "14, 12",
-        "15, 9",
-        "15, 10",
-        "15, 11",
-        "15, 12",
-        "15, 13",
-        "16, 10",
-        "16, 11",
-        "16, 12",
+        "4, 5",
+        "5, 5",
+        "6, 5",
+        "7, 5",
+        "8, 5",
+        // Dividing wall to balcony
+        "8, 5",
+        "8, 6",
+        "8, 7",
+        "8, 8",
+        // Balcony balastrade
+        "9, 5",
+        "10, 5",
+        "11, 5",
+        "12, 5",
+        "13, 5",
+        "14, 5",
+        "15, 5",
+        "16, 5",
+        // Balcony right wall
+        "17, 6",
+        "17, 7",
+        "17, 8",
+        // Kitchen divider
         "17, 9",
         "17, 10",
         "17, 11",
         "17, 12",
         "17, 13",
-        "18, 11",
+        "17, 14",
+        "17, 15",
+        // Kitchen
+        // Back wall & fridge
+        "18, 9",
+        "19, 9",
+        "20, 9",
+        // Right prep space
+        "21, 10",
+        "21, 11",
+        "21, 12",
+        "21, 13",
+        "21, 14",
+        "21, 15",
+        // Rigth wall
+        "22, 16",
+        "23, 17", // Door to Kid's room
+        "22, 18",
+        "22, 19",
+        "22, 20",
+        "22, 21",
+        "22, 22",
+        "23, 23", // Door to bathroom
+        "22, 24",
+        "21, 25",
+        "20, 26", // Door to master bedroom
+        "19, 25",
+        "18, 24",
+        "17, 23", // Door to laundry
+        "18, 22",
+        "18, 21",
+        "18, 20",
+        "18, 19",
+        // Middle bottom wall
+        "13, 19",
+        "14, 19",
+        "15, 19",
+        "16, 19",
+        "17, 19",
+        // Entrance Hallway
+        // Right wll
+        "12,19",
+        "12,20",
+        "12,21",
+        "12,22",
+        "12,23",
+        "12,24",
+        "12,25",
+        // Bottom wall
+        "9, 26",
+        "10, 26",
+        "11, 26",
+        // Left wall
+        "8, 19",
+        "8, 20",
+        "8, 21",
+        "8, 22",
+        "8, 23",
+        "8, 24",
+        "8, 25",
+        // Left Bottom wall
+        "0, 19",
+        "1, 19",
+        "2, 19",
+        "3, 19",
+        "4, 19",
+        "5, 19",
+        "6, 19",
+        "7, 19",
+        // Left wall
+        "-1, 6",
+        "-1, 7",
+        "-1, 8",
+        "-1, 9",
+        "-1, 10",
+        "-1, 11",
+        "-1, 12",
+        "-1, 13",
+        "-1, 14",
+        "-1, 15",
+        "-1, 16",
+        "-1, 17",
+        "-1, 18",
+        "-1, 19",
+        // Assets
+        // Study table and chair
+        "2, 16",
+        "1, 17",
+        "2, 17",
+        "3, 17",
+        "1, 18",
+        "2, 18",
+        "3, 18",
+        // Dining table and chairs
+        "7, 11",
+        "9, 11",
+        "11, 11",
+        "7, 12",
+        "8, 12",
+        "9, 12",
+        "10, 12",
+        "11, 12",
+        "6, 13",
+        "7, 13",
+        "8, 13",
+        "9, 13",
+        "10, 13",
+        "11, 13",
+        "12, 13",
+        "7, 14",
+        "8, 14",
+        "9, 14",
+        "10, 14",
+        "11, 14",
+        "7, 15",
+        "9, 15",
+        "11, 15",
         // Bar stools
-        "23, 9",
-        "23, 11",
-        "23, 13",
+        "16, 10",
+        "16, 12",
+        "16, 14",
         // Piano
-        "6, 5",
-        "7, 5",
-        "7, 6",
-        "8, 5",
+        "1, 6",
+        "2, 6",
+        "3, 6",
+        "2, 7",
         // Sofa
-        "11, 5",
-        "12, 5",
+        "5, 6",
+        "6, 6",
+        "7, 6",
       ].forEach((coord) => {
         let [x, y] = coord.split(",");
         walls[utils.asGridCoord(x, y)] = true;
@@ -429,115 +424,73 @@ window.OverworldMaps = {
             { type: "addStoryFlag", flag: "SEEN_INTRO" },
             {
               type: "textMessage",
-              text: "* Welcome to a Work in Progress version of The Parts We Give | The Game *",
+              text: "* Welcome to the world of The Parts We Give *",
             },
             {
               type: "textMessage",
-              text: "* The game was created and Published by Daniel Pini and FABLE ARTS based on and accompanying Christine Pan's Operetta. *",
-            },
-            // { type: "walk", who: "kitchenNpcA", direction: "down" },
-            // {
-            //   type: "stand",
-            //   who: "kitchenNpcA",
-            //   direction: "right",
-            //   time: 200,
-            // },
-            // { type: "stand", who: "hero", direction: "left", time: 200 },
-            // { type: "textMessage", text: "Ahem. Is this your best work?" },
-            // {
-            //   type: "textMessage",
-            //   text: "These pepperonis are completely unstable! The pepper shapes are all wrong!",
-            // },
-            // {
-            //   type: "textMessage",
-            //   text: "Don't even get me started on the mushrooms.",
-            // },
-            // { type: "textMessage", text: "You will never make it in pizza!" },
-            // {
-            //   type: "stand",
-            //   who: "kitchenNpcA",
-            //   direction: "right",
-            //   time: 200,
-            // },
-            // { type: "walk", who: "kitchenNpcA", direction: "up" },
-            // { type: "stand", who: "kitchenNpcA", direction: "up", time: 300 },
-            // { type: "stand", who: "hero", direction: "down", time: 400 },
-            {
-              type: "textMessage",
-              text: "* Please feel free to explore the map and characters. *",
+              text: "* In this work in progress game, you can discover the scenes and characters from Christine Pan's The Parts We Give operetta *",
             },
             {
               type: "textMessage",
-              text: "* We hope you enjoy. *",
+              text: "* Please feel free to explore the map and characters and let us know what you think *",
             },
-            // {
-            //   type: "changeMap",
-            //   map: "Street",
-            //   x: utils.withGrid(5),
-            //   y: utils.withGrid(10),
-            //   direction: "down",
-            // },
+            {
+              type: "textMessage",
+              text: "* This game was created and Published by Daniel Pini and FABLE ARTS based on and accompanying Christine Pan's Operetta *",
+            },
+            {
+              type: "textMessage",
+              text: "* We hope you enjoy the game ☺️ *",
+            },
           ],
         },
       ],
-      //   [utils.asGridCoord(7,4)]: [
-      //     {
-      //       events: [
-      //         { who: "npcB", type: "walk",  direction: "left" },
-      //         { who: "npcB", type: "stand",  direction: "up", time: 500 },
-      //         { type: "textMessage", text:"You can't be in there!"},
-      //         { who: "npcB", type: "walk",  direction: "right" },
-      //         { who: "hero", type: "walk",  direction: "down" },
-      //         { who: "hero", type: "walk",  direction: "left" },
-      //       ]
-      //     }
-      //   ],
-      [utils.asGridCoord(29, 16)]: [
+      [utils.asGridCoord(22, 17)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "Kid",
-              x: utils.withGrid(1),
+              x: utils.withGrid(0),
               y: utils.withGrid(13),
               direction: "right",
             },
           ],
         },
       ],
-      [utils.asGridCoord(29, 23)]: [
+      [utils.asGridCoord(22, 23)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "Bathroom",
-              x: utils.withGrid(1),
+              x: utils.withGrid(0),
               y: utils.withGrid(8),
               direction: "right",
             },
           ],
         },
       ],
-      [utils.asGridCoord(27, 25)]: [
+      [utils.asGridCoord(20, 25)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "MasterBedroom",
-              x: utils.withGrid(8),
+              x: utils.withGrid(7),
               y: utils.withGrid(3),
               direction: "down",
             },
           ],
         },
       ],
-      [utils.asGridCoord(24, 23)]: [
+      [utils.asGridCoord(18, 23)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "Laundry",
-              x: utils.withGrid(6),
+              x: utils.withGrid(5),
               y: utils.withGrid(8),
               direction: "left",
             },
@@ -564,6 +517,7 @@ window.OverworldMaps = {
       let walls = {};
       [
         // Top wall
+        "1, 4",
         "2, 4",
         "3, 4",
         "4, 4",
@@ -571,20 +525,20 @@ window.OverworldMaps = {
         "6, 4",
         "7, 4",
         "8, 4",
-        "9, 4",
         // Right wall
-        "10, 5",
-        "10, 6",
-        "10, 7",
-        "10, 8",
-        "10, 9",
-        "10, 10",
-        "10, 11",
-        "10, 12",
-        "10, 13",
-        "10, 14",
-        "10, 15",
+        "9, 5",
+        "9, 6",
+        "9, 7",
+        "9, 8",
+        "9, 9",
+        "9, 10",
+        "9, 11",
+        "9, 12",
+        "9, 13",
+        "9, 14",
+        "9, 15",
         // Bottom wall
+        "1, 16",
         "2, 16",
         "3, 16",
         "4, 16",
@@ -592,37 +546,35 @@ window.OverworldMaps = {
         "6, 16",
         "7, 16",
         "8, 16",
-        "9, 16",
-        // Right wall
         // Left wall
-        "1, 5",
-        "1, 6",
-        "1, 7",
-        "1, 8",
-        "1, 9",
-        "1, 10",
-        "1, 11",
-        "1, 12",
-        "0, 13",
-        "1, 14",
-        "1, 15",
+        "0, 5",
+        "0, 6",
+        "0, 7",
+        "0, 8",
+        "0, 9",
+        "0, 10",
+        "0, 11",
+        "0, 12",
+        "-1, 13",
+        "0, 14",
+        "0, 15",
         // Assets
         // Desk and chair
-        "6, 14",
+        "6, 13",
+        "5, 14",
+        "6 ,14",
+        "7, 14",
+        "5, 15",
         "6, 15",
-        "7, 13",
-        "7 ,14",
         "7, 15",
-        "8, 14",
-        "8, 15",
         // Beds
         // Left
+        "1, 5",
         "2, 5",
-        "3, 5",
+        "1, 6",
         "2, 6",
-        "3, 6",
+        "1, 7",
         "2, 7",
-        "3, 7",
         // Right
         "7, 5",
         "8, 5",
@@ -637,14 +589,14 @@ window.OverworldMaps = {
       return walls;
     })(),
     cutsceneSpaces: {
-      [utils.asGridCoord(1, 13)]: [
+      [utils.asGridCoord(0, 13)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "LivingRoom",
-              x: utils.withGrid(29),
-              y: utils.withGrid(16),
+              x: utils.withGrid(22),
+              y: utils.withGrid(17),
               direction: "left",
             },
           ],
@@ -660,7 +612,7 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(1),
+        x: utils.withGrid(0),
         y: utils.withGrid(8),
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
@@ -670,6 +622,7 @@ window.OverworldMaps = {
       let walls = {};
       [
         // Top wall
+        "1, 3",
         "2, 3",
         "3, 3",
         "4, 3",
@@ -677,16 +630,16 @@ window.OverworldMaps = {
         "6, 3",
         "7, 3",
         "8, 3",
-        "9, 3",
         // Right wall
-        "10, 4",
-        "10, 5",
-        "10, 6",
-        "10, 7",
-        "10, 8",
-        "10, 9",
-        "10, 10",
+        "9, 4",
+        "9, 5",
+        "9, 6",
+        "9, 7",
+        "9, 8",
+        "9, 9",
+        "9, 10",
         // Bottom wall
+        "1, 11",
         "2, 11",
         "3, 11",
         "4, 11",
@@ -694,16 +647,15 @@ window.OverworldMaps = {
         "6, 11",
         "7, 11",
         "8, 11",
-        "9, 11",
         // Left wall
         // Right wall
-        "1, 4",
-        "1, 5",
-        "1, 6",
-        "1, 7",
-        "0, 8",
-        "1, 9",
-        "1, 10",
+        "0, 4",
+        "0, 5",
+        "0, 6",
+        "0, 7",
+        "-1, 8",
+        "0, 9",
+        "0, 10",
         // Assets
       ].forEach((coord) => {
         let [x, y] = coord.split(",");
@@ -712,13 +664,13 @@ window.OverworldMaps = {
       return walls;
     })(),
     cutsceneSpaces: {
-      [utils.asGridCoord(1, 8)]: [
+      [utils.asGridCoord(0, 8)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "LivingRoom",
-              x: utils.withGrid(29),
+              x: utils.withGrid(22),
               y: utils.withGrid(23),
               direction: "left",
             },
@@ -735,7 +687,7 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(8),
+        x: utils.withGrid(7),
         y: utils.withGrid(3),
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
@@ -745,25 +697,26 @@ window.OverworldMaps = {
       let walls = {};
       [
         // Top wall
+        "0, 3",
         "1, 3",
         "2, 3",
         "3, 3",
         "4, 3",
         "5, 3",
         "6, 3",
-        "7, 3",
-        "8, 2",
-        "9, 3",
+        "7, 2",
+        "8, 3",
         // Right wall
-        "10, 4",
-        "10, 5",
-        "10, 6",
-        "10, 7",
-        "10, 8",
-        "10, 9",
-        "10, 10",
-        "10, 11",
+        "9, 4",
+        "9, 5",
+        "9, 6",
+        "9, 7",
+        "9, 8",
+        "9, 9",
+        "9, 10",
+        "9, 11",
         // Bottom wall
+        "0, 12",
         "1, 12",
         "2, 12",
         "3, 12",
@@ -772,29 +725,32 @@ window.OverworldMaps = {
         "6, 12",
         "7, 12",
         "8, 12",
-        "9, 12",
         // Left wall
-        "0, 4",
-        "0, 5",
-        "0, 6",
-        "0, 7",
-        "0, 8",
-        "0, 9",
-        "0, 10",
-        "0, 11",
+        "-1, 4",
+        "-1, 5",
+        "-1, 6",
+        "-1, 7",
+        "-1, 8",
+        "-1, 9",
+        "-1, 10",
+        "-1, 11",
         // Assets
         // Closet
+        "0, 4",
         "1, 4",
         "2, 4",
         "3, 4",
         "4, 4",
-        "5, 4",
         // Stools
         // Upper
-        "6, 4",
+        "5, 4",
         // Lower
-        "3, 11",
+        "2, 11",
         // Bed
+        "3, 8",
+        "3, 9",
+        "3, 10",
+        "3, 11",
         "4, 8",
         "4, 9",
         "4, 10",
@@ -803,10 +759,6 @@ window.OverworldMaps = {
         "5, 9",
         "5, 10",
         "5, 11",
-        "6, 8",
-        "6, 9",
-        "6, 10",
-        "6, 11",
       ].forEach((coord) => {
         let [x, y] = coord.split(",");
         walls[utils.asGridCoord(x, y)] = true;
@@ -814,13 +766,13 @@ window.OverworldMaps = {
       return walls;
     })(),
     cutsceneSpaces: {
-      [utils.asGridCoord(8, 3)]: [
+      [utils.asGridCoord(7, 3)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "LivingRoom",
-              x: utils.withGrid(27),
+              x: utils.withGrid(20),
               y: utils.withGrid(25),
               direction: "up",
             },
@@ -837,7 +789,7 @@ window.OverworldMaps = {
       hero: {
         type: "Person",
         isPlayerControlled: true,
-        x: utils.withGrid(9),
+        x: utils.withGrid(8),
         y: utils.withGrid(5),
         src: "./images/characters/people/Sister.png",
         scale: 0.9,
@@ -847,31 +799,31 @@ window.OverworldMaps = {
       let walls = {};
       [
         // Top wall
+        "0, 3",
         "1, 3",
         "2, 3",
         "3, 3",
         "4, 3",
-        "5, 3",
         // Right wall
-        "6, 4",
-        "6, 5",
-        "6, 6",
-        "6, 7",
-        "7, 8",
-        "6, 9",
+        "5, 4",
+        "5, 5",
+        "5, 6",
+        "5, 7",
+        "6, 8",
+        "5, 9",
         // Bottom wall
+        "0, 10",
         "1, 10",
         "2, 10",
         "3, 10",
         "4, 10",
-        "5, 10",
         // Left wall
-        "0, 4",
-        "0, 5",
-        "0, 6",
-        "0, 7",
-        "0, 8",
-        "0, 9",
+        "-1, 4",
+        "-1, 5",
+        "-1, 6",
+        "-1, 7",
+        "-1, 8",
+        "-1, 9",
         // Assets
       ].forEach((coord) => {
         let [x, y] = coord.split(",");
@@ -880,13 +832,13 @@ window.OverworldMaps = {
       return walls;
     })(),
     cutsceneSpaces: {
-      [utils.asGridCoord(6, 8)]: [
+      [utils.asGridCoord(5, 8)]: [
         {
           events: [
             {
               type: "changeMap",
               map: "LivingRoom",
-              x: utils.withGrid(24),
+              x: utils.withGrid(18),
               y: utils.withGrid(23),
               direction: "right",
             },

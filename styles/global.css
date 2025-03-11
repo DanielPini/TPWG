@@ -1,15 +1,17 @@
 :root {
-  --border-color: #291D4D;
-  --dialog-background: #FFF3B4;
+  --border-color: #291d4d;
+  --dialog-background: #fff3b4;
 
-  --menu-background: #FFE8D2;
-  --menu-border-color: #A48465;
-  --menu-font-color: #3A160D;
+  --menu-background: #ffe8d2;
+  --menu-border-color: #a48465;
+  --menu-font-color: #3a160d;
   --menu-selected-background: #7fc2ff;
 }
 
 * {
-  box-sizing:border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -17,13 +19,14 @@ body {
   padding: 0;
   margin: 0;
   overflow: hidden;
-  font-family: 'Ribeye', cursive;
+  font-family: "Ribeye", cursive;
 }
 .how-to-play {
   position: absolute;
-  left:0; right:0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  text-align:center;
+  text-align: center;
   font-size: 12px;
   color: #fff;
 }
