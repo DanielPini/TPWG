@@ -2,7 +2,7 @@
   --border-color: #291d4d;
   --dialog-background: #fff3b4;
 
-  --menu-background: #ffe8d2;
+  --menu-background: #fdefe3;
   --menu-border-color: #a48465;
   --menu-font-color: #3a160d;
   --menu-selected-background: #7fc2ff;
@@ -19,7 +19,7 @@ body {
   padding: 0;
   margin: 0;
   overflow: hidden;
-  font-family: "Ribeye", cursive;
+  font-family: "Charm", "Ribeye", cursive;
 }
 .how-to-play {
   position: absolute;
@@ -33,7 +33,7 @@ body {
 
 .game-container {
   position: relative;
-  background: #9ae2ff;
+  background: hsl(197, 30%, 60%);
   width: 352px;
   height: 198px;
   margin: 0 auto;

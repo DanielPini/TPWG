@@ -96,6 +96,11 @@ class OverworldEvent {
     battle.init(document.querySelector(".game-container"));
   }
 
+  playMusic(resolve) {
+    this.map.handleMusicEvent(this.event);
+    resolve();
+  }
+
   pause(resolve) {
     this.map.isPaused = true;
     const menu = new PauseMenu({
@@ -111,7 +116,6 @@ class OverworldEvent {
 
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;
-    console.log(window.playerState.storyFlags);
     resolve();
   }
 

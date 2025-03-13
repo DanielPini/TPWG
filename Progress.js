@@ -7,6 +7,20 @@ class Progress {
     this.saveFileKey = "PizzaLegends_SaveFile1";
   }
 
+  // Method to retrieve music based on the current map
+  getMusicForMap(mapId) {
+    const musicMap = {
+      // LivingRoom: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+      // Kitchen: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
+      Kid: "./audio/Timestables_kid-audio.mp3",
+      // Balcony: "./audio/JieJie_balcony-audio.mp3",
+      // Entrance: "./audio/We_Song_entryway-audio.mp3",
+      // Dining: "./audio/Barangaroo_Baby_dining-audio.mp3",
+      // Add more maps and corresponding music here
+    };
+    return musicMap[mapId] || "./audio/We_Song_entryway-audio.mp3"; // Default music if no match
+  }
+
   save() {
     window.localStorage.setItem(
       this.saveFileKey,

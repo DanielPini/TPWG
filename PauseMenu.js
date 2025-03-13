@@ -7,19 +7,14 @@ class PauseMenu {
   getOptions(pageKey) {
     //Case 1: Show the first page of options
     if (pageKey === "root") {
-      const lineupPizzas = playerState.lineup.map((id) => {
-        const { pizzaId } = playerState.pizzas[id];
-        const base = Pizzas[pizzaId];
-        return {
-          label: base.name,
-          description: base.description,
-          handler: () => {
-            this.keyboardMenu.setOptions(this.getOptions(id));
-          },
-        };
-      });
       return [
-        // ...lineupPizzas,
+        {
+          label: "Sound Options",
+          description: "Adjust mute and volume",
+          handler: () => {
+            this.keyboardMenu.setOptions(this.getSoundOptions());
+          },
+        },
         {
           label: "Save",
           description: "Save your progress",
@@ -69,6 +64,68 @@ class PauseMenu {
       {
         label: "Back",
         description: "Back to root menu",
+        handler: () => {
+          this.keyboardMenu.setOptions(this.getOptions("root"));
+        },
+      },
+    ];
+  }
+
+  getSoundOptions() {
+    return [
+      {
+        label: window.audioSettings.isMuted ? "Unmute" : "Mute",
+        description: window.audioSettings.isMuted
+          ? "Currently muted. Click to unmute."
+          : "Currently unmuted. Click to mute.",
+        handler: () => {
+          window.audioSettings.isMuted = !window.audioSettings.isMuted;
+          localStorage.setItem(
+            "audioSettings",
+            JSON.stringify(window.audioSettings)
+          );
+          Howler.mute(window.audioSettings.isMuted);
+          this.keyboardMenu.setOptions(this.getSoundOptions()); // Refresh menu
+        },
+      },
+      {
+        label: "Volume Up",
+        description: "Increase volume by 10%",
+        handler: () => {
+          let newVolume = Math.min(1, window.audioSettings.volume + 0.1);
+          window.audioSettings.volume = newVolume;
+          localStorage.setItem(
+            "audioSettings",
+            JSON.stringify(window.audioSettings)
+          );
+          Howler.volume(newVolume);
+          this.keyboardMenu.setOptions(this.getSoundOptions()); // Refresh menu
+        },
+      },
+      {
+        label: "Volume Down",
+        description: "Decrease volume by 10%",
+        handler: () => {
+          let newVolume = Math.max(0, window.audioSettings.volume - 0.1);
+          window.audioSettings.volume = newVolume;
+          localStorage.setItem(
+            "audioSettings",
+            JSON.stringify(window.audioSettings)
+          );
+          Howler.volume(newVolume);
+          this.keyboardMenu.setOptions(this.getSoundOptions()); // Refresh menu
+        },
+      },
+      {
+        label: `Current Volume: ${(window.audioSettings.volume * 100).toFixed(
+          0
+        )}%`,
+        description: window.audioSettings.isMuted ? "Muted" : "Sound On",
+        handler: () => {},
+      },
+      {
+        label: "Back",
+        description: "Return to main menu",
         handler: () => {
           this.keyboardMenu.setOptions(this.getOptions("root"));
         },

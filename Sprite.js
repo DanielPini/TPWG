@@ -92,7 +92,7 @@ class Sprite {
     const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
     const scale = this.gameObject.scale || 1;
 
-    this.isShadowLoaded && ctx.drawImage(this.shadow, x, y + 1);
+    this.isShadowLoaded && ctx.drawImage(this.shadow, x, y + 5);
 
     const [frameX, frameY] = this.frame;
 
