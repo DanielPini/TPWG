@@ -47,6 +47,10 @@ class Sprite {
         [3, 3],
         [0, 3],
       ],
+      "sit-down": [0, 4],
+      "sit-right": [1, 4],
+      "sit-up": [2, 4],
+      "sit-left": [3, 4],
     };
     this.currentAnimation = config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;

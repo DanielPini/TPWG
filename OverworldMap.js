@@ -5,6 +5,7 @@ class OverworldMap {
     this.gameObjects = {}; // Starts empty, live object instances in the map get added here
     this.cutsceneSpaces = config.cutsceneSpaces || {};
     this.walls = config.walls || {};
+    this.chairs = config.chairs || {};
 
     this.lowerImage = new Image();
     this.lowerImage.src = config.lowerSrc;
@@ -134,6 +135,7 @@ class OverworldMap {
     const hero = this.gameObjects["hero"];
     const match = this.cutsceneSpaces[`${hero.x},${hero.y}`];
 
+    this.checkForChair();
     if (!this.isCutscenePlaying && match) {
       const relevantCutscene = match.find((cutScene) => {
         if (
@@ -148,6 +150,27 @@ class OverworldMap {
       if (relevantCutscene) {
         this.startCutscene(match[0].events);
       }
+    }
+  }
+
+  getChairAt(x, y) {
+    return this.chairs[utils.asGridCoord(x, y)] || null;
+  }
+
+  checkForChair() {
+    console.log("checkForChair CALLED");
+    const hero = this.gameObjects["hero"];
+    const { x, y } = hero;
+    const chair = this.getChairAt(x, y);
+
+    if (!this.isCutscenePlaying && chair) {
+      console.log("in checkforchair");
+      console.log("chair found");
+      hero.isSitting = true;
+      hero.startBehavior(this, {
+        type: "sit",
+        direction: chair.direction || hero.direction,
+      });
     }
   }
 
@@ -200,10 +223,44 @@ window.OverworldMaps = {
         x: utils.withGrid(10),
         y: utils.withGrid(25),
         direction: "up",
+        src: "./images/characters/people/Brother.png",
+        scale: 1,
+      },
+      sister: {
+        type: "Person",
+        x: utils.withGrid(4),
+        y: utils.withGrid(10),
         src: "./images/characters/people/Sister.png",
-        scale: 0.9,
+        behaviorLoop: [
+          { type: "walk", direction: "left" },
+          { type: "walk", direction: "down" },
+          { type: "walk", direction: "right" },
+          { type: "walk", direction: "up" },
+          { type: "stand", direction: "up", time: 400 },
+        ],
+        talking: [
+          {
+            required: [],
+            events: [
+              {
+                type: "textMessage",
+                text: "Are you excited for the game?",
+                faceHero: "sister",
+              },
+            ],
+          },
+        ],
       },
     },
+    chairs: (function () {
+      let chairs = {};
+      ["2, 16, down"].forEach((coord) => {
+        let [x, y, direction] = coord.split(",");
+        chairs[utils.asGridCoord(x, y)] = { direction };
+      });
+      console.log("Chairs:", chairs); // << This should show up
+      return chairs;
+    })(),
     walls: (function () {
       let walls = {};
       [
@@ -327,7 +384,6 @@ window.OverworldMaps = {
         "-1, 19",
         // Assets
         // Study table and chair
-        "2, 16",
         "1, 17",
         "2, 17",
         "3, 17",
@@ -379,6 +435,35 @@ window.OverworldMaps = {
     })(),
     cutsceneSpaces: {
       // First entrance
+      // [utils.asGridCoord(17, 27)]: [
+      //   {
+      //     triggerOnLoad: true,
+      //     disqualify: ["SEEN_INTRO"],
+      //     events: [
+      //       { type: "addStoryFlag", flag: "SEEN_INTRO" },
+      //       {
+      //         type: "textMessage",
+      //         text: "* Welcome to the world of The Parts We Give *",
+      //       },
+      //       {
+      //         type: "textMessage",
+      //         text: "* In this work in progress game, you can discover the scenes and characters from Christine Pan's The Parts We Give operetta *",
+      //       },
+      //       {
+      //         type: "textMessage",
+      //         text: "* Please feel free to explore the map and characters and let us know what you think *",
+      //       },
+      //       {
+      //         type: "textMessage",
+      //         text: "* This game was created and Published by Daniel Pini and FABLE ARTS based on and accompanying Christine Pan's Operetta *",
+      //       },
+      //       {
+      //         type: "textMessage",
+      //         text: "* We hope you enjoy the game ☺️ *",
+      //       },
+      //     ],
+      //   },
+      // ],
       [utils.asGridCoord(10, 25)]: [
         {
           events: [
@@ -446,569 +531,6 @@ window.OverworldMaps = {
               type: "playMusic",
               src: "./audio/We_Song_entryway-audio.mp3",
               loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(10, 18)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/We_Song_entryway-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(11, 18)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/We_Song_entryway-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(8, 18)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(8, 17)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(9, 17)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(10, 17)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(11, 17)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(12, 17)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(12, 18)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Kitchen
-      [utils.asGridCoord(19, 15)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(20, 15)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(21, 15)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Outside of Kitchen
-      [utils.asGridCoord(19, 16)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(20, 16)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(21, 16)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Dining room
-      [utils.asGridCoord(8, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(8, 10)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(8, 11)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(5, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(4, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(3, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(2, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(1, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(0, 13)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Outside of Dining
-      [utils.asGridCoord(9, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(9, 10)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(9, 11)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(5, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(4, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(3, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(2, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(1, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(0, 14)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Balcony
-      [utils.asGridCoord(9, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(10, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(11, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(12, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(13, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(14, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(15, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(16, 8)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/JieJie_balcony-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      // Inside balcony
-      [utils.asGridCoord(10, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(11, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(12, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(13, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(14, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(15, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(16, 9)]: [
-        {
-          events: [
-            {
-              type: "playMusic",
-              src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-              loop: true,
-            },
-          ],
-        },
-      ],
-      [utils.asGridCoord(17, 27)]: [
-        {
-          triggerOnLoad: true,
-          disqualify: ["SEEN_INTRO"],
-          events: [
-            { type: "addStoryFlag", flag: "SEEN_INTRO" },
-            {
-              type: "textMessage",
-              text: "* Welcome to the world of The Parts We Give *",
-            },
-            {
-              type: "textMessage",
-              text: "* In this work in progress game, you can discover the scenes and characters from Christine Pan's The Parts We Give operetta *",
-            },
-            {
-              type: "textMessage",
-              text: "* Please feel free to explore the map and characters and let us know what you think *",
-            },
-            {
-              type: "textMessage",
-              text: "* This game was created and Published by Daniel Pini and FABLE ARTS based on and accompanying Christine Pan's Operetta *",
-            },
-            {
-              type: "textMessage",
-              text: "* We hope you enjoy the game ☺️ *",
             },
           ],
         },

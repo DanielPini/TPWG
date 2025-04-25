@@ -18,7 +18,7 @@ class OverworldEvent {
       }
     );
 
-    //Set up a handler to complete when correct person is done walking, then resolve the event
+    //Set up a handler to complete when correct person is done standing, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener("PersonStandComplete", completeHandler);
@@ -26,6 +26,30 @@ class OverworldEvent {
       }
     };
     document.addEventListener("PersonStandComplete", completeHandler);
+  }
+
+  sit(resolve) {
+    const who = this.map.gameObjects[this.event.who];
+
+    who.startBehavior(
+      {
+        map: this.map,
+      },
+      {
+        type: "sit",
+        direction: this.event.direction,
+        time: this.event,
+      }
+    );
+
+    //Set up a handler to complete when correct person is done sitting, then resolve the event
+    const completeHandler = (e) => {
+      if (e.detail.whoId === this.event.who) {
+        document.removeEventListener("PersonSitComplete", completeHandler);
+        resolve();
+      }
+    };
+    document.addEventListener("PersonSitComplete", completeHandler);
   }
 
   walk(resolve) {

@@ -136,6 +136,7 @@ class Overworld {
 
     //Start the first map
     this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+    console.log("Map chairs:", this.map.chairs);
 
     //Create controls
     this.bindActionInput();

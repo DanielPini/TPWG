@@ -3,6 +3,7 @@ class Person extends GameObject {
     super(config);
     this.movingProgressRemaining = 0;
     this.isStanding = false;
+    this.isSitting = false;
 
     this.intentPosition = null; //[x,y]
 
@@ -15,6 +16,7 @@ class Person extends GameObject {
       right: ["x", 1],
     };
     this.standBehaviorTimeout;
+    this.sitBehaviorTimeout;
   }
 
   update(state) {
@@ -73,6 +75,18 @@ class Person extends GameObject {
         this.isStanding = false;
       }, behavior.time);
     }
+
+    if (behavior.type === "sit") {
+      this.isSitting = true;
+      this.updateSprite(state);
+      this.sitBehaviorTimeout = setTimeout(() => {
+        utils.emitEvent("PersonSitComplete", {
+          whoId: this.id,
+        });
+        this.isSitting = false;
+        this.updateSprite(state);
+      }, behavior.time);
+    }
   }
 
   updatePosition() {
@@ -93,6 +107,9 @@ class Person extends GameObject {
     if (this.movingProgressRemaining > 0) {
       this.sprite.setAnimation("walk-" + this.direction);
       return;
+    }
+    if (this.isSitting) {
+      this.sprite.setAnimation("sit-" + this.direction);
     }
     this.sprite.setAnimation("idle-" + this.direction);
   }
