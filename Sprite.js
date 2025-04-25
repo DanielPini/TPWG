@@ -47,10 +47,10 @@ class Sprite {
         [3, 3],
         [0, 3],
       ],
-      "sit-down": [0, 4],
-      "sit-right": [1, 4],
-      "sit-up": [2, 4],
-      "sit-left": [3, 4],
+      "sit-down": [[0, 4]],
+      "sit-right": [[1, 4]],
+      "sit-up": [[2, 4]],
+      "sit-left": [[3, 4]],
     };
     this.currentAnimation = config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;
@@ -67,6 +67,14 @@ class Sprite {
   }
 
   setAnimation(key) {
+    if (typeof key !== "string") {
+      console.warn("Animation key must be a string. Got:", key);
+    }
+
+    if (!this.animations[key]) {
+      console.warn("Missing animation key:", key);
+      return;
+    }
     if (this.currentAnimation !== key) {
       this.currentAnimation = key;
       this.currentAnimationFrame = 0;
@@ -92,11 +100,11 @@ class Sprite {
 
   draw(ctx, cameraPerson) {
     // Calculate the drawing coordinates relative to the camera
-    const x = this.gameObject.x - 8 + utils.withGrid(10.5) - cameraPerson.x;
-    const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
+    const x = this.gameObject.x - 10 + utils.withGrid(10.5) - cameraPerson.x;
+    const y = this.gameObject.y - 23 + utils.withGrid(6) - cameraPerson.y;
     const scale = this.gameObject.scale || 1;
 
-    this.isShadowLoaded && ctx.drawImage(this.shadow, x, y + 5);
+    this.isShadowLoaded && ctx.drawImage(this.shadow, x + 2, y + 7);
 
     const [frameX, frameY] = this.frame;
 

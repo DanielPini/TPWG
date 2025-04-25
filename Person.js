@@ -44,7 +44,9 @@ class Person extends GameObject {
     }
 
     //Set character direction to whatever behavior has
-    this.direction = behavior.direction;
+    if (behavior.type !== "sit") {
+      this.direction = behavior.direction;
+    }
 
     if (behavior.type === "walk") {
       //Stop here if space is not free
@@ -55,7 +57,10 @@ class Person extends GameObject {
           }, 10);
         return;
       }
-
+      if (this.isSitting) {
+        this.isSitting = false;
+        this.updateSprite(state);
+      }
       //Ready to walk!
       this.movingProgressRemaining = 16;
 
@@ -67,6 +72,10 @@ class Person extends GameObject {
     }
 
     if (behavior.type === "stand") {
+      if (this.isSitting) {
+        this.isSitting = false;
+        this.updateSprite(state);
+      }
       this.isStanding = true;
       this.standBehaviorTimeout = setTimeout(() => {
         utils.emitEvent("PersonStandComplete", {
@@ -78,14 +87,18 @@ class Person extends GameObject {
 
     if (behavior.type === "sit") {
       this.isSitting = true;
+      this.direction = behavior.direction;
       this.updateSprite(state);
-      this.sitBehaviorTimeout = setTimeout(() => {
-        utils.emitEvent("PersonSitComplete", {
-          whoId: this.id,
-        });
-        this.isSitting = false;
-        this.updateSprite(state);
-      }, behavior.time);
+      // Sit for a fixed time only if behavior.time is provided
+      if (behavior.time != null) {
+        this.sitBehaviorTimeout = setTimeout(() => {
+          utils.emitEvent("PersonSitComplete", {
+            whoId: this.id,
+          });
+          this.isSitting = false;
+          this.updateSprite(state);
+        }, behavior.time);
+      }
     }
   }
 
@@ -107,10 +120,9 @@ class Person extends GameObject {
     if (this.movingProgressRemaining > 0) {
       this.sprite.setAnimation("walk-" + this.direction);
       return;
-    }
-    if (this.isSitting) {
+    } else if (this.isSitting) {
       this.sprite.setAnimation("sit-" + this.direction);
-    }
-    this.sprite.setAnimation("idle-" + this.direction);
+      return;
+    } else this.sprite.setAnimation("idle-" + this.direction);
   }
 }

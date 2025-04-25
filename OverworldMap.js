@@ -135,7 +135,7 @@ class OverworldMap {
     const hero = this.gameObjects["hero"];
     const match = this.cutsceneSpaces[`${hero.x},${hero.y}`];
 
-    this.checkForChair();
+    this.checkForChair(hero.x, hero.y, hero.direction);
     if (!this.isCutscenePlaying && match) {
       const relevantCutscene = match.find((cutScene) => {
         if (
@@ -158,18 +158,16 @@ class OverworldMap {
   }
 
   checkForChair() {
-    console.log("checkForChair CALLED");
     const hero = this.gameObjects["hero"];
-    const { x, y } = hero;
+    const x = hero.x;
+    const y = hero.y;
     const chair = this.getChairAt(x, y);
 
-    if (!this.isCutscenePlaying && chair) {
-      console.log("in checkforchair");
-      console.log("chair found");
+    if (!this.isCutscenePlaying && this.chairs[`${x},${y}`]) {
       hero.isSitting = true;
       hero.startBehavior(this, {
         type: "sit",
-        direction: chair.direction || hero.direction,
+        direction: this.chairs[`${x},${y}`].direction.trim() || hero.direction,
       });
     }
   }
@@ -215,7 +213,7 @@ window.OverworldMaps = {
   LivingRoom: {
     id: "LivingRoom",
     lowerSrc: "./images/maps/TPWGMaps/Living.png",
-    upperSrc: "",
+    upperSrc: "./images/maps/TPWGMaps/LivingUpper.png",
     configObjects: {
       hero: {
         type: "Person",
@@ -254,11 +252,30 @@ window.OverworldMaps = {
     },
     chairs: (function () {
       let chairs = {};
-      ["2, 16, down"].forEach((coord) => {
+      [
+        // Study Chair
+        "2, 16, down",
+        // Dining Table Chairs
+        "6, 13, right",
+        "7, 11, down",
+        "7, 15, up",
+        "9, 11, down",
+        "9, 15, up",
+        "11, 11, down",
+        "11, 15, up",
+        "12, 13, left",
+        // Bar Stools
+        "16, 10, right",
+        "16, 12, right",
+        "16, 14, right",
+        // Piano Stool
+        "2, 7, up",
+        // Sofa
+        "6, 6, down",
+      ].forEach((coord) => {
         let [x, y, direction] = coord.split(",");
         chairs[utils.asGridCoord(x, y)] = { direction };
       });
-      console.log("Chairs:", chairs); // << This should show up
       return chairs;
     })(),
     walls: (function () {
@@ -391,41 +408,27 @@ window.OverworldMaps = {
         "2, 18",
         "3, 18",
         // Dining table and chairs
-        "7, 11",
-        "9, 11",
-        "11, 11",
         "7, 12",
         "8, 12",
         "9, 12",
         "10, 12",
         "11, 12",
-        "6, 13",
         "7, 13",
         "8, 13",
         "9, 13",
         "10, 13",
         "11, 13",
-        "12, 13",
         "7, 14",
         "8, 14",
         "9, 14",
         "10, 14",
         "11, 14",
-        "7, 15",
-        "9, 15",
-        "11, 15",
-        // Bar stools
-        "16, 10",
-        "16, 12",
-        "16, 14",
         // Piano
         "1, 6",
         "2, 6",
         "3, 6",
-        "2, 7",
         // Sofa
         "5, 6",
-        "6, 6",
         "7, 6",
       ].forEach((coord) => {
         let [x, y] = coord.split(",");
