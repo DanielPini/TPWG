@@ -52,6 +52,39 @@ class OverworldEvent {
     document.addEventListener("PersonSitComplete", completeHandler);
   }
 
+  pickUpItem(resolve) {
+    const who = this.map.gameObjects[this.event.who];
+
+    who.startBehavior(
+      {
+        map: this.map,
+      },
+      {
+        type: "pickUpItem",
+        direction: "down",
+        time: this.event.time || 400,
+      }
+    );
+
+    //Set up a handler to complete when correct person is done sitting, then resolve the event
+    const completeHandler = (e) => {
+      if (e.detail.whoId === this.event.who) {
+        document.removeEventListener("PersonPickUpComplete", completeHandler);
+
+        // Set direction if not already set
+        const who = this.map.gameObjects[this.event.who];
+        if (!who.direction) {
+          who.direction = who.previousDirection || "down";
+        }
+
+        who.sprite.setAnimation("idle-" + who.direction);
+        who.isPickingUp = false;
+        resolve();
+      }
+    };
+    document.addEventListener("PersonPickUpComplete", completeHandler);
+  }
+
   walk(resolve) {
     const who = this.map.gameObjects[this.event.who];
 
@@ -129,6 +162,7 @@ class OverworldEvent {
     this.map.isPaused = true;
     const menu = new PauseMenu({
       progress: this.map.overworld.progress,
+      map: this.map,
       onComplete: () => {
         resolve();
         this.map.isPaused = false;
@@ -151,6 +185,35 @@ class OverworldEvent {
       },
     });
     menu.init(document.querySelector(".game-container"));
+  }
+
+  giveItem(resolve) {
+    const item = this.event.item;
+    window.playerState.inventory.push(item);
+
+    const message = new TextMessage({
+      text: `You received a ${item.replace(/_/g, " ")}!`,
+      onComplete: () => {
+        resolve();
+      },
+    });
+    message.init(document.querySelector(".game-conatiner"));
+  }
+
+  takeItem(resolve) {
+    const item = this.event.item;
+    const itemName = this.event.itemName;
+
+    window.playerState.inventory.push(item);
+
+    const message = new TextMessage({
+      text: `You received ${itemName}`,
+      onComplete: () => {
+        item.destroy();
+        resolve();
+      },
+    });
+    message.init(document.querySelector(".game-container"));
   }
 
   init() {

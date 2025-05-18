@@ -11,24 +11,6 @@ class PlayerState {
         level: 1,
         status: null,
       },
-      // "p2": {
-      //   pizzaId: "v001",
-      //   hp: 50,
-      //   maxHp: 50,
-      //   xp: 75,
-      //   maxXp: 100,
-      //   level: 1,
-      //   status: null,
-      // },
-      // "p3": {
-      //   pizzaId: "f001",
-      //   hp: 50,
-      //   maxHp: 50,
-      //   xp: 75,
-      //   maxXp: 100,
-      //   level: 1,
-      //   status: null,
-      // }
     };
     this.lineup = ["p1"];
     this.items = [
@@ -36,7 +18,11 @@ class PlayerState {
       { actionId: "item_recoverHp", instanceId: "item2" },
       { actionId: "item_recoverHp", instanceId: "item3" },
     ];
-    this.storyFlags = {};
+    this.inventory = [];
+    this.storyFlags = {
+      SEEN_INTRO: true,
+    };
+    this.sisterUnlocked = true;
   }
 
   addPizza(pizzaId) {
@@ -60,6 +46,13 @@ class PlayerState {
     const oldIndex = this.lineup.indexOf(oldId);
     this.lineup[oldIndex] = incomingId;
     utils.emitEvent("LineupChanged");
+  }
+
+  changeCharacter() {
+    if (!this.sisterUnlocked) return;
+    this.character == "brother"
+      ? (this.character = "sister")
+      : (this.character = "brother");
   }
 
   moveToFront(futureFrontId) {

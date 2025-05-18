@@ -4,6 +4,7 @@ class Person extends GameObject {
     this.movingProgressRemaining = 0;
     this.isStanding = false;
     this.isSitting = false;
+    this.isPickingUp = false;
 
     this.intentPosition = null; //[x,y]
 
@@ -17,9 +18,13 @@ class Person extends GameObject {
     };
     this.standBehaviorTimeout;
     this.sitBehaviorTimeout;
+    this.previousDirection = this.direction;
   }
 
   update(state) {
+    if (!this.direction) {
+      this.direction = this.previousDirection || "down";
+    }
     if (this.movingProgressRemaining > 0) {
       this.updatePosition();
     } else {
@@ -34,7 +39,9 @@ class Person extends GameObject {
           direction: state.arrow,
         });
       }
-      this.updateSprite(state);
+      if (!this.isPickingUp) {
+        this.updateSprite(state);
+      }
     }
   }
 
@@ -90,7 +97,7 @@ class Person extends GameObject {
       this.direction = behavior.direction;
       this.updateSprite(state);
       // Sit for a fixed time only if behavior.time is provided
-      if (behavior.time != null) {
+      if (behavior.time) {
         this.sitBehaviorTimeout = setTimeout(() => {
           utils.emitEvent("PersonSitComplete", {
             whoId: this.id,
@@ -99,6 +106,22 @@ class Person extends GameObject {
           this.updateSprite(state);
         }, behavior.time);
       }
+    }
+
+    if (behavior.type === "pickUpItem") {
+      this.isPickingUp = true;
+      this.sprite.setAnimation("pick-up-down");
+      // Prevent movement while animating
+      this.isStanding = true;
+
+      // After the animation duration, emit a complete event
+      setTimeout(() => {
+        utils.emitEvent("PersonPickUpComplete", {
+          whoId: this.id,
+        });
+        this.sprite.setAnimation("idle-down");
+      }, behavior.time || 500);
+      return;
     }
   }
 
@@ -117,6 +140,7 @@ class Person extends GameObject {
   }
 
   updateSprite() {
+    // this.direction = this.previousDirection ? this.previousDirection : "down";
     if (this.movingProgressRemaining > 0) {
       this.sprite.setAnimation("walk-" + this.direction);
       return;

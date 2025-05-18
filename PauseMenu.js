@@ -1,6 +1,7 @@
 class PauseMenu {
-  constructor({ progress, onComplete }) {
+  constructor({ progress, map, onComplete }) {
     this.progress = progress;
+    this.map = map;
     this.onComplete = onComplete;
   }
 
@@ -13,6 +14,13 @@ class PauseMenu {
           description: "Adjust mute and volume",
           handler: () => {
             this.keyboardMenu.setOptions(this.getSoundOptions());
+          },
+        },
+        {
+          label: "Change Player",
+          description: "Change the player character",
+          handler: () => {
+            this.keyboardMenu.setOptions(this.getCharacterOptions());
           },
         },
         {
@@ -128,6 +136,34 @@ class PauseMenu {
         description: "Return to main menu",
         handler: () => {
           this.keyboardMenu.setOptions(this.getOptions("root"));
+        },
+      },
+    ];
+  }
+
+  getCharacterOptions() {
+    return [
+      {
+        label:
+          playerState.sisterUnlocked &&
+          playerState.character.toLowerCase() == "brother"
+            ? "Sister"
+            : "Brother",
+        description: "Change player character",
+        handler: () => {
+          playerState.changeCharacter();
+          this.close();
+
+          setTimeout(() => {
+            const newHero = new Person({
+              ...this.map.configObjects.hero, // Base config
+              src: `/images/characters/people/${playerState.character}.png`,
+            });
+            this.map.gameObjects.hero = newHero;
+            newHero.id = "hero";
+            newHero.mount(this.map);
+            // this.map.refreshGameObjects();
+          }, 10); // Add a small delay to ensure pause menu has fully closed
         },
       },
     ];

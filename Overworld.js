@@ -20,6 +20,7 @@ class Overworld {
         arrow: this.directionInput.direction,
         map: this.map,
       });
+      // object.map.configObjects.hero.src = `/images/characters/people/${playerState.character}`;
     });
 
     //Draw Lower layer
@@ -133,9 +134,14 @@ class Overworld {
     //Load the HUD
     // this.hud = new Hud();
     // this.hud.init(container);
+    const mapFactory = window.OverworldMaps[this.progress.mapId];
+    this.startMap(
+      mapFactory.createInstance(window.playerState.character),
+      initialHeroState
+    );
 
     //Start the first map
-    this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+    // this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
 
     //Create controls
     this.bindActionInput();
@@ -148,9 +154,9 @@ class Overworld {
     this.startGameLoop();
 
     // this.map.startCutscene([
-    //   { type: "battle", enemyId: "beth" }
+    //   // { type: "battle", enemyId: "beth" }
     //   // { type: "changeMap", map: "DemoRoom"}
-    //   // { type: "textMessage", text: "This is the very first message!"}
-    // ])
+    //   { type: "textMessage", text: "This is the very first message!" },
+    // ]);
   }
 }

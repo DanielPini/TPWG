@@ -51,6 +51,7 @@ class Sprite {
       "sit-right": [[1, 4]],
       "sit-up": [[2, 4]],
       "sit-left": [[3, 4]],
+      "pick-up-down": [[0, 6]],
     };
     this.currentAnimation = config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;
@@ -73,7 +74,10 @@ class Sprite {
 
     if (!this.animations[key]) {
       console.warn("Missing animation key:", key);
-      return;
+      const fallback = key.includes("idle") ? "idle-down" : "walk-down";
+      key = this.animations[fallback]
+        ? fallback
+        : Object.keys(this.animations[0]);
     }
     if (this.currentAnimation !== key) {
       this.currentAnimation = key;
@@ -99,12 +103,13 @@ class Sprite {
   }
 
   draw(ctx, cameraPerson) {
+    if (this.isRemoved) return;
     // Calculate the drawing coordinates relative to the camera
     const x = this.gameObject.x - 10 + utils.withGrid(10.5) - cameraPerson.x;
     const y = this.gameObject.y - 23 + utils.withGrid(6) - cameraPerson.y;
     const scale = this.gameObject.scale || 1;
 
-    this.isShadowLoaded && ctx.drawImage(this.shadow, x + 2, y + 7);
+    this.isShadowLoaded && ctx.drawImage(this.shadow, x + 2, y + 4);
 
     const [frameX, frameY] = this.frame;
 
@@ -117,5 +122,12 @@ class Sprite {
     }
 
     this.updateAnimationProgress();
+  }
+
+  remove() {
+    this.isRemoved = true;
+    this.image = null;
+    this.shadow = null;
+    this.gameObject = null;
   }
 }

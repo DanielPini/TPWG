@@ -40,7 +40,7 @@ class TitleScreen {
     return [
       {
         label: "New Game",
-        description: "Explore the world of The Parts We Give.",
+        description: "Explore the world of The Parts We Give",
         handler: () => {
           this.close();
           this.startMusic(musicSrc);
@@ -65,7 +65,7 @@ class TitleScreen {
     this.element = document.createElement("div");
     this.element.classList.add("TitleScreen");
     this.element.innerHTML = `
-      <img class="TitleScreen_logo" src="./images/TPWGTitle.png" alt="The Parts We Give Title Page" />
+      <img class="TitleScreen_logo" src="./images/TPWG_title.png" alt="The Parts We Give Title Page" />
     `;
   }
 

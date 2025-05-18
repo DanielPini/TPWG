@@ -20,11 +20,31 @@ class GameObject {
 
   mount(map) {
     this.isMounted = true;
-
+    this.map = map;
     //If we have a behavior, kick off after a short delay
     setTimeout(() => {
       this.doBehaviorEvent(map);
     }, 10);
+  }
+
+  unmount() {
+    if (this.sprite) {
+      // Remove sprite-related hooks or rendering references
+      this.sprite = null;
+    }
+    if (this.behaviorLoop) {
+      this.behaviorLoop = [];
+    }
+  }
+
+  destroy() {
+    if (this.sprite) {
+      this.sprite.remove();
+    }
+
+    if (this.parent) {
+      this.parent.removeChild(this);
+    }
   }
 
   update() {}
