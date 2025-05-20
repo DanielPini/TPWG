@@ -1,0 +1,11 @@
+.QuestTimer {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: 1px solid var(--menu-border-color);
+  background: var(--menu-background);
+  color: var(--menu-font-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.3em;
+}

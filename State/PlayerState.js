@@ -22,7 +22,7 @@ class PlayerState {
     this.storyFlags = {
       SEEN_INTRO: true,
     };
-    this.sisterUnlocked = true;
+    this.sisterUnlocked = false;
   }
 
   addPizza(pizzaId) {
