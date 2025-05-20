@@ -14,17 +14,25 @@ class GameObject {
     //These happen once on map startup.
     this.behaviorLoop = config.behaviorLoop || [];
     this.behaviorLoopIndex = 0;
+    this.behaviorLoopActive = false;
     this.talking = config.talking || [];
     this.retryTimeout = null;
   }
 
   mount(map) {
+    if (this.isMounted) {
+      console.warn("Already mounted:", this.id);
+      return;
+    }
     this.isMounted = true;
     this.map = map;
+    console.log("Mounting", this.id);
     //If we have a behavior, kick off after a short delay
-    setTimeout(() => {
-      this.doBehaviorEvent(map);
-    }, 10);
+    if (this.behaviorLoop && this.behaviorLoop.length > 0) {
+      setTimeout(() => {
+        this.startBehaviorLoop(map);
+      }, 10);
+    }
   }
 
   unmount() {
@@ -49,38 +57,42 @@ class GameObject {
 
   update() {}
 
+  startBehaviorLoop(map) {
+    if (this.isBehaviorLoopActive) return;
+    this.isBehaviorLoopActive = true;
+    this.doBehaviorEvent(map);
+  }
+
+  stopBehaviorLoop() {
+    this.isBehaviorLoopActive = false;
+    if (this.retryTimeout) clearTimeout(this.retryTimeout);
+  }
+
   async doBehaviorEvent(map) {
-    //I don't have config to do anything
+    if (!this.isBehaviorLoopActive) {
+      return;
+    }
     if (this.behaviorLoop.length === 0) {
       return;
     }
 
-    //Retry later if a cutscene is playing
     if (map.isCutscenePlaying) {
-      if (this.retryTimeout) {
-        clearTimeout(this.retryTimeout);
-      }
+      if (this.retryTimeout) clearTimeout(this.retryTimeout);
       this.retryTimeout = setTimeout(() => {
         this.doBehaviorEvent(map);
       }, 1000);
       return;
     }
 
-    //Setting up our event with relevant info
     let eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
     eventConfig.who = this.id;
-
-    //Create an event instance out of our next event config
     const eventHandler = new OverworldEvent({ map, event: eventConfig });
     await eventHandler.init();
 
-    //Setting the next event to fire
-    this.behaviorLoopIndex += 1;
-    if (this.behaviorLoopIndex === this.behaviorLoop.length) {
-      this.behaviorLoopIndex = 0;
-    }
-
-    //Do it again!
+    this.behaviorLoopIndex =
+      (this.behaviorLoopIndex + 1) % this.behaviorLoop.length;
     this.doBehaviorEvent(map);
   }
 }
+
+window.GameObject = GameObject;

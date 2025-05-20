@@ -6,7 +6,6 @@ class OverworldEvent {
 
   stand(resolve) {
     const who = this.map.gameObjects[this.event.who];
-
     who.startBehavior(
       {
         map: this.map,
@@ -17,7 +16,6 @@ class OverworldEvent {
         time: this.event.time,
       }
     );
-
     //Set up a handler to complete when correct person is done standing, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
@@ -65,7 +63,6 @@ class OverworldEvent {
         time: this.event.time || 400,
       }
     );
-
     //Set up a handler to complete when correct person is done sitting, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
@@ -83,6 +80,31 @@ class OverworldEvent {
       }
     };
     document.addEventListener("PersonPickUpComplete", completeHandler);
+  }
+
+  startQuest(resolve) {
+    const questId = this.event.questId;
+    if (!questId) {
+      console.warn(`Quest ID ${questId} not found.`);
+      return;
+    }
+    console.log(`Quest started: ${questId}`);
+    this.map.overworld.questManager.startQuest(questId);
+    resolve();
+  }
+
+  completeQuest(resolve) {
+    const questId = this.event.questId;
+    this.map.overworld.questManager.completeQuest(questId);
+    resolve();
+  }
+
+  removeObjects(resolve) {
+    const objectIds = this.event.ids || [];
+    objectIds.forEach((id) => {
+      delete this.map.gameObjects[id];
+    });
+    resolve();
   }
 
   walk(resolve) {
@@ -131,12 +153,22 @@ class OverworldEvent {
     });
 
     const sceneTransition = new SceneTransition();
+    const mapConfig = window.OverworldMaps[this.event.map];
+    if (!mapConfig) {
+      console.error(`Map "${this.event.map}" not found in OverworldMaps.`);
+      console.log("Available maps:", Object.keys(window.OverworldMaps));
+      return;
+    }
     sceneTransition.init(document.querySelector(".game-container"), () => {
-      this.map.overworld.startMap(window.OverworldMaps[this.event.map], {
-        x: this.event.x,
-        y: this.event.y,
-        direction: this.event.direction,
-      });
+      this.map.overworld.startMap(
+        this.event.map,
+        window.playerState.character,
+        {
+          x: this.event.x,
+          y: this.event.y,
+          direction: this.event.direction,
+        }
+      );
       resolve();
       sceneTransition.fadeOut();
     });
@@ -204,7 +236,8 @@ class OverworldEvent {
     const item = this.event.item;
     const itemName = this.event.itemName;
 
-    window.playerState.inventory.push(item);
+    window.playerState.inventory.push(item.id);
+    window.playerState.pickedUpQuestObjects.push(item.id);
 
     const message = new TextMessage({
       text: `You received ${itemName}`,

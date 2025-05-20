@@ -1,31 +1,36 @@
-class Plates extends GameObject {
+class Nerf extends GameObject {
   constructor(config) {
     super(config);
     this.sprite = new Sprite({
       gameObject: this,
-      src: "./images/objects/Plates.png",
+      src: "./images/Nerf.png",
       animations: {
-        placed: [[0, 1]],
+        idle: [[config.frame || 0, 0]], // Use config.frame for different Nerfs
       },
-      currentAnimation: "placed",
+      currentAnimation: "idle",
     });
     this.storyFlag = config.storyFlag;
 
     this.talking = [
       {
         required: [this.storyFlag],
-        events: [{ type: "textMessage", text: "You have already used this." }],
+        events: [
+          {
+            type: "textMessage",
+            text: "You already picked up this Nerf bullet.",
+          },
+        ],
       },
       {
         events: [
           {
             type: "textMessage",
-            text: "These are the plates for the table",
+            text: "You found a stray Nerf bullet!",
           },
           {
             type: "takeItem",
             item: this,
-            itemName: "PLATES",
+            itemName: "NERF BULLET",
           },
           {
             type: "pickUpItem",
@@ -47,8 +52,12 @@ class Plates extends GameObject {
   }
 
   update() {
+    // You can add animation or state logic here if needed
     this.sprite.currentAnimation = playerState.storyFlags[this.storyFlag]
       ? "used-down"
-      : "placed";
+      : "idle";
   }
 }
+
+window.GameObjectClasses = window.GameObjectClasses || {};
+window.GameObjectClasses["Nerf"] = Nerf;

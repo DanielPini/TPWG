@@ -4,6 +4,7 @@ class Overworld {
     this.canvas = this.element.querySelector(".game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.map = null;
+    this.questTimer = new QuestTimer();
   }
 
   gameLoopStepWork(delta) {
@@ -12,7 +13,6 @@ class Overworld {
 
     //Establish the camera person
     const cameraPerson = this.map.gameObjects.hero;
-
     //Update all objects
     Object.values(this.map.gameObjects).forEach((object) => {
       object.update({
@@ -20,7 +20,6 @@ class Overworld {
         arrow: this.directionInput.direction,
         map: this.map,
       });
-      // object.map.configObjects.hero.src = `/images/characters/people/${playerState.character}`;
     });
 
     //Draw Lower layer
@@ -58,6 +57,7 @@ class Overworld {
         delta -= step;
       }
       previousMs = timestampMs - delta * 1000; // Make sure we don't lose unprocessed (delta) time
+      this.questManager.update();
 
       // Business as usual tick
       requestAnimationFrame(stepFn);
@@ -88,11 +88,30 @@ class Overworld {
     });
   }
 
-  startMap(mapConfig, heroInitialState = null) {
-    this.map = new OverworldMap(mapConfig);
+  startMap(mapId, character, heroInitialState = null) {
+    const mapInstance = window.OverworldMaps[mapId].createInstance(character);
+    this.map = mapInstance;
     this.map.overworld = this;
     this.map.mountObjects();
     this.map.triggerLoadCutscenes();
+
+    if (!this.questManager) {
+      this.questManager = new QuestManager({
+        overworld: this,
+        onQuestStart: (questId, quest) => {
+          if (quest.timer) {
+            this.questTimer.start(questId, quest.timer);
+          }
+        },
+        onQuestEnd: (questId) => {
+          this.questTimer.stop();
+        },
+      });
+    }
+    this.questManager.setMap(this.map);
+    this.map.mountObjects(this);
+
+    this.map.spawnActiveQuestObjects();
 
     if (heroInitialState) {
       const { hero } = this.map.gameObjects;
@@ -101,10 +120,27 @@ class Overworld {
       hero.direction = heroInitialState.direction;
     }
 
-    this.progress.mapId = mapConfig.id;
-    this.progress.startingHeroX = this.map.gameObjects.hero.x;
-    this.progress.startingHeroY = this.map.gameObjects.hero.y;
+    this.progress.mapId = mapId;
+    const hero = this.map.gameObjects.hero;
+    this.progress.startingHeroX = hero.x;
+    this.progress.startingHeroY = hero.y;
     this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+  }
+
+  addGameObject(config) {
+    const Constructor = window.GameObjectClasses[config.type];
+    if (!Constructor) {
+      throw new Error(`Unknown GameObject type: ${config.type}`);
+    }
+
+    const gameObject = new Constructor(config);
+    gameObject.id = config.id;
+
+    if (typeof gameObject.mount === "function") {
+      gameObject.mount(this.map);
+    }
+    // Attach to the current map
+    this.map.gameObjects[config.id] = gameObject;
   }
 
   async init() {
@@ -134,11 +170,7 @@ class Overworld {
     //Load the HUD
     // this.hud = new Hud();
     // this.hud.init(container);
-    const mapFactory = window.OverworldMaps[this.progress.mapId];
-    this.startMap(
-      mapFactory.createInstance(window.playerState.character),
-      initialHeroState
-    );
+    this.startMap(this.progress.mapId, window.playerState.character);
 
     //Start the first map
     // this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
@@ -160,3 +192,7 @@ class Overworld {
     // ]);
   }
 }
+
+// In your global playerState (e.g., playerState.pickedUpQuestObjects = [])
+window.playerState.pickedUpQuestObjects =
+  window.playerState.pickedUpQuestObjects || [];

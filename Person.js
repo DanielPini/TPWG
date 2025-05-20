@@ -50,6 +50,12 @@ class Person extends GameObject {
       return;
     }
 
+    // Clear any existing stand timeout before starting a new behavior
+    if (this.standBehaviorTimeout) {
+      clearTimeout(this.standBehaviorTimeout);
+      this.standBehaviorTimeout = null;
+    }
+
     //Set character direction to whatever behavior has
     if (behavior.type !== "sit") {
       this.direction = behavior.direction;
@@ -57,13 +63,33 @@ class Person extends GameObject {
 
     if (behavior.type === "walk") {
       //Stop here if space is not free
-      if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
-        behavior.retry &&
+      if (state.map.isSpaceTaken(this.x, this.y, this.direction, this.id)) {
+        // If NPC, stand for a bit before retrying
+        if (!this.isPlayerControlled) {
+          this.startBehavior(state, {
+            type: "stand",
+            direction: this.direction,
+            time: 400,
+            onComplete: () => {
+              this.startBehavior(state, behavior);
+            },
+          });
+        }
+        // If player, use retry logic as before
+        if (behavior.retry) {
           setTimeout(() => {
-            this.startBehavior(state, behavior);
-          }, 10);
+            if (
+              this.isPlayerControlled &&
+              state.arrow === behavior.direction &&
+              !state.map.isCutscenePlaying
+            ) {
+              this.startBehavior(state, behavior);
+            }
+          }, 250);
+        }
         return;
       }
+
       if (this.isSitting) {
         this.isSitting = false;
         this.updateSprite(state);
@@ -89,6 +115,7 @@ class Person extends GameObject {
           whoId: this.id,
         });
         this.isStanding = false;
+        if (behavior.onComplete) behavior.onComplete();
       }, behavior.time);
     }
 
