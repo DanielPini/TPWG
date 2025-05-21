@@ -3,7 +3,7 @@ class NerfPile extends GameObject {
     super(config);
     this.sprite = new Sprite({
       gameObject: this,
-      src: "images/Nerf.png",
+      src: "./images/Nerf.png",
       animations: {
         "idle-down": [[4, 0]], // 5th crop (pile)
       },

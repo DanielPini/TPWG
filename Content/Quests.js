@@ -12,22 +12,22 @@ const QUESTS = {
         id: "Nerf2",
         type: "Nerf",
         map: "Kid",
-        x: utils.withGrid(2),
+        x: utils.withGrid(7),
         y: utils.withGrid(5),
       },
       {
         id: "Nerf3",
         type: "Nerf",
-        map: "Kid",
-        x: utils.withGrid(7),
-        y: utils.withGrid(15),
+        map: "Bathroom",
+        x: utils.withGrid(3),
+        y: utils.withGrid(6),
       },
       {
         id: "Nerf4",
         type: "Nerf",
-        map: "Kid",
-        x: utils.withGrid(8),
-        y: utils.withGrid(16),
+        map: "Laundry",
+        x: utils.withGrid(5),
+        y: utils.withGrid(5),
       },
     ],
     successConditions: [
@@ -114,8 +114,8 @@ const QUESTS = {
     retryDelay: 2000,
     despawnOnComplete: true,
     branches: {
-      success: "reportToChef",
-      fail: "apologiseToChef",
+      success: "helpBaba",
+      fail: "apologiseToMom",
     },
   },
   helpBaba: {
@@ -126,7 +126,7 @@ const QUESTS = {
       },
     ],
     onComplete(overworld) {
-      console.log("You apologised to the chef.");
+      console.log("You helped Baba.");
     },
   },
 };

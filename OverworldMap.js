@@ -274,8 +274,8 @@ window.OverworldMaps = {
         id: "Home",
         lowerSrc:
           character === "sister"
-            ? "images/maps/sister/Living.png"
-            : "images/maps/brother/Living.png",
+            ? "./images/maps/sister/Living.png"
+            : "./images/maps/brother/Living.png",
 
         upperSrc: "",
 
@@ -477,8 +477,8 @@ window.OverworldMaps = {
         id: "Bathroom",
         lowerSrc:
           character === "sister"
-            ? "images/maps/sister/Bathroom.png"
-            : "images/maps/brother/Bathroom.png",
+            ? "./images/maps/sister/Bathroom.png"
+            : "./images/maps/brother/Bathroom.png",
 
         upperSrc: "",
 
@@ -538,8 +538,8 @@ window.OverworldMaps = {
         id: "Kid",
         lowerSrc:
           character === "sister"
-            ? "images/maps/sister/Kid.png"
-            : "images/maps/brother/Kid.png",
+            ? "./images/maps/sister/Kid.png"
+            : "./images/maps/brother/Kid.png",
 
         upperSrc: "",
 
@@ -633,8 +633,8 @@ window.OverworldMaps = {
         id: "Laundry",
         lowerSrc:
           character === "sister"
-            ? "images/maps/sister/Laundry.png"
-            : "images/maps/brother/Laundry.png",
+            ? "./images/maps/sister/Laundry.png"
+            : "./images/maps/brother/Laundry.png",
 
         upperSrc: "",
 
@@ -685,8 +685,8 @@ window.OverworldMaps = {
         id: "Master",
         lowerSrc:
           character === "sister"
-            ? "images/maps/sister/Master.png"
-            : "images/maps/brother/Master.png",
+            ? "./images/maps/sister/Master.png"
+            : "./images/maps/brother/Master.png",
 
         upperSrc: "",
 
@@ -877,6 +877,11 @@ function getConfigObjectsForHome(character) {
             { type: "addStoryFlag", flag: "PLATES_DELIVERED" },
             { type: "completeQuest", questId: "fetchPlates" },
             { type: "textMessage", text: "Well done. Took long enough!" },
+            { type: "addStoryFlag", flag: "SENT_TO_BABA" },
+            {
+              type: "textMessage",
+              text: "Go see Ba-ba. He wanted you for something",
+            },
           ],
         },
         // Optionally, a fallback dialog if the quest is active but not complete
@@ -944,12 +949,30 @@ function getConfigObjectsForHome(character) {
       ],
       talking: [
         {
+          disqualify: ["SENT_TO_BABA"],
+          events: [
+            {
+              type: "textMessage",
+              text: "Such a good boy!",
+            },
+            {
+              type: "textMessage",
+              text: "Go help your sister!",
+            },
+          ],
+        },
+        {
+          required: ["PLATES_COLLECTED", "SENT_TO_BABA"],
           events: [
             { type: "startQuest", questId: "fetchNerfs" },
             { type: "addStoryFlag", flag: "FETCH_NERFS_QUEST" },
             {
               type: "textMessage",
-              text: "Your toys are everywhere. Pack them away before they get broken!",
+              text: "Your toys are all over the house!",
+            },
+            {
+              type: "textMessage",
+              text: "Pick them up before your mother sees!!!",
             },
           ],
         },

@@ -164,7 +164,7 @@ class PauseMenu {
           setTimeout(() => {
             const newHero = new Person({
               ...this.map.configObjects.hero,
-              src: `/images/characters/people/sister.png`,
+              src: `./images/characters/people/sister.png`,
             });
             this.map.gameObjects.hero = newHero;
             newHero.id = "hero";
@@ -185,7 +185,7 @@ class PauseMenu {
           setTimeout(() => {
             const newHero = new Person({
               ...this.map.configObjects.hero,
-              src: `/images/characters/people/brother.png`,
+              src: `./images/characters/people/brother.png`,
             });
             this.map.gameObjects.hero = newHero;
             newHero.id = "hero";
