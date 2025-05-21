@@ -20,7 +20,7 @@ class PlayerState {
     ];
     this.inventory = [];
     this.storyFlags = {
-      SEEN_INTRO: true,
+      SEEN_INTRO: false,
     };
     this.sisterUnlocked = false;
   }

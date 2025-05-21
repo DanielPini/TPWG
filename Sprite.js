@@ -9,7 +9,7 @@ class Sprite {
 
     //Shadow
     this.shadow = new Image();
-    this.useShadow = true; //config.useShadow || false
+    this.useShadow = config.useShadow !== undefined ? config.useShadow : true;
     if (this.useShadow) {
       this.shadow.src = "./images/characters/shadow.png";
     }
@@ -122,6 +122,26 @@ class Sprite {
     }
 
     this.updateAnimationProgress();
+  }
+
+  drawAt(ctx, x, y, cameraPerson) {
+    if (this.isRemoved) return;
+    const scale = this.gameObject?.scale || 1;
+
+    // Calculate screen position relative to camera
+    const screenX = x - 10 + utils.withGrid(10.5) - cameraPerson.x;
+    const screenY = y - 23 + utils.withGrid(6) - cameraPerson.y;
+
+    // No shadow for pickup animation, or add a parameter if needed
+    const [frameX, frameY] = this.frame;
+
+    if (this.isLoaded) {
+      ctx.save();
+      ctx.translate(screenX + 2, screenY + 2);
+      ctx.scale(scale, scale);
+      ctx.drawImage(this.image, frameX * 32, frameY * 32, 32, 32, 0, 0, 32, 32);
+      ctx.restore();
+    }
   }
 
   remove() {

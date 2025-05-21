@@ -7,6 +7,7 @@ const QUESTS = {
         map: "Kid",
         x: utils.withGrid(4),
         y: utils.withGrid(11),
+        frame: 0,
       },
       {
         id: "Nerf2",
@@ -14,6 +15,7 @@ const QUESTS = {
         map: "Kid",
         x: utils.withGrid(7),
         y: utils.withGrid(5),
+        frame: 1,
       },
       {
         id: "Nerf3",
@@ -21,6 +23,7 @@ const QUESTS = {
         map: "Bathroom",
         x: utils.withGrid(3),
         y: utils.withGrid(6),
+        frame: 2,
       },
       {
         id: "Nerf4",
@@ -28,6 +31,7 @@ const QUESTS = {
         map: "Laundry",
         x: utils.withGrid(5),
         y: utils.withGrid(5),
+        frame: 3,
       },
     ],
     successConditions: [
@@ -37,6 +41,9 @@ const QUESTS = {
       },
     ],
     onComplete(overworld) {
+      new TextMessage({
+        text: "Wow! That was a lot. I'd better treat myself to a video game! But Ba-ba wanted to see me first. ** Sigh **",
+      });
       playerState.storyFlags["NERFS_COLLECTED"] = true;
       playerState.inventory = playerState.inventory.filter(
         (item) => !["Nerf1", "Nerf2", "Nerf3", "Nerf4"].includes(item)
@@ -62,14 +69,14 @@ const QUESTS = {
         type: "Plates",
         map: "Home",
         x: utils.withGrid(17),
-        y: utils.withGrid(19),
+        y: utils.withGrid(15),
       },
       {
         id: "Plate A",
         type: "Plates",
         map: "Home",
-        x: utils.withGrid(9),
-        y: utils.withGrid(12),
+        x: utils.withGrid(11),
+        y: utils.withGrid(13),
       },
     ],
     timer: 20000, // 30 seconds
@@ -80,6 +87,9 @@ const QUESTS = {
       },
     ],
     onComplete(overworld) {
+      new TextMessage({
+        text: "You did it!!! Now bring the plates to Jiejie. She knows what to do!",
+      }).init();
       console.log("Plates delivered! Quest success.");
       playerState.storyFlags["PLATES_COLLECTED"] = true;
       playerState.inventory = playerState.inventory.filter(
@@ -102,8 +112,8 @@ const QUESTS = {
               } else {
                 overworld.map.isPaused = false;
                 new TextMessage({
-                  text: "Flip the table and deal with the consequences!",
-                });
+                  text: "** Flip the table and deal with the consequences! **",
+                }).init();
               }
             },
           }).init();

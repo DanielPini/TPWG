@@ -30,6 +30,8 @@ class Plates extends GameObject {
           {
             type: "pickUpItem",
             who: "hero",
+            itemId: this.id,
+            itemType: this.type,
             time: 500,
           },
         ],

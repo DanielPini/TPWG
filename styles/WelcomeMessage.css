@@ -1,0 +1,33 @@
+.WelcomeMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  min-width: 200px;
+  max-width: 400px;
+  transform: translate(-50%, -50%);
+  background: var(--menu-background);
+  border: 2px solid var(--menu-border-color);
+  color: var(--menu-font-color);
+  padding: 24px 16px;
+  border-radius: 8px;
+  text-align: center;
+  z-index: 1001;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.WelcomeMessage_p {
+  margin: 0 0 12px 0;
+  font-size: 6px;
+}
+
+.WelcomeMessage_button {
+  font-size: 14px;
+  padding: 4px 16px;
+  margin-top: 12px;
+  border-radius: 4px;
+  background: rgb(245, 72, 187);
+  color: var(--menu-background);
+  border: none;
+  cursor: pointer;
+}

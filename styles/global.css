@@ -35,7 +35,8 @@ body {
 
 .game-container {
   position: relative;
-  background: hsl(198, 63%, 74%);
+  background: url(../images/TPWG_background.png);
+  /* hsl(198, 63%, 74%); */
   width: 352px;
   height: 198px;
   margin: 0 auto;

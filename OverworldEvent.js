@@ -52,7 +52,15 @@ class OverworldEvent {
 
   pickUpItem(resolve) {
     const who = this.map.gameObjects[this.event.who];
+    const itemId = this.event.itemId;
+    const itemType = this.event.itemType;
 
+    if (!itemId || !itemType) {
+      console.error("pickUpItem event missing itemId or itemType", this.event);
+      return;
+    }
+
+    console.log(this.event);
     who.startBehavior(
       {
         map: this.map,
@@ -60,9 +68,34 @@ class OverworldEvent {
       {
         type: "pickUpItem",
         direction: "down",
+        itemId,
+        itemType,
         time: this.event.time || 400,
       }
     );
+
+    // Animate item above character
+    const typeToImage = {
+      Nerf: "./images/Nerf.png",
+      Plates: "./images/objects/Plates.png",
+    };
+
+    const itemSpriteSrc = typeToImage[itemType];
+
+    // Create a temporary item sprite object
+    const tempItem = new Sprite({
+      gameObject: who,
+      src: itemSpriteSrc,
+      useShadow: false,
+    });
+
+    // Attach to map for rendering
+    this.map.tempPickupSprite = {
+      sprite: tempItem,
+      who,
+      startTime: performance.now(),
+      duration: this.event.time || 400,
+    };
     //Set up a handler to complete when correct person is done sitting, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {

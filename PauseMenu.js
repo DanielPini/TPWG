@@ -146,8 +146,6 @@ class PauseMenu {
     const sisterUnlocked = !!playerState.sisterUnlocked;
     const options = [];
 
-    console.log(current);
-
     if (current === "brother") {
       // Only show "Sister" as an option
       options.push({

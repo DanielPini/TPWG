@@ -1,6 +1,8 @@
 class Nerf extends GameObject {
   constructor(config) {
     super(config);
+    console.log("Nerf config:", config);
+    console.log("Nerf id:", this.id, "type:", this.type);
     this.sprite = new Sprite({
       gameObject: this,
       src: "./images/Nerf.png",
@@ -8,9 +10,9 @@ class Nerf extends GameObject {
         idle: [[config.frame || 0, 0]], // Use config.frame for different Nerfs
       },
       currentAnimation: "idle",
+      useShadow: false,
     });
     this.storyFlag = config.storyFlag;
-
     this.talking = [
       {
         required: [this.storyFlag],
@@ -35,6 +37,8 @@ class Nerf extends GameObject {
           {
             type: "pickUpItem",
             who: "hero",
+            itemId: this.id,
+            itemType: this.type,
             time: 500,
           },
         ],

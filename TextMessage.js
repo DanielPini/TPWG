@@ -32,13 +32,14 @@ class TextMessage {
   }
 
   done() {
-    if (this.revealingText.isDone) {
-      this.element.remove();
-      this.actionListener.unbind();
-      this.onComplete();
-    } else {
+    // Only warp to done if revealingText exists and isn't done yet
+    if (this.revealingText && !this.revealingText.isDone) {
       this.revealingText.warpToDone();
+      return;
     }
+    this.element.remove();
+    this.actionListener?.unbind();
+    if (this.onComplete) this.onComplete();
   }
 
   init(container) {

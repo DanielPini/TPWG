@@ -34,6 +34,21 @@ class Overworld {
         object.sprite.draw(this.ctx, cameraPerson);
       });
 
+    // Draw temporary pickup sprite
+    if (this.map.tempPickupSprite) {
+      const elapsed = performance.now() - this.map.tempPickupSprite.startTime;
+      if (elapsed < this.map.tempPickupSprite.duration) {
+        this.map.tempPickupSprite.sprite.drawAt(
+          this.ctx,
+          this.map.tempPickupSprite.who.x,
+          this.map.tempPickupSprite.who.y - 16, // adjust offset as needed
+          cameraPerson
+        );
+      } else {
+        this.map.tempPickupSprite = null;
+      }
+    }
+
     //Draw Upper layer
     this.map.drawUpperImage(this.ctx, cameraPerson);
   }
@@ -182,9 +197,18 @@ class Overworld {
     this.directionInput = new DirectionInput();
     this.directionInput.init();
 
-    //Kick off the game!
-    this.startGameLoop();
-
+    if (!playerState.storyFlags.SEEN_INTRO) {
+      new WelcomeMessage({
+        map: this.map, // Pass the map instance
+        onComplete: () => {
+          playerState.storyFlags.SEEN_INTRO = true;
+          this.startGameLoop();
+        },
+      }).init();
+    } else {
+      //Kick off the game!
+      this.startGameLoop();
+    }
     // this.map.startCutscene([
     //   // { type: "battle", enemyId: "beth" }
     //   // { type: "changeMap", map: "DemoRoom"}

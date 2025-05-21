@@ -7,7 +7,6 @@ class YesNoPrompt {
     this.element = null;
     this.optionElements = [];
     this.listeners = [];
-    console.log("Inside the constructor");
   }
 
   createElement() {
@@ -83,7 +82,6 @@ class YesNoPrompt {
     container.appendChild(this.element);
     this.bindKeys();
     // Position above and to the left of the text box
-    console.log("Inside the init method");
     const textBox = container.querySelector(".TextMessage");
     if (textBox) {
       const boxRect = textBox.getBoundingClientRect();
