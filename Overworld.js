@@ -27,11 +27,13 @@ class Overworld {
 
     //Draw Game Objects
     Object.values(this.map.gameObjects)
-      .sort((a, b) => {
-        return a.y - b.y;
-      })
+      .sort((a, b) => a.y - b.y)
       .forEach((object) => {
-        object.sprite.draw(this.ctx, cameraPerson);
+        if (object.sprite) {
+          object.sprite.draw(this.ctx, cameraPerson);
+        }
+        if (typeof object.draw === "function" && object !== object.sprite)
+          object.draw(this.ctx, cameraPerson);
       });
 
     // Draw temporary pickup sprite
@@ -55,7 +57,7 @@ class Overworld {
 
   startGameLoop() {
     let previousMs;
-    const step = 1 / 60;
+    const step = 1 / 50;
 
     const stepFn = (timestampMs) => {
       // Stop here if paused
@@ -92,6 +94,16 @@ class Overworld {
         this.map.startCutscene([{ type: "pause" }]);
       }
     });
+    new KeyPressListener("KeyV", () => {
+      window.audioSettings.muted = !window.audioSettings.muted;
+      Howler.mute(window.audioSettings.muted);
+
+      // Update in localstorage
+      localStorage.setItem(
+        "audioSettings",
+        JSON.stringify(window.audioSettings)
+      );
+    });
   }
 
   bindHeroPositionCheck() {
@@ -113,11 +125,6 @@ class Overworld {
     if (!this.questManager) {
       this.questManager = new QuestManager({
         overworld: this,
-        onQuestStart: (questId, quest) => {
-          if (quest.timer) {
-            this.questTimer.start(questId, quest.timer);
-          }
-        },
         onQuestEnd: (questId) => {
           this.questTimer.stop();
         },
@@ -185,10 +192,8 @@ class Overworld {
     //Load the HUD
     // this.hud = new Hud();
     // this.hud.init(container);
-    this.startMap(this.progress.mapId, window.playerState.character);
-
     //Start the first map
-    // this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+    this.startMap(this.progress.mapId, window.playerState.character);
 
     //Create controls
     this.bindActionInput();

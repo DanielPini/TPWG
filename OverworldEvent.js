@@ -126,6 +126,27 @@ class OverworldEvent {
     resolve();
   }
 
+  startQuestTimer(resolve) {
+    console.log("Starting quest timer event for quest:", this.event.questId);
+    const questId = this.event.questId;
+    const quest = this.map.overworld.questManager.questDefinitions[questId];
+    if (quest && quest.timer) {
+      // Start the timer for the quest
+      this.map.overworld.questManager.timers[questId] = setTimeout(() => {
+        this.map.overworld.questManager.failQuest(questId);
+      }, quest.timer);
+      // Also start the visual timer
+      if (this.map.overworld.questTimer) {
+        this.map.overworld.questTimer.start(
+          questId,
+          quest.timer,
+          quest.milestones || []
+        );
+      }
+    }
+    resolve();
+  }
+
   completeQuest(resolve) {
     const questId = this.event.questId;
     this.map.overworld.questManager.completeQuest(questId);
@@ -172,11 +193,51 @@ class OverworldEvent {
       );
     }
 
+    let name = null;
+    if (this.event.who) {
+      const obj = this.map.gameObjects[this.event.who];
+      // Use obj.name if defined, else fallback to id
+      name = obj?.name || this.event.who;
+    }
     const message = new TextMessage({
       text: this.event.text,
+      name,
+      onComplete: () => {
+        console.log("TextMessage event resolved:", this.event.text);
+        resolve();
+      },
+    });
+    message.init(document.querySelector(".game-container"));
+  }
+
+  randomTextMessage(resolve) {
+    if (this.event.faceHero) {
+      const obj = this.map.gameObjects[this.event.faceHero];
+      obj.direction = utils.oppositeDirection(
+        this.map.gameObjects["hero"].direction
+      );
+    }
+
+    const options = this.event.options || [];
+    const text = options[Math.floor(Math.random() * options.length)];
+
+    let name = null;
+    if (this.event.who) {
+      const obj = this.map.gameObjects[this.event.who];
+      name = obj?.name || this.event.who;
+    }
+    const message = new TextMessage({
+      text,
+      name,
       onComplete: () => resolve(),
     });
     message.init(document.querySelector(".game-container"));
+  }
+
+  placeTableObjects(resolve) {
+    const table = this.map.gameObjects["table"];
+    table.interact();
+    resolve();
   }
 
   changeMap(resolve) {
@@ -240,6 +301,27 @@ class OverworldEvent {
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;
     resolve();
+  }
+
+  condition(resolve) {
+    const conditions = this.event.conditions || [];
+    const allMet = conditions.every((cond) => {
+      if (cond.type === "inventory") {
+        return cond.items.every((item) => playerState.inventory.includes(item));
+      }
+      if (cond.type === "storyFlag") {
+        return !!playerState.storyFlags[cond.flag];
+      }
+      return false;
+    });
+
+    const eventsToRun = allMet ? this.event.onSuccess : this.event.onFail;
+    if (eventsToRun && eventsToRun.length) {
+      // Run the events as a cutscene
+      this.map.startCutscene(eventsToRun).then(resolve);
+    } else {
+      resolve();
+    }
   }
 
   craftingMenu(resolve) {

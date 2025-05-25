@@ -123,6 +123,9 @@ class OverworldMap {
       if (config.type === "Plates") {
         obj = new Plates(config);
       }
+      if (config.type === "Table") {
+        obj = new Table(config);
+      }
 
       this.gameObjects[key] = obj;
       this.gameObjects[key].id = key;
@@ -156,7 +159,9 @@ class OverworldMap {
         event: events[i],
         map: this,
       });
+
       const result = await eventHandler.init();
+
       if (result === "LOST_BATTLE") {
         break;
       }
@@ -166,6 +171,16 @@ class OverworldMap {
 
   checkForActionCutscene() {
     const hero = this.gameObjects["hero"];
+    // Check if hero is facint the table
+    if (this.gameObjects["table"] && Table.isHeroFacingTable(hero)) {
+      // Trigger the table's talking events (e.g., placeTableObjects)
+      const table = this.gameObjects["table"];
+      if (table.talking && table.talking.length) {
+        console.log("Table talking triggered:", table.talking[0].events);
+        this.startCutscene(table.talking[0].events);
+        return;
+      }
+    }
     const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
     const match = Object.values(this.gameObjects).find((object) => {
       return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`;
@@ -814,7 +829,7 @@ function getConfigObjectsForHome(character) {
             {
               type: "textMessage",
               text: "Are you excited for the game?",
-              faceHero: "hero",
+              faceHero: "Didi",
             },
           ],
         },
@@ -825,6 +840,7 @@ function getConfigObjectsForHome(character) {
   const brotherNPCs = {
     Jiejie: {
       type: "Person",
+      name: "Jiejie",
       x: utils.withGrid(19),
       y: utils.withGrid(16),
       src: "./images/characters/people/Sister.png",
@@ -858,38 +874,103 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "up", time: 100 },
       ],
       talking: [
-        {
-          required: [],
-          disqualify: ["FETCH_PLATES_QUEST"],
-          events: [
-            { type: "startQuest", questId: "fetchPlates" },
-            { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
-            {
-              type: "textMessage",
-              text: "Mom wants you to get the plates for the table. They're over there.",
-            },
-          ],
-        },
-        {
-          required: ["PLATES_COLLECTED"], // <-- Only available after plates are collected
-          disqualify: [],
-          events: [
-            { type: "addStoryFlag", flag: "PLATES_DELIVERED" },
-            { type: "completeQuest", questId: "fetchPlates" },
-            { type: "textMessage", text: "Well done. Took long enough!" },
-            { type: "addStoryFlag", flag: "SENT_TO_BABA" },
-            {
-              type: "textMessage",
-              text: "Go see Ba-ba. He wanted you for something",
-            },
-          ],
-        },
-        // Optionally, a fallback dialog if the quest is active but not complete
+        // After collecting plates, but before delivering
         {
           required: ["FETCH_PLATES_QUEST"],
-          disqualify: ["PLATES_COLLECTED"],
+          disqualify: ["PLATES_DELIVERED"],
           events: [
-            { type: "textMessage", text: "Hurry up and get those plates!" },
+            {
+              type: "condition",
+              conditions: [
+                { type: "inventory", items: ["Plate A", "Plate B"] },
+              ],
+              onSuccess: [
+                { type: "completeQuest", questId: "fetchPlates" },
+                { type: "addStoryFlag", flag: "PLATES_DELIVERED" },
+                {
+                  who: "Jiejie",
+                  type: "textMessage",
+                  text: "Well done. Took long enough!",
+                  faceHero: "Jiejie",
+                },
+                { type: "addStoryFlag", flag: "SENT_TO_BABA" },
+                {
+                  who: "Jiejie",
+                  type: "textMessage",
+                  text: "Go see Ba-ba. He wanted you for something",
+                },
+              ],
+              onFail: [
+                {
+                  who: "Jiejie",
+                  type: "randomTextMessage",
+                  options: [
+                    "You don't have all the plates yet!",
+                    "How can you be taking this long?",
+                    "That table won't set itself! Get going.",
+                  ],
+                  faceHero: "Jiejie",
+                },
+              ],
+            },
+          ],
+        },
+        // After quest is complete, fallback dialogue
+        {
+          required: ["PLATES_DELIVERED"],
+          disqualify: ["FETCH_NERFS_QUEST"],
+          events: [
+            {
+              who: "Jiejie",
+              type: "textMessage",
+              text: "Go see Ba-ba. He wanted you for something.",
+              faceHero: "Jiejie",
+            },
+          ],
+        },
+        // After quest is complete, fallback dialogue
+        {
+          required: ["FETCH_NERFS_QUEST"],
+          disqualify: [],
+          events: [
+            {
+              who: "Jiejie",
+              type: "randomTextMessage",
+              options: [
+                "You're finally picking those up!",
+                "How do you have so much stuff?",
+              ],
+              faceHero: "Jiejie",
+            },
+          ],
+        },
+      ],
+    },
+    Mum: {
+      type: "Person",
+      name: "Mum",
+      x: utils.withGrid(18),
+      y: utils.withGrid(17),
+      src: "./images/characters/people/Mum.png",
+      behaviorLoop: [
+        { type: "stand", direction: "left", time: 1200 },
+        { type: "stand", direction: "right", time: 2800 },
+        { type: "stand", direction: "up", time: 1500 },
+        { type: "stand", direction: "left", time: 2200 },
+      ],
+      talking: [
+        {
+          events: [
+            {
+              who: "Mum",
+              type: "randomTextMessage",
+              options: [
+                "Such a good boy.",
+                "Have you finished your homework?",
+                "* Sigh * You know when your sister was your age, she got straight 'A's",
+              ],
+              faceHero: "Mum",
+            },
           ],
         },
       ],
@@ -952,10 +1033,13 @@ function getConfigObjectsForHome(character) {
           disqualify: ["SENT_TO_BABA"],
           events: [
             {
+              who: "Ba-ba",
               type: "textMessage",
-              text: "Such a good boy!",
+              text: "Such a good boy Didi!",
+              faceHero: "Baba",
             },
             {
+              who: "Ba-ba",
               type: "textMessage",
               text: "Go help your sister!",
             },
@@ -967,10 +1051,13 @@ function getConfigObjectsForHome(character) {
             { type: "startQuest", questId: "fetchNerfs" },
             { type: "addStoryFlag", flag: "FETCH_NERFS_QUEST" },
             {
+              who: "Ba-ba",
               type: "textMessage",
               text: "Your toys are all over the house!",
+              faceHero: "Baba",
             },
             {
+              who: "Ba-ba",
               type: "textMessage",
               text: "Pick them up before your mother sees!!!",
             },
@@ -985,6 +1072,17 @@ function getConfigObjectsForHome(character) {
       type: "Plates",
       x: utils.withGrid(21),
       y: utils.withGrid(11),
+    },
+    table: {
+      type: "Table",
+      x: utils.withGrid(7),
+      y: utils.withGrid(12),
+      placements: [],
+      talking: [
+        {
+          events: [{ type: "placeTableObjects" }],
+        },
+      ],
     },
   };
 
@@ -1153,80 +1251,82 @@ function getCutsceneSpacesForHome(character) {
 
   const brotherCutScenes = {
     // First entrance
-    // [utils.asGridCoord(19, 10)]: [
-    //   {
-    //     triggerOnLoad: true,
-    //     disqualify: ["SEEN_INTRO"],
-    //     events: [
-    //       { type: "addStoryFlag", flag: "SEEN_INTRO" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       {
-    //         who: "Jiejie",
-    //         type: "textMessage",
-    //         text: "You made it!",
-    //       },
-    //       { type: "stand", direction: "left", who: "Jiejie" },
-    //       {
-    //         type: "textMessage",
-    //         text: "Well... Hurry up! There's so much left to do!",
-    //       },
-    //       { type: "stand", direction: "up", who: "Jiejie" },
-    //       {
-    //         type: "textMessage",
-    //         text: "Chop chop! Grab those plates and get to work.",
-    //       },
-    //       { type: "stand", direction: "left", who: "Jiejie" },
-    //       {
-    //         type: "textMessage",
-    //         text: "I'll be watching and timing you!!",
-    //       },
-    //       { type: "walk", who: "Jiejie", direction: "down" },
-    //       { type: "walk", who: "Jiejie", direction: "down" },
-    //       { type: "walk", who: "Jiejie", direction: "down" },
-    //       { type: "walk", who: "Jiejie", direction: "down" },
-    //       { type: "walk", who: "Jiejie", direction: "down" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "stand", direction: "left", who: "hero" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "left" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "walk", who: "Jiejie", direction: "up" },
-    //       { type: "stand", direction: "down", who: "hero" },
-    //       {
-    //         type: "textMessage",
-    //         text: "Don't just stand there! Hurry up!",
-    //       },
-    //       {
-    //         type: "textMessage",
-    //         text: "* New Quest: Set the table *",
-    //       },
-    //       {
-    //         type: "textMessage",
-    //         text: "* Grab all 8 plates set the table *",
-    //       },
-    //     ],
-    //   },
-    // ],
+    [utils.asGridCoord(19, 10)]: [
+      {
+        triggerOnLoad: true,
+        disqualify: ["SEEN_INTRO"],
+        events: [
+          { type: "addStoryFlag", flag: "SEEN_INTRO" },
+          {
+            type: "textMessage",
+            text: "San is a very scary number!",
+          },
+          {
+            type: "textMessage",
+            text: "You never want them to count to three",
+          },
+          {
+            type: "textMessage",
+            text: "Slam the door or get low scores",
+          },
+          {
+            type: "textMessage",
+            text: "You'll be dead as 四 (the number 4)",
+          },
+          {
+            type: "textMessage",
+            text: "* Help Didi dodge trouble by having him set the dining table in record time, before Jiejie counts to 3 *",
+          },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "You made it!",
+            faceHero: "Jiejie",
+          },
+          { type: "stand", direction: "left", who: "Jiejie" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "Well... Hurry up! There's so much left to do!",
+          },
+          { type: "stand", direction: "up", who: "Jiejie" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "Chop chop! Grab those plates and chopsticks and get to work.",
+          },
+          { type: "stand", direction: "left", who: "Jiejie" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "I want all of them set on the dining room table before I count to 3 or there'll be trouble!",
+          },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "stand", direction: "down", who: "hero" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "Don't just stand there! Hurry up!",
+          },
+          {
+            type: "textMessage",
+            text: "* New Quest: Set the table *",
+          },
+          {
+            type: "textMessage",
+            text: "* Grab all 8 plates and all 8 sets of chopsticks and bring them to the table *",
+          },
+          { type: "startQuest", questId: "fetchPlates" },
+          { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
+          { type: "startQuestTimer", questId: "fetchPlates" },
+        ],
+      },
+    ],
   };
   return {
     ...shared,

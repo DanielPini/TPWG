@@ -11,12 +11,13 @@ class QuestTimer {
     this.duration = 0;
   }
 
-  start(questId, duration) {
+  start(questId, duration, milestones = []) {
     this.questId = questId;
     this.duration = duration;
     this.startTime = Date.now();
     this.elapsedBeforePause = 0;
     this.isPaused = false;
+    this.milestones = milestones.map((m) => ({ ...m, triggered: false }));
 
     this.element.style.display = "block";
 
@@ -27,6 +28,20 @@ class QuestTimer {
       const remaining = Math.max(0, this.duration - elapsed);
       const seconds = Math.ceil(remaining / 1000);
       this.element.textContent = `Time left: ${seconds}s`;
+
+      // Check milestones
+      this.milestones.forEach((milestone) => {
+        if (!milestone.triggered && remaining <= milestone.at) {
+          milestone.triggered = true;
+          // Show the TextMessage
+          new TextMessage({
+            text: milestone.text,
+            name: milestone.who || milestone.name,
+            autoClose: true,
+            autoCloseDelay: 3000,
+          }).init();
+        }
+      });
 
       if (remaining <= 0) {
         this.stop();

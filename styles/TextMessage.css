@@ -4,14 +4,14 @@
   right: 0;
   bottom: 0;
   height: 36px;
-  padding: 4px;
+  padding: 8px;
   background: var(--menu-background);
   border-top: 1px solid var(--menu-border-color);
   color: var(--menu-font-color);
 }
 .TextMessage_p {
   margin: 0;
-  font-size: 6px;
+  font-size: 5px;
 }
 .TextMessage span {
   opacity: 0;
@@ -33,4 +33,15 @@
   position: absolute;
   right: 2px;
   bottom: 0;
+}
+.TextMessage_nameplate {
+  position: absolute;
+  left: 0;
+  bottom: 36px;
+  height: 17px;
+  line-height: 1.5;
+  font-size: 6px;
+  padding: 4px;
+  background: var(--menu-background);
+  border: 1px solid var(--menu-border-color);
 }

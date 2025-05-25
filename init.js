@@ -3,7 +3,7 @@
   if (savedAudioSettings) {
     window.audioSettings = savedAudioSettings;
     Howler.volume(window.audioSettings.volume);
-    Howler.mute(window.audioSettings.isMuted);
+    Howler.mute(window.audioSettings.muted);
   } else {
     window.audioSettings = {
       volume: 0.5,
@@ -11,7 +11,7 @@
     };
   }
   Howler.volume(window.audioSettings.volume);
-  Howler.mute(window.audioSettings.isMuted);
+  Howler.mute(window.audioSettings.muted);
   const overworld = new Overworld({
     element: document.querySelector(".game-container"),
   });

@@ -10,6 +10,7 @@ class Plates extends GameObject {
       currentAnimation: "placed",
     });
     this.storyFlag = config.storyFlag;
+    this.translateSprite = [0, -4];
 
     this.talking = [
       {
@@ -32,7 +33,7 @@ class Plates extends GameObject {
             who: "hero",
             itemId: this.id,
             itemType: this.type,
-            time: 500,
+            time: 700,
           },
         ],
       },

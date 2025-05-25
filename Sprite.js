@@ -108,14 +108,22 @@ class Sprite {
     const x = this.gameObject.x - 10 + utils.withGrid(10.5) - cameraPerson.x;
     const y = this.gameObject.y - 23 + utils.withGrid(6) - cameraPerson.y;
     const scale = this.gameObject.scale || 1;
+    let translateX, translateY;
+    if (this.gameObject && this.gameObject.translateSprite) {
+      [translateX, translateY] = this.gameObject.translateSprite;
+    } else {
+      translateX = 0;
+      translateY = 0;
+    }
 
-    this.isShadowLoaded && ctx.drawImage(this.shadow, x + 2, y + 4);
+    this.isShadowLoaded &&
+      ctx.drawImage(this.shadow, x + 2 + translateX, y + 4 + translateY);
 
     const [frameX, frameY] = this.frame;
 
     if (this.isLoaded) {
       ctx.save();
-      ctx.translate(x + 2, y + 2);
+      ctx.translate(x + 2 + translateX, y + 2 + translateY);
       ctx.scale(scale, scale);
       ctx.drawImage(this.image, frameX * 32, frameY * 32, 32, 32, 0, 0, 32, 32);
       ctx.restore();
@@ -127,7 +135,13 @@ class Sprite {
   drawAt(ctx, x, y, cameraPerson) {
     if (this.isRemoved) return;
     const scale = this.gameObject?.scale || 1;
-
+    let translateX, translateY;
+    if (this.gameObject && this.gameObject.translateSprite) {
+      [translateX, translateY] = this.gameObject.translateSprite;
+    } else {
+      translateX = 0;
+      translateY = 0;
+    }
     // Calculate screen position relative to camera
     const screenX = x - 10 + utils.withGrid(10.5) - cameraPerson.x;
     const screenY = y - 23 + utils.withGrid(6) - cameraPerson.y;
@@ -137,7 +151,7 @@ class Sprite {
 
     if (this.isLoaded) {
       ctx.save();
-      ctx.translate(screenX + 2, screenY + 2);
+      ctx.translate(screenX + 2 + translateX, screenY - 3 + translateY);
       ctx.scale(scale, scale);
       ctx.drawImage(this.image, frameX * 32, frameY * 32, 32, 32, 0, 0, 32, 32);
       ctx.restore();

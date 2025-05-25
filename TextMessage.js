@@ -1,8 +1,18 @@
 class TextMessage {
-  constructor({ text, onComplete }) {
+  constructor({
+    text,
+    onComplete,
+    name,
+    autoClose = false,
+    autoCloseDelay = 2000,
+  }) {
     this.text = text;
     this.onComplete = onComplete;
     this.element = null;
+    this.name = name || null;
+    this.autoClose = autoClose;
+    this.autoCloseDelay = autoCloseDelay;
+    this.autoCloseTimeout = null;
   }
 
   createElement() {
@@ -11,6 +21,9 @@ class TextMessage {
     this.element.classList.add("TextMessage");
 
     this.element.innerHTML = `
+      ${
+        this.name ? `<div class="TextMessage_nameplate">${this.name}</div>` : ""
+      }
       <p class="TextMessage_p"></p>
       <button class="TextMessage_button">Next</button>
     `;
@@ -39,6 +52,7 @@ class TextMessage {
     }
     this.element.remove();
     this.actionListener?.unbind();
+    if (this.autoCloseTimeout) clearTimeout(this.autoCloseTimeout);
     if (this.onComplete) this.onComplete();
   }
 
@@ -52,5 +66,12 @@ class TextMessage {
     this.createElement();
     container.appendChild(this.element);
     this.revealingText.init();
+
+    if (this.autoClose) {
+      this.autoCloseTimeout = setTimeout(
+        () => this.done(),
+        this.autoCloseDelay
+      );
+    }
   }
 }

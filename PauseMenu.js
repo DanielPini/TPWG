@@ -82,17 +82,17 @@ class PauseMenu {
   getSoundOptions() {
     return [
       {
-        label: window.audioSettings.isMuted ? "Unmute" : "Mute",
-        description: window.audioSettings.isMuted
+        label: window.audioSettings.muted ? "Unmute" : "Mute",
+        description: window.audioSettings.muted
           ? "Currently muted. Click to unmute."
           : "Currently unmuted. Click to mute.",
         handler: () => {
-          window.audioSettings.isMuted = !window.audioSettings.isMuted;
+          window.audioSettings.muted = !window.audioSettings.muted;
           localStorage.setItem(
             "audioSettings",
             JSON.stringify(window.audioSettings)
           );
-          Howler.mute(window.audioSettings.isMuted);
+          Howler.mute(window.audioSettings.muted);
           this.keyboardMenu.setOptions(this.getSoundOptions()); // Refresh menu
         },
       },
@@ -128,7 +128,7 @@ class PauseMenu {
         label: `Current Volume: ${(window.audioSettings.volume * 100).toFixed(
           0
         )}%`,
-        description: window.audioSettings.isMuted ? "Muted" : "Sound On",
+        description: window.audioSettings.muted ? "Muted" : "Sound On",
         handler: () => {},
       },
       {

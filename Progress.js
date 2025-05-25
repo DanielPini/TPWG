@@ -45,7 +45,17 @@ class Progress {
     }
 
     const file = window.localStorage.getItem(this.saveFileKey);
-    return file ? JSON.parse(file) : null;
+    if (!file) return null;
+    try {
+      const parsed = JSON.parse(file);
+      // Check for required properties to confirm it's a valid save
+      if (parsed && parsed.mapId && parsed.playerState) {
+        return parsed;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 
   load() {

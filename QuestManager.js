@@ -19,6 +19,7 @@ class QuestManager {
     if (!quest || this.activeQuests[questId]) return;
 
     console.log(`Starting quest: ${questId}`);
+
     this.activeQuests[questId] = {
       ...quest,
       id: questId,
@@ -27,30 +28,18 @@ class QuestManager {
       duration: quest.timer || null,
     };
 
+    quest.previousMusic = window.lastMusicSrc;
+
+    if (quest.music) {
+      console.log(this.overworld.map);
+      this.overworld.map.handleMusicEvent({ src: quest.music, loop: true });
+    }
+
     if (this.onQuestStart) {
       this.onQuestStart(questId, quest);
     }
 
-    if (quest.timer) {
-      this.timers[questId] = setTimeout(() => {
-        this.failQuest(questId);
-      }, quest.timer);
-    }
-
     this.spawnQuestObjectsForCurrentMap(quest);
-
-    // if (quest.spawnObjects) {
-    //   quest.spawnObjects.forEach((obj) => {
-    //     this.overworld.addGameObject(obj);
-    //   });
-    // }
-
-    // Start timer if defined
-    if (quest.timer) {
-      this.timers[questId] = setTimeout(() => {
-        this.failQuest(questId);
-      }, quest.timer);
-    }
 
     // Trigger optional start events
     if (quest.onStart) {
@@ -76,7 +65,10 @@ class QuestManager {
     if (!this.activeQuests[questId]) return;
 
     console.log(`Quest completed: ${questId}`);
-    clearTimeout(this.timers[questId]);
+    if (this.timers && this.timers[questId]) {
+      clearTimeout(this.timers[questId]);
+      delete this.timers[questId];
+    }
     delete this.activeQuests[questId];
     this.completedQuests.add(questId);
 
@@ -114,7 +106,10 @@ class QuestManager {
     if (!this.activeQuests[questId]) return;
 
     console.log(`Quest failed: ${questId}`);
-    clearTimeout(this.timers[questId]);
+    if (this.timers && this.timers[questId]) {
+      clearTimeout(this.timers[questId]);
+      delete this.timers[questId];
+    }
     delete this.activeQuests[questId];
     this.failedQuests.add(questId);
 
@@ -140,7 +135,7 @@ class QuestManager {
     }
 
     // Optional fail handler
-    console.log("Inside quest fail, onFail about to be balled.");
+    console.log("Inside quest fail, onFail about to be called.");
     if (quest.onFail) {
       quest.onFail(this.overworld);
     }
