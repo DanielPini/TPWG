@@ -1,24 +1,6 @@
-window.PLATE_NAMES = [
-  "Plate",
-  "Plate A",
-  "Plate B",
-  "Plate C",
-  "Plate D",
-  "Plate E",
-  "Plate F",
-  "Plate G",
-];
+window.PLATE_NAMES = ["plate"];
 
-window.CHOPSTICK_NAMES = [
-  "Chopsticks",
-  "Chopsticks A",
-  "Chopsticks B",
-  "Chopsticks C",
-  "Chopsticks D",
-  "Chopsticks E",
-  "Chopsticks F",
-  "Chopsticks G",
-];
+window.CHOPSTICK_NAMES = ["chopstick"];
 
 window.TABLE_GRID_SQUARES = [
   [7, 12],
@@ -44,10 +26,15 @@ window.TABLE_PLACEMENT_POSITIONS = [
   { x: 11, y: 12 },
   { x: 7, y: 13 },
   { x: 11, y: 13 },
-  { x: 7, y: 4 },
+  { x: 7, y: 14 },
   { x: 9, y: 14 },
   { x: 11, y: 14 },
 ];
+
+const PLATE_IMG = new Image();
+PLATE_IMG.src = "./images/objects/Plates.png";
+const CHOPSTICKS_IMG = new Image();
+CHOPSTICKS_IMG.src = "./images/objects/Chopsticks.png";
 
 class Table extends GameObject {
   constructor(config) {
@@ -60,57 +47,57 @@ class Table extends GameObject {
     const { x, y } = utils.nextPosition(hero.x, hero.y, hero.direction);
     const gridX = x / 16;
     const gridY = y / 16;
-    console.log("Hero is facing:", gridX, gridY);
-    console.log("Table squares:", window.TABLE_GRID_SQUARES);
     const match = window.TABLE_GRID_SQUARES.some(
       ([tx, ty]) => tx === gridX && ty === gridY
     );
-    console.log("Match found:", match);
     return match;
   }
 
   interact() {
-    // 1. Count how many plates/chopsticks are already placed
-    const placedPlates = this.placements.filter(
-      (p) => p.type === "Plate"
-    ).length;
-    const placedChopsticks = this.placements.filter(
-      (p) => p.type === "Chopsticks"
-    ).length;
+    console.log("Player inventory:", window.playerState.inventory);
 
-    // 2. Count how many are in inventory
-    const invPlates = playerState.inventory.filter((i) =>
-      window.PLATE_NAMES.includes(i)
-    ).length;
-    const invChopsticks = playerState.inventory.filter((i) =>
-      window.CHOPSTICK_NAMES.includes(i)
-    ).length;
+    // For each placement position, try to place a plate and/or chopsticks
+    window.TABLE_PLACEMENT_POSITIONS.forEach((pos) => {
+      // Only place a plate if not already present at this position
+      if (
+        !this.placements.some(
+          (p) => p.x === pos.x && p.y === pos.y && p.type === "Plate"
+        )
+      ) {
+        const plateIdx = playerState.inventory.findIndex((item) =>
+          window.PLATE_NAMES.includes(item)
+        );
+        if (plateIdx > -1) {
+          this.placements.push({
+            type: "Plate",
+            state: "normal",
+            x: pos.x,
+            y: pos.y,
+          });
+          playerState.inventory.splice(plateIdx, 1);
+        }
+      }
 
-    // 3. Calculate how many to place (up to 8 each)
-    const toPlacePlates = Math.min(8 - placedPlates, invPlates);
-    const toPlaceChopsticks = Math.min(8 - placedChopsticks, invChopsticks);
+      // Only place chopsticks if not already present at this position
+      if (
+        !this.placements.some(
+          (p) => p.x === pos.x && p.y === pos.y && p.type === "Chopsticks"
+        )
+      ) {
+        const chopIdx = playerState.inventory.findIndex((item) =>
+          window.CHOPSTICK_NAMES.includes(item)
+        );
+        if (chopIdx > -1) {
+          this.placements.push({
+            type: "Chopsticks",
+            x: pos.x,
+            y: pos.y,
+          });
+          playerState.inventory.splice(chopIdx, 1);
+        }
+      }
+    });
 
-    // 4. Place them on the table
-    let placementIndex = 0;
-    for (let i = 0; i < toPlacePlates; i++) {
-      this.placements.push({
-        type: "Plate",
-        ...TABLE_PLACEMENT_POSITIONS[placementIndex++],
-      });
-      // Remove from inventory
-      const idx = playerState.inventory.indexOf("Plate");
-      if (idx > -1) playerState.inventory.splice(idx, 1);
-    }
-    for (let i = 0; i < toPlaceChopsticks; i++) {
-      this.placements.push({
-        type: "Chopsticks",
-        ...TABLE_PLACEMENT_POSITIONS[placementIndex++],
-      });
-      const idx = playerState.inventory.indexOf("Chopsticks");
-      if (idx > -1) playerState.inventory.splice(idx, 1);
-    }
-
-    // Completion check
     if (
       this.placements.filter((p) => p.type === "Plate").length === 8 &&
       this.placements.filter((p) => p.type === "Chopsticks").length === 8
@@ -122,43 +109,85 @@ class Table extends GameObject {
     }
   }
 
+  breakAllPlacements(onCleared) {
+    console.log("Breaking all placements!", this.placements);
+    this.placements.forEach((p) => (p.state = "broken"));
+    setTimeout(() => {
+      console.log("Clearing placements");
+      this.placements = [];
+      if (onCleared) onCleared();
+    }, 2000);
+  }
+
   // Optionally, override draw() to render plates/chopsticks at placements
   draw(ctx, cameraPerson) {
-    // Draw each placed object
-    this.placements.forEach((placement) => {
-      let img = new Image();
-      if (placement.type === "Plate") {
-        img.src = "./images/objects/Plates.png";
-      } else if (placement.type === "Chopsticks") {
-        img.src = "./images/objects/Chopsticks.png"; // Update path as needed
+    const DRAW_SIZE = 28;
+    const GRID_SIZE = 16;
+    const OFFSET = GRID_SIZE - DRAW_SIZE / 2;
+    const minY = 12;
+
+    // Draw plates first, then chopsticks for each placement position
+    window.TABLE_PLACEMENT_POSITIONS.forEach((pos) => {
+      // Find plate and chopsticks at this position
+      const plate = this.placements.find(
+        (p) => p.x === pos.x && p.y === pos.y && p.type === "Plate"
+      );
+      const chopsticks = this.placements.find(
+        (p) => p.x === pos.x && p.y === pos.y && p.type === "Chopsticks"
+      );
+
+      // Draw plate if present
+      if (plate) {
+        let sx = 0,
+          sy = 0;
+        let img = PLATE_IMG;
+        if (plate.state === "broken") {
+          sx = 0;
+          sy = 4;
+        }
+        if (img && img.complete) {
+          ctx.drawImage(
+            img,
+            sx * 32,
+            sy * 32,
+            32,
+            32,
+            pos.x * GRID_SIZE - cameraPerson.x + utils.withGrid(10) + OFFSET,
+            pos.y * GRID_SIZE -
+              cameraPerson.y +
+              utils.withGrid(5) +
+              OFFSET -
+              7 -
+              3 * (pos.y - minY),
+            DRAW_SIZE,
+            DRAW_SIZE
+          );
+        }
       }
-      // Only draw if loaded
-      img.onload = () => {
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          32,
-          32, // source, x, y, width, height (top frame)
-          placement.x * 32 - cameraPerson.x + utils.withGrid(10.5) - 10,
-          placement.y * 32 - cameraPerson.y + utils.withGrid(6) - 23,
-          32,
-          32 // destination width, height
-        );
-      };
-      // If already loaded from cache, draw immediately
-      if (img.complete) {
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          32,
-          32, // source, x, y, width, height (top frame)
-          placement.x * 32 - cameraPerson.x + utils.withGrid(10.5) - 10,
-          placement.y * 32 - cameraPerson.y + utils.withGrid(6) - 23,
-          32,
-          32
-        );
+
+      // Draw chopsticks if present
+      if (chopsticks) {
+        let sx = 0,
+          sy = 0;
+        let img = CHOPSTICKS_IMG;
+        if (img && img.complete) {
+          ctx.drawImage(
+            img,
+            sx * 32,
+            sy * 32,
+            32,
+            32,
+            pos.x * GRID_SIZE - cameraPerson.x + utils.withGrid(10) + OFFSET,
+            pos.y * GRID_SIZE -
+              cameraPerson.y +
+              utils.withGrid(5) +
+              OFFSET -
+              7 -
+              3 * (pos.y - minY),
+            DRAW_SIZE,
+            DRAW_SIZE
+          );
+        }
       }
     });
   }

@@ -6,6 +6,7 @@ class QuestTimer {
     this.createElement();
     document.querySelector(".game-container").appendChild(this.element);
     this.isPaused = false;
+    this.pauseStartedAt = null;
     this.startTime = null;
     this.elapsedBeforePause = 0;
     this.duration = 0;
@@ -17,6 +18,7 @@ class QuestTimer {
     this.startTime = Date.now();
     this.elapsedBeforePause = 0;
     this.isPaused = false;
+    this.pauseStartedAt = null;
     this.milestones = milestones.map((m) => ({ ...m, triggered: false }));
 
     this.element.style.display = "block";
@@ -52,13 +54,17 @@ class QuestTimer {
   pause() {
     if (!this.isPaused) {
       this.isPaused = true;
-      this.elapsedBeforePause += Date.now() - this.startTime;
+      this.pauseStartedAt = Date.now();
     }
   }
 
   resume() {
     if (this.isPaused) {
       this.isPaused = false;
+      if (this.pauseStartedAt) {
+        this.elapsedBeforePause += Date.now() - this.pauseStartedAt;
+        this.pauseStartedAt = null;
+      }
       this.startTime = Date.now();
     }
   }

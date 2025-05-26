@@ -512,13 +512,13 @@ window.OverworldMaps = {
             "7, 3",
             "8, 3",
             // Right wall
-            "9, 4",
-            "9, 5",
-            "9, 6",
-            "9, 7",
-            "9, 8",
-            "9, 9",
-            "9, 10",
+            "6, 4",
+            "6, 5",
+            "6, 6",
+            "6, 7",
+            "6, 8",
+            "6, 9",
+            "6, 10",
             // Bottom wall
             "1, 11",
             "2, 11",
@@ -529,7 +529,6 @@ window.OverworldMaps = {
             "7, 11",
             "8, 11",
             // Left wall
-            // Right wall
             "0, 4",
             "0, 5",
             "0, 6",
@@ -537,6 +536,20 @@ window.OverworldMaps = {
             "-1, 8",
             "0, 9",
             "0, 10",
+            // Assets
+            // Shower
+            "5, 8",
+            "4, 8",
+            "4, 9",
+            // Dresser
+            "3, 9",
+            "2, 9",
+            "1, 9",
+            // Toilet
+            "4, 4",
+            // Bath
+            "2, 4",
+            "1, 4",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -684,6 +697,14 @@ window.OverworldMaps = {
             "-1, 7",
             "-1, 8",
             "-1, 9",
+            // Assets
+            // Ironing board
+            "0, 4",
+            "1, 4",
+            // Dryer
+            "2, 4",
+            // Washing machine
+            "4, 4",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -789,7 +810,7 @@ function getConfigObjectsForHome(character) {
     hero: {
       type: "Person",
       isPlayerControlled: true,
-      x: utils.withGrid(19),
+      x: utils.withGrid(20),
       y: utils.withGrid(10),
       direction: "down",
       src: `./images/characters/people/Sister.png`,
@@ -812,15 +833,26 @@ function getConfigObjectsForHome(character) {
   const sisterNPCs = {
     Didi: {
       type: "Person",
-      x: utils.withGrid(19),
-      y: utils.withGrid(16),
+      x: utils.withGrid(18),
+      y: utils.withGrid(17),
       src: "./images/characters/people/Brother.png",
       behaviorLoop: [
-        { type: "walk", direction: "left" },
-        { type: "walk", direction: "down" },
-        { type: "walk", direction: "right" },
-        { type: "walk", direction: "up" },
-        { type: "stand", direction: "up", time: 400 },
+        { type: "stand", direction: "right", time: 200 },
+        { type: "walk", direction: "up", who: "Didi" },
+        { type: "walk", direction: "up", who: "Didi" },
+        { type: "stand", direction: "left", time: 1500 },
+        { type: "stand", direction: "down", time: 1400 },
+        { type: "walk", direction: "up", who: "Didi" },
+        { type: "walk", direction: "up", who: "Didi" },
+        { type: "stand", direction: "right", time: 600 },
+        { type: "walk", direction: "down", who: "Didi" },
+        { type: "walk", direction: "down", who: "Didi" },
+        { type: "stand", direction: "left", time: 1500 },
+        { type: "stand", direction: "down", time: 1400 },
+        { type: "walk", direction: "down", who: "Didi" },
+        { type: "walk", direction: "down", who: "Didi" },
+        { type: "stand", direction: "up", time: 600 },
+        { type: "stand", direction: "right", time: 600 },
       ],
       talking: [
         {
@@ -830,6 +862,68 @@ function getConfigObjectsForHome(character) {
               type: "textMessage",
               text: "Are you excited for the game?",
               faceHero: "Didi",
+            },
+          ],
+        },
+      ],
+    },
+    Mum: {
+      type: "Person",
+      x: utils.withGrid(19),
+      y: utils.withGrid(16),
+      src: "./images/characters/people/Mum.png",
+      behaviorLoop: [
+        { type: "stand", direction: "left", time: 1200 },
+        { type: "stand", direction: "down", time: 700 },
+        { type: "stand", direction: "right", time: 500 },
+        { type: "stand", direction: "up", time: 3000 },
+        { type: "stand", direction: "up", time: 400 },
+      ],
+      talking: [
+        {
+          required: [],
+          events: [
+            {
+              type: "randomTextMessage",
+              options: [
+                "Oh, you forgot to pack your own fruit",
+                "You didn't finish lunch yesterday. You gotta eat more food.",
+              ],
+              faceHero: "Mum",
+            },
+          ],
+        },
+      ],
+    },
+    Baba: {
+      type: "Person",
+      x: utils.withGrid(3),
+      y: utils.withGrid(10),
+      src: "./images/characters/people/Ba-ba.png",
+      behaviorLoop: [
+        { type: "stand", direction: "left", time: 1200 },
+        { type: "stand", direction: "down", time: 700 },
+        { type: "stand", direction: "right", time: 500 },
+        { type: "stand", direction: "up", time: 3000 },
+        { type: "stand", direction: "up", time: 400 },
+      ],
+      talking: [
+        {
+          required: [],
+          events: [
+            {
+              type: "textMessage",
+              text: "Help your mum prepare for our guests!",
+              faceHero: "Baba",
+            },
+            {
+              type: "randomTextMessage",
+              options: [
+                "The laundry is a mess. Take some of the load from your mum.",
+                "Your brother is making a mess again. Get him under control!",
+                "Is all the food ready for this evening?",
+              ],
+              faceHero: "Baba",
             },
           ],
         },
@@ -874,6 +968,27 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "up", time: 100 },
       ],
       talking: [
+        {
+          disqualify: ["FETCH_PLATES_QUEST"],
+          events: [
+            {
+              type: "textMessage",
+              text: "What do you mean I counted too quickly?!",
+            },
+            { type: "textMessage", text: "Try again!" },
+            {
+              type: "textMessage",
+              text: "* New Quest: Set the table *",
+            },
+            {
+              type: "textMessage",
+              text: "* Grab all 8 plates and all 8 sets of chopsticks and bring them to the table *",
+            },
+            { type: "startQuest", questId: "fetchPlates" },
+            { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
+            { type: "startQuestTimer", questId: "fetchPlates" },
+          ],
+        },
         // After collecting plates, but before delivering
         {
           required: ["FETCH_PLATES_QUEST"],
@@ -881,9 +996,7 @@ function getConfigObjectsForHome(character) {
           events: [
             {
               type: "condition",
-              conditions: [
-                { type: "inventory", items: ["Plate A", "Plate B"] },
-              ],
+              conditions: [{ type: "tableSet", plates: 8, chopsticks: 8 }],
               onSuccess: [
                 { type: "completeQuest", questId: "fetchPlates" },
                 { type: "addStoryFlag", flag: "PLATES_DELIVERED" },
@@ -893,12 +1006,27 @@ function getConfigObjectsForHome(character) {
                   text: "Well done. Took long enough!",
                   faceHero: "Jiejie",
                 },
-                { type: "addStoryFlag", flag: "SENT_TO_BABA" },
+                {
+                  who: "Didi",
+                  type: "textMessage",
+                  text: "EZ moneyyyyyyy.",
+                },
+                {
+                  who: "Mum",
+                  type: "textMessage",
+                  text: "Here. Come get the snack I made you as a reward.",
+                },
+                {
+                  who: "Jiejie",
+                  type: "textMessage",
+                  text: "...So spoiled...",
+                },
                 {
                   who: "Jiejie",
                   type: "textMessage",
                   text: "Go see Ba-ba. He wanted you for something",
                 },
+                { type: "addStoryFlag", flag: "SENT_TO_BABA" },
               ],
               onFail: [
                 {
@@ -960,6 +1088,7 @@ function getConfigObjectsForHome(character) {
       ],
       talking: [
         {
+          disqualify: ["PLATES_DELIVERED"],
           events: [
             {
               who: "Mum",
@@ -969,6 +1098,17 @@ function getConfigObjectsForHome(character) {
                 "Have you finished your homework?",
                 "* Sigh * You know when your sister was your age, she got straight 'A's",
               ],
+              faceHero: "Mum",
+            },
+          ],
+        },
+        {
+          required: ["PLATES_DELIVERED"],
+          events: [
+            {
+              who: "Mum",
+              type: "textMessage",
+              text: "Here, try this. I made a snack just for you!",
               faceHero: "Mum",
             },
           ],
@@ -1033,33 +1173,113 @@ function getConfigObjectsForHome(character) {
           disqualify: ["SENT_TO_BABA"],
           events: [
             {
-              who: "Ba-ba",
-              type: "textMessage",
-              text: "Such a good boy Didi!",
+              who: "Baba",
+              type: "randomTextMessage",
+              options: [
+                "Such a good boy Didi!",
+                "Did you leave some Nerfs around the house?",
+                "Your mother is in a rush. Best be on your best behaviour!",
+              ],
               faceHero: "Baba",
             },
             {
-              who: "Ba-ba",
+              who: "Baba",
               type: "textMessage",
-              text: "Go help your sister!",
+              text: "Best go help your mother and sister!",
             },
           ],
         },
         {
           required: ["PLATES_COLLECTED", "SENT_TO_BABA"],
+          disqualify: ["FETCH_NERFS_QUEST"],
           events: [
             { type: "startQuest", questId: "fetchNerfs" },
             { type: "addStoryFlag", flag: "FETCH_NERFS_QUEST" },
             {
-              who: "Ba-ba",
+              who: "Baba",
               type: "textMessage",
-              text: "Your toys are all over the house!",
+              text: "Clean this up before your mother sees!",
+              faceHero: "Baba",
+            },
+            { type: "stand", direction: "up", who: "Baba" },
+            {
+              who: "Baba",
+              type: "textMessage",
+              text: "Just look at how many Nerf bullets are lying on the floor!",
               faceHero: "Baba",
             },
             {
-              who: "Ba-ba",
+              who: "Didi",
               type: "textMessage",
-              text: "Pick them up before your mother sees!!!",
+              text: "...I used the sofa as a barricade for my Nerf Wars...",
+            },
+            {
+              who: "Baba",
+              type: "textMessage",
+              text: "Your mum has guests arriving for dinner soon!",
+              faceHero: "Baba",
+            },
+            {
+              who: "Baba",
+              type: "textMessage",
+              text: "Stop messing around and get to cleaning!",
+              faceHero: "Baba",
+            },
+            {
+              who: "Didi",
+              type: "textMessage",
+              text: "We used to play together, pillow forts and everything...",
+            },
+            { type: "walk", direction: "down", who: "hero" },
+            {
+              who: "Didi",
+              type: "textMessage",
+              text: "This was our playground...",
+            },
+            { type: "textMessage", text: "Inside, the walls don't move." },
+            {
+              type: "textMessage",
+              text: "So I turn them into something else.",
+            },
+            { type: "textMessage", text: "A fort. A maze. A game." },
+            { type: "textMessage", text: "Until someone calls my name," },
+            { type: "textMessage", text: "and the spell breaks." },
+            { type: "stand", direction: "down", who: "Baba" },
+            { type: "stand", direction: "up", who: "hero" },
+            {
+              type: "textMessage",
+              text: "Didi, stop daydreaming and get cleaning!",
+            },
+            {
+              type: "textMessage",
+              text: "* New Quest: Find and collect all the Nerf bullets around the house! *",
+            },
+            { type: "startQuest", questId: "fetchNerfs" },
+            { type: "addStoryFlag", flag: "FETCH_NERFS_QUEST" },
+          ],
+        },
+        {
+          required: ["NERFS_COLLECTED"],
+          events: [
+            {
+              type: "textMessage",
+              text: "Well done! Don't forget to clean up when you play in the future",
+              who: "Baba",
+            },
+            {
+              type: "textMessage",
+              text: "...and I think you're mature enough now to see things from other people's perspective.",
+              who: "Baba",
+            },
+            { type: "storyFlag", flag: "SISTER_UNLOCKED" },
+            { type: "unlockSister" },
+            {
+              type: "textMessage",
+              text: "* Jiejie is now playable through the Pause Menu (press Escape) *",
+            },
+            {
+              type: "textMessage",
+              text: "* Continue with Jiejie's character to experience the second half of the game *",
             },
           ],
         },
@@ -1068,11 +1288,6 @@ function getConfigObjectsForHome(character) {
   };
 
   const shared = {
-    plates: {
-      type: "Plates",
-      x: utils.withGrid(21),
-      y: utils.withGrid(11),
-    },
     table: {
       type: "Table",
       x: utils.withGrid(7),
@@ -1257,6 +1472,124 @@ function getCutsceneSpacesForHome(character) {
         disqualify: ["SEEN_INTRO"],
         events: [
           { type: "addStoryFlag", flag: "SEEN_INTRO" },
+          { type: "walk", who: "Mum", direction: "up" },
+          { type: "walk", who: "Mum", direction: "up" },
+          { type: "walk", who: "Mum", direction: "up" },
+          { type: "walk", who: "Mum", direction: "up" },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "Guests are arriving!",
+            faceHero: "Mum",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "We have exactly 1 hour and 12 minutes to get ready and if we round that down...!",
+            faceHero: "Mum",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "We really only have 1 hour, which means 60 minutes, whih is really 45 minutes if we think about plating...",
+            faceHero: "Mum",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "... and also in case they get lost on teh way here which is really 30 minutes because we need to tidy up the house...",
+            faceHero: "Mum",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "... WHICH IS NOT ENOUGH TIME!!!",
+            faceHero: "Mum",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "How the heck did we get from 1 hour and 12 minutes down to 30 minutes...",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "And no one helps me around the house anymore. I have to do everything.",
+            faceHero: "Mum",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "I can set up the table-",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "But you never do it right. Ayaaaaaa just forget, I'll do it.",
+            faceHero: "Mum",
+          },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          { type: "walk", who: "Jiejie", direction: "up" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "You made it!",
+            faceHero: "Jiejie",
+          },
+          { type: "stand", direction: "left", who: "Jiejie" },
+          { type: "stand", direction: "right", who: "Mum" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "No mum, just let Didi do it. It'll be good for him to know how to.",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "But if he doesn't do it right, I'll have to redo it anyway and that's so much time wasted and we only have 3 minutes!",
+            faceHero: "Mum",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "How did we get from 30 minutes to 3 minutes?",
+          },
+          { type: "stand", direction: "up", who: "Jiejie" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "Mum, you concentrate on the cooking, I'll make sure Didi gets it done",
+          },
+          { type: "walk", who: "Mum", direction: "down" },
+          { type: "walk", who: "Mum", direction: "down" },
+          { type: "walk", who: "Mum", direction: "down" },
+          { type: "walk", who: "Mum", direction: "down" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "I'm going to count to 3, and you must finish setting the table!",
+          },
+          { type: "stand", direction: "left", who: "Jiejie" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "I want all of the chopsticks and plates set on the dining room table before I get to san, or there'll be trouble!",
+          },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "walk", who: "Jiejie", direction: "down" },
+          { type: "stand", direction: "down", who: "hero" },
+          {
+            who: "Jiejie",
+            type: "textMessage",
+            text: "Don't just stand there! Hurry up!",
+          },
           {
             type: "textMessage",
             text: "San is a very scary number!",
@@ -1276,42 +1609,6 @@ function getCutsceneSpacesForHome(character) {
           {
             type: "textMessage",
             text: "* Help Didi dodge trouble by having him set the dining table in record time, before Jiejie counts to 3 *",
-          },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "You made it!",
-            faceHero: "Jiejie",
-          },
-          { type: "stand", direction: "left", who: "Jiejie" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Well... Hurry up! There's so much left to do!",
-          },
-          { type: "stand", direction: "up", who: "Jiejie" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Chop chop! Grab those plates and chopsticks and get to work.",
-          },
-          { type: "stand", direction: "left", who: "Jiejie" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "I want all of them set on the dining room table before I count to 3 or there'll be trouble!",
-          },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "stand", direction: "down", who: "hero" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Don't just stand there! Hurry up!",
           },
           {
             type: "textMessage",

@@ -20,6 +20,18 @@ class QuestManager {
 
     console.log(`Starting quest: ${questId}`);
 
+    if (quest.timer) {
+      if (!this.timers) this.timers = {};
+      if (this.timers[questId]) {
+        clearTimeout(this.timers[questId]);
+        delete this.timers[questId];
+      }
+      // Start the timer
+      if (window.questTimer) {
+        window.questTimer.start(questId, quest.timer, quest.milestones);
+      }
+    }
+
     this.activeQuests[questId] = {
       ...quest,
       id: questId,
@@ -69,6 +81,9 @@ class QuestManager {
       clearTimeout(this.timers[questId]);
       delete this.timers[questId];
     }
+    if (window.questTimer) {
+      window.questTimer.stop();
+    }
     delete this.activeQuests[questId];
     this.completedQuests.add(questId);
 
@@ -109,6 +124,9 @@ class QuestManager {
     if (this.timers && this.timers[questId]) {
       clearTimeout(this.timers[questId]);
       delete this.timers[questId];
+    }
+    if (window.questTimer) {
+      window.questTimer.stop();
     }
     delete this.activeQuests[questId];
     this.failedQuests.add(questId);

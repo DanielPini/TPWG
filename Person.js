@@ -174,6 +174,12 @@ class Person extends GameObject {
     } else if (this.isSitting) {
       this.sprite.setAnimation("sit-" + this.direction);
       return;
-    } else this.sprite.setAnimation("idle-" + this.direction);
+    } else if (this.isChopping) {
+      // <-- Add this block
+      this.sprite.setAnimation("chop-right");
+      return;
+    } else {
+      this.sprite.setAnimation("idle-" + this.direction);
+    }
   }
 }

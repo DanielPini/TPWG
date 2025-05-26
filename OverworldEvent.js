@@ -76,7 +76,8 @@ class OverworldEvent {
 
     // Animate item above character
     const typeToImage = {
-      Nerf: "./images/Nerf.png",
+      NerfPile: "./images/objects/Nerf.png",
+      Nerf: "./images/objects/Nerf.png",
       Plates: "./images/objects/Plates.png",
     };
 
@@ -161,28 +162,99 @@ class OverworldEvent {
     resolve();
   }
 
+  unlockSister(resolve) {
+    window.playerState.sisterUnlocked = true;
+    resolve();
+  }
+
   walk(resolve) {
     const who = this.map.gameObjects[this.event.who];
+    const direction = this.event.direction;
 
-    who.startBehavior(
-      {
-        map: this.map,
-      },
-      {
-        type: "walk",
-        direction: this.event.direction,
-        retry: true,
-      }
-    );
+    if (who.isPlayerControlled) {
+      const maxRetries = 30;
+      let retries = 0;
 
-    //Set up a handler to complete when correct person is done walking, then resolve the event
-    const completeHandler = (e) => {
-      if (e.detail.whoId === this.event.who) {
-        document.removeEventListener("PersonWalkingComplete", completeHandler);
-        resolve();
-      }
-    };
-    document.addEventListener("PersonWalkingComplete", completeHandler);
+      const tryWalk = () => {
+        // Only check for blocking during cutscenes
+        if (!this.map.isSpaceTaken(who.x, who.y, direction, who.id)) {
+          who.startBehavior(
+            { map: this.map },
+            { type: "walk", direction: this.event.direction, retry: true }
+          );
+
+          // Set up a handler to complete when correct person is done walking, then resolve the event
+          const completeHandler = (e) => {
+            if (e.detail.whoId === this.event.who) {
+              document.removeEventListener(
+                "PersonWalkingComplete",
+                completeHandler
+              );
+              resolve();
+            }
+          };
+          document.addEventListener("PersonWalkingComplete", completeHandler);
+        } else {
+          // Space is taken, try again after a short delay
+          retries++;
+          if (retries < maxRetries) {
+            setTimeout(tryWalk, 100);
+          } else {
+            // Give up after too many retries to avoid infinite loop
+            console.warn(
+              `Cutscene walk for ${this.event.who} blocked after ${maxRetries} retries.`
+            );
+            resolve();
+          }
+        }
+      };
+      tryWalk();
+    } else {
+      who.startBehavior(
+        {
+          map: this.map,
+        },
+        {
+          type: "walk",
+          direction: this.event.direction,
+          retry: true,
+        }
+      );
+
+      //Set up a handler to complete when correct person is done walking, then resolve the event
+      const completeHandler = (e) => {
+        if (e.detail.whoId === this.event.who) {
+          document.removeEventListener(
+            "PersonWalkingComplete",
+            completeHandler
+          );
+          resolve();
+        }
+      };
+      document.addEventListener("PersonWalkingComplete", completeHandler);
+    }
+  }
+
+  chop(resolve) {
+    const who = this.map.gameObjects[this.event.who];
+    if (!who) {
+      console.error(
+        `No gameObject found for key "${this.event.who}" in chop event.`
+      );
+      resolve();
+      return;
+    }
+    if (this.event.direction) {
+      who.direction = this.event.direction;
+    }
+    who.isChopping = true; // <-- Add this line
+    console.log("Setting chop animation for", who.id, who.sprite);
+    who.sprite.setAnimation("chop-right");
+    setTimeout(() => {
+      who.isChopping = false; // <-- Add this line
+      who.sprite.setAnimation("idle-" + (who.direction || "right"));
+      resolve();
+    }, this.event.time || 1000);
   }
 
   textMessage(resolve) {
@@ -309,6 +381,21 @@ class OverworldEvent {
       if (cond.type === "inventory") {
         return cond.items.every((item) => playerState.inventory.includes(item));
       }
+      if (cond.type === "tableSet") {
+        // Check the table placements
+        const table = this.map.gameObjects["table"];
+        if (!table) return false;
+        const plateCount = table.placements.filter(
+          (p) => p.type === "Plate"
+        ).length;
+        const chopstickCount = table.placements.filter(
+          (p) => p.type === "Chopsticks"
+        ).length;
+        return (
+          plateCount >= (cond.plates || 0) &&
+          chopstickCount >= (cond.chopsticks || 0)
+        );
+      }
       if (cond.type === "storyFlag") {
         return !!playerState.storyFlags[cond.flag];
       }
@@ -351,7 +438,15 @@ class OverworldEvent {
     const item = this.event.item;
     const itemName = this.event.itemName;
 
-    window.playerState.inventory.push(item.id);
+    if (item.type === "Plates") {
+      // Add two "plate entries for each plate picked up"
+      window.playerState.inventory.push("plate", "plate");
+    } else if (item.type === "Chopsticks") {
+      // Add two "plate entries for each plate picked up"
+      window.playerState.inventory.push("chopstick", "chopstick");
+    } else {
+      window.playerState.inventory.push(item.id);
+    }
     window.playerState.pickedUpQuestObjects.push(item.id);
 
     const message = new TextMessage({

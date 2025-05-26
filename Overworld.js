@@ -25,6 +25,10 @@ class Overworld {
     //Draw Lower layer
     this.map.drawLowerImage(this.ctx, cameraPerson);
 
+    if (this.map.gameObjects["table"]) {
+      this.map.gameObjects["table"].draw(this.ctx, cameraPerson);
+    }
+
     //Draw Game Objects
     Object.values(this.map.gameObjects)
       .sort((a, b) => a.y - b.y)
@@ -32,7 +36,11 @@ class Overworld {
         if (object.sprite) {
           object.sprite.draw(this.ctx, cameraPerson);
         }
-        if (typeof object.draw === "function" && object !== object.sprite)
+        if (
+          typeof object.draw === "function" &&
+          object !== object.sprite &&
+          object.type !== "Table"
+        )
           object.draw(this.ctx, cameraPerson);
       });
 
@@ -147,6 +155,159 @@ class Overworld {
     this.progress.startingHeroX = hero.x;
     this.progress.startingHeroY = hero.y;
     this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+
+    if (
+      playerState.character === "sister" &&
+      playerState.sisterUnlocked &&
+      !playerState.storyFlags.SISTER_INTRO_CUTSCENE
+    ) {
+      playerState.storyFlags.SISTER_INTRO_CUTSCENE = true; // Prevent repeat
+      this.map.startCutscene([
+        { type: "chop", who: "hero", direction: "right", time: 2200 },
+        {
+          type: "textMessage",
+          who: "Mum",
+          text: "Here, try this Didi!",
+        },
+        { type: "chop", who: "hero", direction: "right", time: 2200 },
+        {
+          type: "textMessage",
+          who: "Jiejie",
+          text: "You always give the fatty piece of ro (meat) to Didi",
+        },
+        {
+          type: "walk",
+          who: "Didi",
+          direction: "left",
+        },
+        {
+          type: "walk",
+          who: "Didi",
+          direction: "left",
+        },
+        {
+          type: "walk",
+          who: "Didi",
+          direction: "left",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "up",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "up",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "up",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "up",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "up",
+        },
+        {
+          type: "textMessage",
+          who: "Mum",
+          text: "Because he is a growing boy.",
+        },
+        {
+          type: "stand",
+          who: "hero",
+          direction: "down",
+        },
+        {
+          type: "textMessage",
+          who: "Mum",
+          text: "Plus, we ladies have to watch our figures.",
+        },
+        {
+          type: "textMessage",
+          who: "Mum",
+          text: "I'm getting pun (fat) the older I get",
+        },
+        {
+          type: "textMessage",
+          who: "Jiejie",
+          text: "...",
+        },
+        {
+          type: "stand",
+          who: "hero",
+          direction: "right",
+        },
+        { type: "chop", who: "hero", direction: "right", time: 2200 },
+        {
+          type: "textMessage",
+          who: "Mum",
+          text: "I have my hands full, can you cut up some fruit for the guests and pack some for Didi's Fruito tomorrow?",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "Mum",
+          direction: "down",
+        },
+        { type: "chop", who: "hero", direction: "right", time: 3000 },
+        {
+          type: "textMessage",
+          text: "I build my own walkls, brick by brick, made of expectations.",
+        },
+        {
+          type: "textMessage",
+          text: "Each step I take, each breath I draw, until I can give an answer.",
+        },
+        { type: "chop", who: "hero", direction: "right", time: 2200 },
+        {
+          type: "walk",
+          who: "hero",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "hero",
+          direction: "down",
+        },
+        {
+          type: "walk",
+          who: "hero",
+          direction: "left",
+        },
+        {
+          type: "walk",
+          who: "hero",
+          direction: "down",
+        },
+      ]);
+    }
   }
 
   addGameObject(config) {

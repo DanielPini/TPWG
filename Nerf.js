@@ -1,11 +1,10 @@
 class Nerf extends GameObject {
   constructor(config) {
     super(config);
-    console.log("Nerf config:", config);
-    console.log("Nerf id:", this.id, "type:", this.type);
+    this.translateSprite = [0, 1];
     this.sprite = new Sprite({
       gameObject: this,
-      src: "./images/Nerf.png",
+      src: "./images/objects/Nerf.png",
       animations: {
         idle: [[config.frame || 0, 0]], // Use config.frame for different Nerfs
       },

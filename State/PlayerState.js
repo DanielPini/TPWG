@@ -20,9 +20,9 @@ class PlayerState {
     ];
     this.inventory = [];
     this.storyFlags = {
-      SEEN_INTRO: false,
+      SEEN_INTRO: true,
     };
-    this.sisterUnlocked = false;
+    this.sisterUnlocked = true;
   }
 
   addPizza(pizzaId) {

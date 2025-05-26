@@ -1,13 +1,14 @@
-class Plates extends GameObject {
+class Chopsticks extends GameObject {
   constructor(config) {
     super(config);
     this.sprite = new Sprite({
       gameObject: this,
-      src: "./images/objects/Plates.png",
+      src: "./images/objects/Chopsticks.png",
       animations: {
         placed: [[0, 1]],
       },
       currentAnimation: "placed",
+      useShadow: false,
     });
     this.storyFlag = config.storyFlag;
     this.translateSprite = [0, -4];
@@ -21,12 +22,12 @@ class Plates extends GameObject {
         events: [
           {
             type: "textMessage",
-            text: "These are the plates for the table",
+            text: "These are the chopsticks for the table",
           },
           {
             type: "takeItem",
             item: this,
-            itemName: "PLATES",
+            itemName: "CHOPSTICKS",
           },
           {
             type: "pickUpItem",
@@ -56,4 +57,4 @@ class Plates extends GameObject {
   }
 }
 window.GameObjectClasses = window.GameObjectClasses || {};
-window.GameObjectClasses["Plates"] = Plates;
+window.GameObjectClasses["Chopsticks"] = Chopsticks;

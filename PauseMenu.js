@@ -157,6 +157,10 @@ class PauseMenu {
         handler: () => {
           if (!sisterUnlocked) return;
           playerState.changeCharacter?.();
+          this.map.overworld.startMap(
+            this.map.overworld.progress.mapId,
+            playerState.character
+          );
           this.close();
 
           setTimeout(() => {
