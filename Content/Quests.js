@@ -142,10 +142,6 @@ const QUESTS = {
         new TextMessage({
           text: "Oh no! You've run out of time to set the table! Jiejie will be mad!!! Beg for more?",
           onComplete: () => {
-            console.log(
-              "Yes/No box:",
-              document.querySelector(".game-container")
-            );
             new YesNoPrompt({
               onComplete: (yes) => {
                 overworld.map.isPaused = false;
@@ -203,7 +199,6 @@ const QUESTS = {
   //     },
   //   ],
   //   onComplete(overworld) {
-  //     console.log("You helped Baba.");
   //   },
   // },
   fetchNerfs: {
@@ -511,6 +506,247 @@ const QUESTS = {
     //   success: "reportToParent",
     //   fail: "apologiseToParent",
     // },
+  },
+  chopFruit: {
+    id: "chopFruit",
+    name: "Chop the Apple",
+    background: "./images/maps/TableclothChoppingRoom.png",
+    knifeSrc: "./images/objects/Knife.png",
+    appleSrc: "./images/objects/Apple.png",
+    applePhases: [
+      [0, 0],
+      [1, 0],
+      [2, 0],
+      [3, 0],
+      [4, 0],
+    ],
+    dialogue: [
+      {
+        name: "Jiejie",
+        text: "Why does Didi get all the delicious food and mum and I have to watch our weight?",
+      },
+      {
+        name: "Jiejie",
+        text: "* Mum is so beautiful, if she thinks she’s fat, what does that mean for me? *",
+      },
+      {
+        name: "Jiejie",
+        text: "* Hmm, let's make this a delicious Fruito for Didi. *",
+      },
+      {
+        name: "Jiejie",
+        text: "* Have I been too harsh with him? But mum wanted everything to be done quickly... *",
+      },
+      {
+        name: "Jiejie",
+        text: "* No... Mum was really stressed... We need to lay down some rules in this house. But the look on his face... *",
+      },
+    ],
+    onStart(overworld) {
+      overworld.startChopFruitQuest(this);
+    },
+    onComplete(overworld) {
+      // Return to previous map or trigger next quest
+    },
+  },
+  mediationQuest: {
+    id: "mediationQuest",
+    name: "Mediation Quest",
+    map: "HomeMediation",
+    legs: [
+      {
+        timer: 30,
+        steps: [
+          {
+            arrowTarget: {
+              x: utils.withGrid(20),
+              y: utils.withGrid(25),
+              map: "HomeMediation",
+            },
+            location: { x: utils.withGrid(20), y: utils.withGrid(25) },
+            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            dialogue: [
+              {
+                text: "It's good to take a moment for practise. Piano calms me down.",
+                name: "Jiejie",
+              },
+              { text: "* Angry shouting... *" },
+              {
+                text: "Why are you getting so worked up. It's only guests.",
+                name: "Baba",
+              },
+              {
+                text: "How can you just stand here and complain when I'm spending all day putting the house in order.",
+                name: "Mum",
+              },
+              { text: "Do you want to embarrass us?!", name: "Mum" },
+              {
+                text: "You say I'm standing here the whole day? Have you not seen anything I've done?!",
+                name: "Baba",
+              },
+            ],
+          },
+          {
+            spawnNPCs: [
+              {
+                id: "Mum",
+                type: "Person",
+                x: utils.withGrid(5),
+                y: utils.withGrid(5),
+                src: "./images/characters/people/Mum.png",
+                talking: [],
+              },
+              {
+                id: "Baba",
+                type: "Person",
+                x: utils.withGrid(3),
+                y: utils.withGrid(5),
+                src: "./images/characters/people/Ba-ba.png",
+                talking: [],
+              },
+            ],
+            location: { x: utils.withGrid(4), y: utils.withGrid(5) },
+            arrowTarget: {
+              x: utils.withGrid(4),
+              y: utils.withGrid(5),
+              map: "Master",
+            },
+            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            dialogue: [
+              {
+                text: "What I see is you watching me work while you and the kids relax!",
+                name: "Mum",
+              },
+            ],
+            choices: [
+              {
+                text: "Mum is right, she works so hard. You should apologise Baba!",
+                responses: [
+                  {
+                    text: "Thank you for seeing my hard work. I thought it went unnoticed.",
+                    name: "Mum",
+                  },
+                  {
+                    text: "I know how hard you work. We all see it. Thank you for what you do.",
+                    name: "Baba",
+                  },
+                ],
+              },
+              {
+                // despawnNPCs: [ "Mum" ],
+                text: "Give him some slack. He has been working hard too, even if you can't see it.",
+                responses: [
+                  {
+                    text: "I suppose you're right. I'm just so worked up about our guests and I don't want to embarrass ourselves in front of them.",
+                    name: "Mum",
+                  },
+                  {
+                    text: "Let's work together and it will get done in no time.",
+                    name: "Baba",
+                  },
+                ],
+              },
+              {
+                text: "You're both right. It's a disaster. Panic!!!!!",
+                responses: [
+                  { text: "Aaaaaah!", name: "Mum" },
+                  { text: "Aaaaaah!", name: "Baba" },
+                ],
+              },
+            ],
+            npcPositions: {
+              Mum: {
+                x: utils.withGrid(5),
+                y: utils.withGrid(5),
+              },
+              Baba: {
+                x: utils.withGrid(3),
+                y: utils.withGrid(5),
+              },
+            },
+          },
+        ],
+      },
+      {
+        timer: 30,
+        steps: [
+          {
+            location: { x: utils.withGrid(19), y: utils.withGrid(10) },
+            arrowTarget: {
+              x: utils.withGrid(19),
+              y: utils.withGrid(10),
+              map: "Master",
+            },
+            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            dialogue: [
+              {
+                text: "Whew, that's one thing sorted!",
+                name: "Jiejie",
+              },
+              { text: "* The smell of acrid smoke billows from the kitchen *" },
+              {
+                text: "Oh no! The food will be ruined!!!",
+                name: "Jiejie",
+              },
+            ],
+            choices: [
+              {
+                text: "Kick the oven",
+                responses: [
+                  {
+                    text: "Burrrrrrrrr",
+                    name: "Oven",
+                  },
+                  {
+                    text: "Clunck",
+                    name: "Oven",
+                  },
+                  {
+                    text: "* Smoke dissipates *",
+                  },
+                  {
+                    text: "Well, I'm not going to question that...",
+                    name: "Jiejie",
+                  },
+                ],
+              },
+              {
+                text: "... So ... I wanted takeout anyway...",
+                responses: [
+                  {
+                    text: "I heard that!",
+                    name: "Mum",
+                  },
+                  {
+                    text: "No takeout. Home cooking is better. Make it work.",
+                    name: "Mum",
+                  },
+                  {
+                    text: "* Sigh *",
+                    name: "Jiejie",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      // ...more steps
+    ],
+    onStart(overworld) {
+      overworld.startMediationQuest(this);
+    },
+    onComplete(overworld) {
+      // wrap up quest
+    },
+    onFail(overworld) {
+      if (overworld.questManager && overworld.questManager.currentRunner) {
+        overworld.questManager.currentRunner.targetHighlightActive = false;
+        if (overworld.questManager.currentRunner.questArrow) {
+          overworld.questManager.currentRunner.questArrow.hide();
+        }
+      }
+    },
   },
 };
 

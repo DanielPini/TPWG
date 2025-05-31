@@ -72,3 +72,14 @@ body {
   image-rendering: pixelated;
   /* transform: translateX(-35%) translateY(0%); */
 }
+
+.ChopFruitRoom {
+  position: absolute;
+  top: 0;
+}
+
+.chop-canvas {
+  width: 352px; /* 352 * 3 */
+  height: 198px; /* 198 * 3 */
+  image-rendering: pixelated; /* optional, for crisp pixels */
+}

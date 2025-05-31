@@ -43,7 +43,6 @@ class QuestManager {
     quest.previousMusic = window.lastMusicSrc;
 
     if (quest.music) {
-      console.log(this.overworld.map);
       this.overworld.map.handleMusicEvent({ src: quest.music, loop: true });
     }
 
@@ -135,8 +134,6 @@ class QuestManager {
 
     // Despawn objects
     quest.spawnObjects?.forEach((obj) => {
-      console.log("SpawnObjects:", quest.spawnObjects);
-      console.log(obj);
       const object = this.overworld.map.gameObjects[obj.id];
       if (!object) {
         console.warn(`GameObject with id ${obj.id} not found for despawn.`);
@@ -153,7 +150,6 @@ class QuestManager {
     }
 
     // Optional fail handler
-    console.log("Inside quest fail, onFail about to be called.");
     if (quest.onFail) {
       quest.onFail(this.overworld);
     }

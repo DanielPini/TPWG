@@ -12,7 +12,16 @@ class Overworld {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     //Establish the camera person
-    const cameraPerson = this.map.gameObjects.hero;
+    let cameraPerson;
+    if (this.inChopFruitRoom) {
+      cameraPerson = { x: 168, y: 96, direction: "down" };
+    } else {
+      cameraPerson = this.map.gameObjects.hero || {
+        x: 0,
+        y: 0,
+        direction: "down",
+      };
+    }
     //Update all objects
     Object.values(this.map.gameObjects).forEach((object) => {
       object.update({
@@ -24,6 +33,33 @@ class Overworld {
 
     //Draw Lower layer
     this.map.drawLowerImage(this.ctx, cameraPerson);
+
+    // Draw target highlight if active
+    if (
+      this.questManager &&
+      this.questManager.activeQuests &&
+      this.questManager.activeQuests["mediationQuest"]
+    ) {
+      const runner = this.questManager.activeQuests["mediationQuest"].runner;
+      if (runner && runner.currentTarget) {
+        // Convert pixel to grid for easier reading
+        const heroGrid = {
+          x: Math.round(cameraPerson.x / 16),
+          y: Math.round(cameraPerson.y / 16),
+        };
+        const targetGrid = {
+          x: Math.round(runner.currentTarget.x / 16),
+          y: Math.round(runner.currentTarget.y / 16),
+        };
+        if (runner.targetHighlightActive && runner.currentTarget) {
+          this.map.drawTargetHighlight(
+            this.ctx,
+            runner.currentTarget,
+            cameraPerson
+          );
+        }
+      }
+    }
 
     if (this.map.gameObjects["table"]) {
       this.map.gameObjects["table"].draw(this.ctx, cameraPerson);
@@ -123,11 +159,82 @@ class Overworld {
     });
   }
 
+  startMediationQuest(quest) {
+    const sceneTransition = new SceneTransition();
+    sceneTransition.init(document.querySelector(".game-container"), () => {
+      window.playerState.character = "sister";
+      this.startMap("HomeMediation", window.playerState.character);
+      const runner = new MediationQuestRunner({
+        quest,
+        overworld: this,
+      });
+      if (
+        this.questManager &&
+        this.questManager.activeQuests &&
+        this.questManager.activeQuests["mediationQuest"]
+      ) {
+        this.questManager.activeQuests["mediationQuest"].runner = runner;
+      }
+      runner.start();
+      setTimeout(() => {
+        sceneTransition.fadeOut();
+      }, 0);
+    });
+  }
+
+  startChopFruitQuest(quest) {
+    const sceneTransition = new SceneTransition();
+    const originalMapId = this.progress.mapId;
+    const hero = this.map.gameObjects.hero;
+    const originalHeroState = hero
+      ? { x: hero.x, y: hero.y, direction: hero.direction }
+      : null;
+
+    sceneTransition.init(document.querySelector(".game-container"), () => {
+      this.startMap("ChopRoom", "sister");
+      this.inChopFruitRoom = true;
+      const chopRoom = new ChopFruitRoom({
+        quest,
+        onComplete: () => {
+          this.map.isPaused = false;
+          this.questManager.completeQuest("chopFruit");
+          // Transition back to the original map
+          const returnTransition = new SceneTransition();
+          returnTransition.init(
+            document.querySelector(".game-container"),
+            () => {
+              this.startMap(
+                originalMapId,
+                window.playerState.character,
+                originalHeroState
+              );
+              setTimeout(() => {
+                returnTransition.fadeOut();
+                this.inChopFruitRoom = false;
+                this.questManager.startQuest("mediationQuest");
+              }, 0);
+              // requestAnimationFrame(() => {
+              //   returnTransition.fadeOut();
+              // });
+            }
+          );
+        },
+      });
+      chopRoom.start(document.querySelector(".game-container"));
+      setTimeout(() => {
+        sceneTransition.fadeOut();
+      }, 0);
+      // requestAnimationFrame(() => {
+      //   sceneTransition.fadeOut();
+      // });
+    });
+  }
+
   startMap(mapId, character, heroInitialState = null) {
     const mapInstance = window.OverworldMaps[mapId].createInstance(character);
     this.map = mapInstance;
     this.map.overworld = this;
-    this.map.mountObjects();
+    // this.map.mountObjects();
     this.map.triggerLoadCutscenes();
 
     if (!this.questManager) {
@@ -139,22 +246,25 @@ class Overworld {
       });
     }
     this.questManager.setMap(this.map);
-    this.map.mountObjects(this);
+    // this.map.mountObjects(this);
 
     this.map.spawnActiveQuestObjects();
 
     if (heroInitialState) {
       const { hero } = this.map.gameObjects;
-      hero.x = heroInitialState.x;
-      hero.y = heroInitialState.y;
-      hero.direction = heroInitialState.direction;
+      if (hero) {
+        hero.x = heroInitialState.x;
+        hero.y = heroInitialState.y;
+        hero.direction = heroInitialState.direction;
+      }
     }
 
     this.progress.mapId = mapId;
+
     const hero = this.map.gameObjects.hero;
-    this.progress.startingHeroX = hero.x;
-    this.progress.startingHeroY = hero.y;
-    this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+    this.progress.startingHeroX = hero ? hero.x : 0;
+    this.progress.startingHeroY = hero ? hero.y : 0;
+    this.progress.startingHeroDirection = hero ? hero.direction : "down";
 
     if (
       playerState.character === "sister" &&
@@ -162,151 +272,135 @@ class Overworld {
       !playerState.storyFlags.SISTER_INTRO_CUTSCENE
     ) {
       playerState.storyFlags.SISTER_INTRO_CUTSCENE = true; // Prevent repeat
-      this.map.startCutscene([
-        { type: "chop", who: "hero", direction: "right", time: 2200 },
-        {
-          type: "textMessage",
-          who: "Mum",
-          text: "Here, try this Didi!",
-        },
-        { type: "chop", who: "hero", direction: "right", time: 2200 },
-        {
-          type: "textMessage",
-          who: "Jiejie",
-          text: "You always give the fatty piece of ro (meat) to Didi",
-        },
-        {
-          type: "walk",
-          who: "Didi",
-          direction: "left",
-        },
-        {
-          type: "walk",
-          who: "Didi",
-          direction: "left",
-        },
-        {
-          type: "walk",
-          who: "Didi",
-          direction: "left",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "up",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "up",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "up",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "up",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "up",
-        },
-        {
-          type: "textMessage",
-          who: "Mum",
-          text: "Because he is a growing boy.",
-        },
-        {
-          type: "stand",
-          who: "hero",
-          direction: "down",
-        },
-        {
-          type: "textMessage",
-          who: "Mum",
-          text: "Plus, we ladies have to watch our figures.",
-        },
-        {
-          type: "textMessage",
-          who: "Mum",
-          text: "I'm getting pun (fat) the older I get",
-        },
-        {
-          type: "textMessage",
-          who: "Jiejie",
-          text: "...",
-        },
-        {
-          type: "stand",
-          who: "hero",
-          direction: "right",
-        },
-        { type: "chop", who: "hero", direction: "right", time: 2200 },
-        {
-          type: "textMessage",
-          who: "Mum",
-          text: "I have my hands full, can you cut up some fruit for the guests and pack some for Didi's Fruito tomorrow?",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "Mum",
-          direction: "down",
-        },
-        { type: "chop", who: "hero", direction: "right", time: 3000 },
-        {
-          type: "textMessage",
-          text: "I build my own walkls, brick by brick, made of expectations.",
-        },
-        {
-          type: "textMessage",
-          text: "Each step I take, each breath I draw, until I can give an answer.",
-        },
-        { type: "chop", who: "hero", direction: "right", time: 2200 },
-        {
-          type: "walk",
-          who: "hero",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "hero",
-          direction: "down",
-        },
-        {
-          type: "walk",
-          who: "hero",
-          direction: "left",
-        },
-        {
-          type: "walk",
-          who: "hero",
-          direction: "down",
-        },
-      ]);
+      this.map
+        .startCutscene([
+          { type: "chop", who: "hero", direction: "right", time: 2200 },
+          // {
+          //   type: "textMessage",
+          //   who: "Mum",
+          //   text: "Here, try this Didi!",
+          // },
+          // { type: "chop", who: "hero", direction: "right", time: 2200 },
+          // {
+          //   type: "textMessage",
+          //   who: "Jiejie",
+          //   text: "You always give the fatty piece of ro (meat) to Didi",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Didi",
+          //   direction: "left",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Didi",
+          //   direction: "left",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Didi",
+          //   direction: "left",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "up",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "up",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "up",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "up",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "up",
+          // },
+          // {
+          //   type: "textMessage",
+          //   who: "Mum",
+          //   text: "Because he is a growing boy.",
+          // },
+          // {
+          //   type: "stand",
+          //   who: "hero",
+          //   direction: "down",
+          // },
+          // {
+          //   type: "textMessage",
+          //   who: "Mum",
+          //   text: "Plus, we ladies have to watch our figures.",
+          // },
+          // {
+          //   type: "textMessage",
+          //   who: "Mum",
+          //   text: "I'm getting pun (fat) the older I get",
+          // },
+          // {
+          //   type: "textMessage",
+          //   who: "Jiejie",
+          //   text: "...",
+          // },
+          // {
+          //   type: "stand",
+          //   who: "hero",
+          //   direction: "right",
+          // },
+          // { type: "chop", who: "hero", direction: "right", time: 2200 },
+          // {
+          //   type: "textMessage",
+          //   who: "Mum",
+          //   text: "I have my hands full, can you cut up some fruit for the guests and pack some for Didi's Fruito tomorrow?",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "down",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "down",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "down",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "down",
+          // },
+          // {
+          //   type: "walk",
+          //   who: "Mum",
+          //   direction: "down",
+          // },
+          // { type: "chop", who: "hero", direction: "right", time: 3000 },
+          // {
+          //   type: "textMessage",
+          //   text: "I build my own walkls, brick by brick, made of expectations.",
+          // },
+          // {
+          //   type: "textMessage",
+          //   text: "Each step I take, each breath I draw, until I can give an answer.",
+          // },
+          // { type: "chop", who: "hero", direction: "right", time: 2200 },
+        ])
+        .then(() => {
+          this.questManager.startQuest("mediationQuest");
+        });
     }
   }
 
@@ -315,9 +409,18 @@ class Overworld {
     if (!Constructor) {
       throw new Error(`Unknown GameObject type: ${config.type}`);
     }
-
     const gameObject = new Constructor(config);
     gameObject.id = config.id;
+
+    const type = config.type;
+
+    let instance;
+
+    if (type === "Person") {
+      instance = new window.Person(config);
+    } else {
+      throw new Error(`Unknown GameObject type: ${type}`);
+    }
 
     if (typeof gameObject.mount === "function") {
       gameObject.mount(this.map);
@@ -331,6 +434,13 @@ class Overworld {
 
     //Create a new Progress tracker
     this.progress = new Progress();
+
+    /**
+     * For Dev purposes
+     */
+    // this.startMap("Home", window.playerState.character);
+    // this.startChopFruitQuest(window.Quests.chopFruit);
+    // return;
 
     // Show the title screen
     this.titleScreen = new TitleScreen({

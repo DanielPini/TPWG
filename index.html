@@ -111,7 +111,7 @@
       <canvas
         class="game-canvas"
         width="352"
-        height="625"></canvas>
+        height="198"></canvas>
     </div>
     <p class="how-to-play">
       Use Arrow Keys to move. Enter to select/talk. <br />Press escape to pause
@@ -124,33 +124,48 @@
         Game accompanies Christine Pan's Song Cycle of the same name.
         <br /><br />Read more
         <a href="https://www.christinepanmusic.com/">here</a>.
-        <p>If you are one of our lovely beta testers, please note that this is an early preview.<br /><br />All bug notes can be sent to <a href="mailto:daniel@danielpini.com">daniel@danielpini.com</a> </p>
+      </p>
+
+      <p>
+        If you are one of our lovely beta testers, please note that this is an
+        early preview.<br /><br />All bug notes can be sent to
+        <a href="mailto:daniel@danielpini.com">daniel@danielpini.com</a>
       </p>
     </div>
 
     <script src="utils.js"></script>
+
+    <!-- State -->
+    <script src="State/PlayerState.js"></script>
+
+    <!-- Game object classes and registry -->
+    <script src="GameObject.js"></script>
+    <script src="GameObjectClasses.js"></script>
+    <script src="Person.js"></script>
+    <script src="Knife.js"></script>
+    <script src="Apple.js"></script>
+    <script src="AppleBit.js"></script>
+    <script src="PizzaStone.js"></script>
+    <script src="Plates.js"></script>
+    <script src="Chopsticks.js"></script>
+    <script src="Table.js"></script>
+    <script src="Nerf.js"></script>
+    <script src="NerfPile.js"></script>
+
     <!-- Content -->
     <script src="Content/pizzas.js"></script>
     <script src="Content/actions.js"></script>
     <script src="Content/enemies.js"></script>
     <script src="Content/Quests.js"></script>
 
-    <!-- State -->
-    <script src="State/PlayerState.js"></script>
-
     <!-- Scripts -->
     <script src="QuestTimer.js"></script>
+    <script src="MultiChoicePrompt.js"></script>
+    <script src="MediationQuestRunner.js"></script>
+    <script src="QuestArrow.js"></script>
     <script src="DirectionInput.js"></script>
-    <script src="GameObject.js"></script>
-    <script src="Person.js"></script>
-    <script src="PizzaStone.js"></script>
-    <script src="GameObjectClasses.js"></script>
-    <script src="Plates.js"></script>
-    <script src="Chopsticks.js"></script>
-    <script src="Table.js"></script>
-    <script src="Nerf.js"></script>
-    <script src="NerfPile.js"></script>
     <script src="Sprite.js"></script>
+    <script src="ChopFruitRoom.js"></script>
     <script src="OverworldMap.js"></script>
     <script src="QuestManager.js"></script>
     <script src="Overworld.js"></script>

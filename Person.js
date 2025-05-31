@@ -3,7 +3,7 @@ class Person extends GameObject {
     super(config);
     this.movingProgressRemaining = 0;
     this.isStanding = false;
-    this.isSitting = false;
+    this.isSitting = config.isSitting || false;
     this.isPickingUp = false;
 
     this.intentPosition = null; //[x,y]
@@ -110,13 +110,14 @@ class Person extends GameObject {
         this.updateSprite(state);
       }
       this.isStanding = true;
+      const standTime = behavior.time !== undefined ? behavior.time : 400; // Default to 400ms
       this.standBehaviorTimeout = setTimeout(() => {
         utils.emitEvent("PersonStandComplete", {
           whoId: this.id,
         });
         this.isStanding = false;
         if (behavior.onComplete) behavior.onComplete();
-      }, behavior.time);
+      }, standTime);
     }
 
     if (behavior.type === "sit") {
@@ -183,3 +184,6 @@ class Person extends GameObject {
     }
   }
 }
+window.Person = Person;
+window.GameObjectClasses = window.GameObjectClasses || {};
+window.GameObjectClasses.Person = Person;

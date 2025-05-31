@@ -13,7 +13,7 @@ class OverworldEvent {
       {
         type: "stand",
         direction: this.event.direction,
-        time: this.event.time,
+        time: this.event.time || 400,
       }
     );
     //Set up a handler to complete when correct person is done standing, then resolve the event
@@ -59,8 +59,6 @@ class OverworldEvent {
       console.error("pickUpItem event missing itemId or itemType", this.event);
       return;
     }
-
-    console.log(this.event);
     who.startBehavior(
       {
         map: this.map,
@@ -128,7 +126,6 @@ class OverworldEvent {
   }
 
   startQuestTimer(resolve) {
-    console.log("Starting quest timer event for quest:", this.event.questId);
     const questId = this.event.questId;
     const quest = this.map.overworld.questManager.questDefinitions[questId];
     if (quest && quest.timer) {
@@ -248,7 +245,6 @@ class OverworldEvent {
       who.direction = this.event.direction;
     }
     who.isChopping = true; // <-- Add this line
-    console.log("Setting chop animation for", who.id, who.sprite);
     who.sprite.setAnimation("chop-right");
     setTimeout(() => {
       who.isChopping = false; // <-- Add this line
@@ -275,7 +271,6 @@ class OverworldEvent {
       text: this.event.text,
       name,
       onComplete: () => {
-        console.log("TextMessage event resolved:", this.event.text);
         resolve();
       },
     });
@@ -321,10 +316,9 @@ class OverworldEvent {
     const sceneTransition = new SceneTransition();
     const mapConfig = window.OverworldMaps[this.event.map];
     if (!mapConfig) {
-      console.error(`Map "${this.event.map}" not found in OverworldMaps.`);
-      console.log("Available maps:", Object.keys(window.OverworldMaps));
       return;
     }
+
     sceneTransition.init(document.querySelector(".game-container"), () => {
       this.map.overworld.startMap(
         this.event.map,
@@ -334,6 +328,18 @@ class OverworldEvent {
           y: this.event.y,
           direction: this.event.direction,
         }
+      );
+      // Re-append the quest timer if needed
+      if (this.map.overworld.questTimer) {
+        document
+          .querySelector(".game-container")
+          .appendChild(this.map.overworld.questTimer.element);
+      }
+      // Notify listeners that the map has changed
+      document.dispatchEvent(
+        new CustomEvent("MapChanged", {
+          detail: { mapId: this.event.map },
+        })
       );
       resolve();
       sceneTransition.fadeOut();

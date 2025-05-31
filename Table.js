@@ -54,8 +54,6 @@ class Table extends GameObject {
   }
 
   interact() {
-    console.log("Player inventory:", window.playerState.inventory);
-
     // For each placement position, try to place a plate and/or chopsticks
     window.TABLE_PLACEMENT_POSITIONS.forEach((pos) => {
       // Only place a plate if not already present at this position
@@ -110,10 +108,8 @@ class Table extends GameObject {
   }
 
   breakAllPlacements(onCleared) {
-    console.log("Breaking all placements!", this.placements);
     this.placements.forEach((p) => (p.state = "broken"));
     setTimeout(() => {
-      console.log("Clearing placements");
       this.placements = [];
       if (onCleared) onCleared();
     }, 2000);

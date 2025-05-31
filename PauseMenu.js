@@ -154,13 +154,10 @@ class PauseMenu {
           ? "Switch to the sister."
           : "You haven't unlocked the sister yet!",
         disabled: !sisterUnlocked,
+
         handler: () => {
           if (!sisterUnlocked) return;
           playerState.changeCharacter?.();
-          this.map.overworld.startMap(
-            this.map.overworld.progress.mapId,
-            playerState.character
-          );
           this.close();
 
           setTimeout(() => {
@@ -171,6 +168,11 @@ class PauseMenu {
             this.map.gameObjects.hero = newHero;
             newHero.id = "hero";
             newHero.mount(this.map);
+
+            this.map.overworld.startMap(
+              this.map.overworld.progress.mapId,
+              playerState.character
+            );
           }, 10);
         },
       });

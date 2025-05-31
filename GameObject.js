@@ -27,7 +27,6 @@ class GameObject {
     }
     this.isMounted = true;
     this.map = map;
-    console.log("Mounting", this.id);
     //If we have a behavior, kick off after a short delay
     if (this.behaviorLoop && this.behaviorLoop.length > 0) {
       setTimeout(() => {
