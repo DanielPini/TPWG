@@ -19,6 +19,7 @@ class Person extends GameObject {
     this.standBehaviorTimeout;
     this.sitBehaviorTimeout;
     this.previousDirection = this.direction;
+    this.lockedAnimation = null;
   }
 
   update(state) {
@@ -167,8 +168,50 @@ class Person extends GameObject {
     }
   }
 
+  playFailAnimation(onComplete) {
+    this.lockedAnimation = "fail";
+    this.sprite.setAnimation("fail");
+    this.sprite.currentAnimationFrame = 0;
+
+    // Calculate how long the fail animation takes to play once
+    const frames = this.sprite.animations["fail"].length;
+    const frameDuration = this.sprite.animationFrameLimit * (1000 / 60); // assuming 60fps
+
+    // Play frames 0, 1, 2 in order
+    let frame = 0;
+    const playFrames = () => {
+      if (frame < frames - 1) {
+        this.sprite.currentAnimationFrame = frame;
+        frame++;
+        setTimeout(playFrames, frameDuration);
+      } else {
+        // Hold on the last frame for 3 seconds
+        this.sprite.freezeAnimation = true;
+        this.sprite.currentAnimationFrame = frames - 1;
+        setTimeout(() => {
+          this.sprite.freezeAnimation = false;
+          this.lockedAnimation = null;
+          if (onComplete) onComplete();
+        }, 3000);
+      }
+    };
+
+    playFrames();
+  }
+
+  unlockAnimation() {
+    this.lockedAnimation = null;
+    this.sprite.setAnimation("idle-" + this.direction);
+    this.sprite.currentAnimationFrame = 0;
+    this.sprite.animationFrameProgress = this.sprite.animationFrameLimit;
+    console.log("character unlocked:", this.lockedAnimation);
+  }
+
   updateSprite() {
-    // this.direction = this.previousDirection ? this.previousDirection : "down";
+    if (this.lockedAnimation) {
+      this.sprite.setAnimation(this.lockedAnimation);
+      return;
+    }
     if (this.movingProgressRemaining > 0) {
       this.sprite.setAnimation("walk-" + this.direction);
       return;
@@ -176,8 +219,8 @@ class Person extends GameObject {
       this.sprite.setAnimation("sit-" + this.direction);
       return;
     } else if (this.isChopping) {
-      // <-- Add this block
       this.sprite.setAnimation("chop-right");
+      console.log("Chopping");
       return;
     } else {
       this.sprite.setAnimation("idle-" + this.direction);

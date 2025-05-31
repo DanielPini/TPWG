@@ -103,6 +103,11 @@ const QUESTS = {
           src: quest.previousMusic,
           loop: true,
         });
+      } else {
+        overworld.map.handleMusicEvent({
+          src: "./audio/We_Song_entryway-audio.mp3",
+          loop: true,
+        });
       }
       playerState.storyFlags["PLATES_COLLECTED"] = true;
     },
@@ -413,34 +418,9 @@ const QUESTS = {
     ],
     successConditions: [
       {
-        type: "inventory",
-        items: [
-          "Nerf1",
-          "Nerf2",
-          "Nerf3",
-          "Nerf4",
-          "Nerf5",
-          "Nerf6",
-          "Nerf7",
-          "Nerf8",
-          "Nerf9",
-          "Nerf10",
-          "Nerf11",
-          "Nerf12",
-          "Nerf13",
-          "Nerf14",
-          "Nerf15",
-          "Nerf16",
-          "Nerf17",
-          "Nerf18",
-          "Nerf19",
-          "Nerf20",
-          "Nerf21",
-          "Nerf22",
-          "Nerf23",
-          "Nerf24",
-          "Nerf25",
-        ],
+        type: "nerfsCollected",
+        byType: "Nerf",
+        count: 2,
       },
     ],
     onComplete(overworld) {
@@ -555,9 +535,10 @@ const QUESTS = {
     map: "HomeMediation",
     legs: [
       {
-        timer: 30,
+        timer: 90,
         steps: [
           {
+            // Point towards Master room
             arrowTarget: {
               x: utils.withGrid(20),
               y: utils.withGrid(25),
@@ -565,24 +546,72 @@ const QUESTS = {
             },
             location: { x: utils.withGrid(20), y: utils.withGrid(25) },
             music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
-            dialogue: [
+            cutscene: [
               {
+                type: "playMusic",
+                src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+                loop: true,
+              },
+              {
+                type: "sit",
+                direction: "up",
+                who: "hero",
+              },
+              {
+                type: "textMessage",
                 text: "It's good to take a moment for practise. Piano calms me down.",
-                name: "Jiejie",
+                who: "Jiejie",
               },
-              { text: "* Angry shouting... *" },
+              { type: "textMessage", text: "* Angry shouting... *" },
               {
+                type: "textMessage",
                 text: "Why are you getting so worked up. It's only guests.",
-                name: "Baba",
+                who: "Baba",
               },
               {
+                type: "walk",
+                direction: "down",
+                who: "hero",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "hero",
+              },
+              {
+                type: "playMusic",
+                src: "./audio/Barangaroo_Baby_dining-audio.mp3",
+                loop: true,
+              },
+              {
+                type: "textMessage",
+                text: "* sigh *",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
+                text: "Mum and Baba have lost it over the stress of the guests.",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
+                text: "I'll go help them.",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
                 text: "How can you just stand here and complain when I'm spending all day putting the house in order.",
-                name: "Mum",
+                who: "Mum",
               },
-              { text: "Do you want to embarrass us?!", name: "Mum" },
               {
+                type: "textMessage",
+                text: "Do you want to embarrass us?!",
+                who: "Mum",
+              },
+              {
+                type: "textMessage",
                 text: "You say I'm standing here the whole day? Have you not seen anything I've done?!",
-                name: "Baba",
+                who: "Baba",
               },
             ],
           },
@@ -605,17 +634,99 @@ const QUESTS = {
                 talking: [],
               },
             ],
-            location: { x: utils.withGrid(4), y: utils.withGrid(5) },
+            npcPositions: {
+              Mum: {
+                x: utils.withGrid(5),
+                y: utils.withGrid(5),
+              },
+              Baba: {
+                x: utils.withGrid(3),
+                y: utils.withGrid(5),
+              },
+            },
+            // Point towards square in front of the parents
+            location: { x: utils.withGrid(4), y: utils.withGrid(6) },
             arrowTarget: {
               x: utils.withGrid(4),
-              y: utils.withGrid(5),
-              map: "Master",
+              y: utils.withGrid(6),
+              map: "MasterMediation",
             },
-            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
-            dialogue: [
+            cutscene: [
               {
+                type: "stand",
+                direction: "right",
+                who: "Baba",
+              },
+              {
+                type: "stand",
+                direction: "left",
+                who: "Mum",
+              },
+              {
+                type: "textMessage",
                 text: "What I see is you watching me work while you and the kids relax!",
-                name: "Mum",
+                who: "Mum",
+              },
+              {
+                type: "stand",
+                direction: "down",
+                time: 200,
+                who: "Mum",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "hero",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "hero",
+              },
+              {
+                type: "stand",
+                direction: "left",
+                who: "hero",
+              },
+              {
+                type: "stand",
+                direction: "right",
+                who: "Mum",
+              },
+              {
+                type: "textMessage",
+                text: "Jiejie, set your dad straight.",
+                who: "Mum",
+              },
+              {
+                type: "stand",
+                direction: "left",
+                who: "hero",
+              },
+              {
+                type: "textMessage",
+                text: "Yeah, you have seen how I've been supporting your mother and helping Didi with his tasks.",
+                who: "Baba",
+              },
+              {
+                type: "textMessage",
+                text: "You need to support me.",
+                who: "Baba",
+              },
+              {
+                type: "textMessage",
+                text: "...",
+                who: "Jiejie",
+              },
+              {
+                type: "stand",
+                direction: "left",
+                who: "Mum",
+              },
+              {
+                type: "stand",
+                direction: "right",
+                who: "Baba",
               },
             ],
             choices: [
@@ -651,42 +762,97 @@ const QUESTS = {
                 responses: [
                   { text: "Aaaaaah!", name: "Mum" },
                   { text: "Aaaaaah!", name: "Baba" },
+                  { text: "Aaaaaah!", name: "Mum" },
+                  { text: "Aaaaaah!", name: "Baba" },
                 ],
               },
             ],
-            npcPositions: {
-              Mum: {
-                x: utils.withGrid(5),
-                y: utils.withGrid(5),
+            afterChoiceCutscene: [
+              {
+                type: "stand",
+                direction: "down",
+                who: "Mum",
               },
-              Baba: {
-                x: utils.withGrid(3),
-                y: utils.withGrid(5),
+              {
+                type: "textMessage",
+                text: "* Chuckle *",
+                who: "Both",
               },
-            },
+              {
+                type: "textMessage",
+                text: "Thanks for that Jiejie",
+                who: "Mum",
+              },
+              {
+                type: "textMessage",
+                text: "Yeah. I think we let the stress get to us.",
+                who: "Baba",
+              },
+              {
+                type: "stand",
+                direction: "down",
+                who: "hero",
+              },
+              {
+                type: "textMessage",
+                text: "Guess it's up to me to be the adult in this family... Yikes.",
+                who: "Jiejie",
+              },
+            ],
           },
         ],
       },
       {
-        timer: 30,
+        timer: 70,
         steps: [
+          {
+            // Point to Master doorway
+            arrowTarget: {
+              x: utils.withGrid(7),
+              y: utils.withGrid(3),
+              map: "MasterMediation",
+            },
+            location: { x: utils.withGrid(7), y: utils.withGrid(3) },
+            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            cutscene: [
+              {
+                type: "textMessage",
+                text: "Whew, that's one thing sorted!",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
+                text: "* The smell of acrid smoke billows from the kitchen *",
+              },
+              {
+                type: "textMessage",
+                text: "What now?!",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
+                text: "Mum and Baba are occupied...",
+                who: "Jiejie",
+              },
+              {
+                type: "textMessage",
+                text: "I guess it's up to me to get to the kitchen to check on the food.",
+                who: "Jiejie",
+              },
+            ],
+          },
           {
             location: { x: utils.withGrid(19), y: utils.withGrid(10) },
             arrowTarget: {
               x: utils.withGrid(19),
               y: utils.withGrid(10),
-              map: "Master",
+              map: "HomeMediation",
             },
-            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            despawnNPCs: ["Didi"],
             dialogue: [
               {
-                text: "Whew, that's one thing sorted!",
-                name: "Jiejie",
-              },
-              { text: "* The smell of acrid smoke billows from the kitchen *" },
-              {
                 text: "Oh no! The food will be ruined!!!",
-                name: "Jiejie",
+                who: "Jiejie",
               },
             ],
             choices: [
@@ -725,19 +891,294 @@ const QUESTS = {
                     text: "* Sigh *",
                     name: "Jiejie",
                   },
+                  {
+                    text: "I'll just ... scrape off the charcoal.",
+                    name: "Jiejie",
+                  },
+                  {
+                    text: "And go check on Didi. He needs you to be a good influence, especially when we have guests coming over.",
+                    name: "Jiejie",
+                  },
                 ],
               },
             ],
           },
         ],
       },
-      // ...more steps
+      {
+        // Leg 3: Go to KidMediation, comfort Didi
+        timer: 60,
+        steps: [
+          {
+            arrowTarget: {
+              x: utils.withGrid(22),
+              y: utils.withGrid(17),
+              map: "HomeMediation", // Fix: arrow to MasterMediation doorway
+            },
+            location: { x: utils.withGrid(22), y: utils.withGrid(17) },
+            music: "./audio/Timestables_kid-audio.mp3",
+            dialogue: [
+              { text: "I should check on him in his room.", name: "Jiejie" },
+            ],
+          },
+          {
+            arrowTarget: {
+              x: utils.withGrid(3),
+              y: utils.withGrid(6),
+              map: "KidMediation",
+            },
+            location: { x: utils.withGrid(3), y: utils.withGrid(6) },
+            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+            spawnNPCs: [
+              {
+                id: "Didi",
+                type: "Person",
+                x: utils.withGrid(3),
+                y: utils.withGrid(5),
+                direction: "down",
+                src: "./images/characters/people/Brother.png",
+                talking: [],
+              },
+            ],
+            cutscene: [
+              {
+                type: "textMessage",
+                text: "Why does no one listen to me? It's not fair!",
+                who: "Didi",
+              },
+              {
+                type: "textMessage",
+                text: "Didi, is that you?",
+                who: "Jiejie",
+              },
+              {
+                type: "walk",
+                direction: "right",
+                who: "hero",
+              },
+              {
+                type: "stand",
+                direction: "up",
+                who: "hero",
+              },
+              {
+                type: "textMessage",
+                text: "I didn't realise you that way.",
+                who: "Jiejie",
+              },
+            ],
+            choices: [
+              {
+                text: "Reassure Didi",
+                responses: [
+                  {
+                    text: "It's okay, Didi. I'm here for you. I know it can be tough, but we have to stick up for each other.",
+                    name: "Jiejie",
+                  },
+                  {
+                    text: "You're the only brother I have.",
+                    name: "Jiejie",
+                  },
+                  { text: "Thanks, Jiejie...", name: "Didi" },
+                ],
+              },
+              {
+                text: "Tell Didi to tough it out.",
+                responses: [
+                  { text: "You need to be strong, Didi.", name: "Jiejie" },
+                  {
+                    text: "Mum and Baba need us to be on our best behaviour, especially with the guests coming over.",
+                    name: "Jiejie",
+                  },
+                  { text: "I guess...", name: "Didi" },
+                  {
+                    text: "I was hoping for a bit of space, but I can try harder Jiejie.",
+                    name: "Didi",
+                  },
+                  { text: "For Mum and Baba. And for you.", name: "Didi" },
+                ],
+              },
+            ],
+            afterChoiceCutscene: [
+              {
+                type: "textMessage",
+                text: "Kids, hurry up to the table. Our guests are here.",
+                who: "Mum",
+              },
+              {
+                type: "textMessage",
+                text: "I'd better go. I'll see you there soon, Jiejie!",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "right",
+                who: "hero",
+              },
+              {
+                type: "stand",
+                direction: "left",
+                who: "hero",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+              {
+                type: "walk",
+                direction: "down",
+                who: "Didi",
+              },
+            ],
+            despawnNPCs: ["Didi"],
+          },
+        ],
+      },
+      {
+        // Leg 4: Dinner in HomeMediation
+        timer: 50,
+        steps: [
+          {
+            arrowTarget: {
+              x: utils.withGrid(0),
+              y: utils.withGrid(13),
+              map: "KidMediation",
+            },
+            location: { x: utils.withGrid(0), y: utils.withGrid(13) },
+            music: "./audio/JieJie_balcony-audio.mp3",
+          },
+          {
+            despawnNPCs: ["Didi"],
+            spawnNPCs: [
+              {
+                id: "Didi",
+                x: utils.withGrid(7),
+                y: utils.withGrid(15),
+                isSitting: true,
+                direction: "up",
+              },
+            ],
+            // npcPositions: {
+            //   Didi: {
+            //     x: utils.withGrid(7),
+            //     y: utils.withGrid(15),
+            //     direction: "up",
+            //   },
+            // },
+            arrowTarget: {
+              x: utils.withGrid(9),
+              y: utils.withGrid(11),
+              map: "HomeMediation",
+            },
+            location: { x: utils.withGrid(9), y: utils.withGrid(11) },
+            spawnNPCs: [
+              {
+                id: "Mum",
+                type: "Person",
+                x: utils.withGrid(6),
+                y: utils.withGrid(13),
+                src: "./images/characters/people/Mum.png",
+                direction: "right",
+                talking: [],
+              },
+              {
+                id: "Baba",
+                type: "Person",
+                x: utils.withGrid(12),
+                y: utils.withGrid(13),
+                src: "./images/characters/people/Ba-ba.png",
+                direction: "left",
+                talking: [],
+              },
+              {
+                id: "Didi",
+                type: "Person",
+                x: utils.withGrid(7),
+                y: utils.withGrid(15),
+                src: "./images/characters/people/Brother.png",
+                talking: [],
+              },
+              {
+                id: "NPC1",
+                type: "Person",
+                x: utils.withGrid(7),
+                y: utils.withGrid(11),
+                src: "./images/characters/people/erio.png",
+                talking: [],
+              },
+              {
+                id: "NPC2",
+                type: "Person",
+                x: utils.withGrid(11),
+                y: utils.withGrid(11),
+                src: "./images/characters/people/hero.png",
+                talking: [],
+              },
+            ],
+            cutscene: [
+              { type: "sit", direction: "left", who: "Baba" },
+              { type: "sit", direction: "right", who: "Mum" },
+              { type: "sit", direction: "up", who: "Didi" },
+              { type: "textMessage", text: "Kids! Right on time", who: "Mum" },
+              {
+                type: "textMessage",
+                text: "Meet our special guests!",
+                who: "Mum",
+              },
+            ],
+            dialogue: [
+              { text: "Dinner is ready! Let's all sit together.", name: "Mum" },
+              { text: "Thank you for joining us.", name: "Baba" },
+            ],
+          },
+        ],
+      },
     ],
     onStart(overworld) {
       overworld.startMediationQuest(this);
     },
     onComplete(overworld) {
-      // wrap up quest
+      overworld.map.handleMusicEvent({
+        src: "./audio/JieJie_balcony-audio.mp3",
+        loop: true,
+      });
+      new EndGameMessage({
+        overworld,
+        onComplete: () => {
+          // Optionally do any cleanup here
+        },
+      }).init();
     },
     onFail(overworld) {
       if (overworld.questManager && overworld.questManager.currentRunner) {

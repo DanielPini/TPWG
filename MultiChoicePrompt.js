@@ -93,6 +93,10 @@ class MultiChoicePrompt {
     this.createElement();
     container.appendChild(this.element);
     this.bindKeys();
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.pause === "function") {
+      questTimer.pause();
+    }
     // Position above and to the left of the text box, like YesNoPrompt
     const textBox = container.querySelector(".TextMessage");
     if (textBox) {
@@ -110,6 +114,10 @@ class MultiChoicePrompt {
       this.element.parentNode.removeChild(this.element);
     }
     this.unbindKeys();
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.resume === "function") {
+      questTimer.resume();
+    }
     if (window.overworld && window.overworld.directionInput) {
       window.overworld.directionInput.enabled = true;
       window.overworld.directionInput.heldDirections = [];

@@ -164,10 +164,29 @@ class Overworld {
     sceneTransition.init(document.querySelector(".game-container"), () => {
       window.playerState.character = "sister";
       this.startMap("HomeMediation", window.playerState.character);
+
+      const hero = this.map.gameObjects.hero;
+      if (hero) {
+        // Reset all animation-related flags
+        hero.lockedAnimation = null;
+        hero.isChopping = false;
+        hero.isSitting = false;
+        hero.isPickingUp = false;
+        hero.sprite.setAnimation("idle-" + hero.direction);
+        hero.sprite.currentAnimationFrame = 0;
+        hero.sprite.animationFrameProgress = hero.sprite.animationFrameLimit;
+        hero.x = utils.withGrid(2);
+        hero.y = utils.withGrid(7);
+        hero.direction = "up";
+      }
+      this.map.isPaused = false; // Ensure game loop is running
+      console.log(this.map.isPaused);
+
       const runner = new MediationQuestRunner({
         quest,
         overworld: this,
       });
+
       if (
         this.questManager &&
         this.questManager.activeQuests &&
@@ -221,6 +240,10 @@ class Overworld {
         },
       });
       chopRoom.start(document.querySelector(".game-container"));
+      this.map.handleMusicEvent({
+        src: "./audio/JieJie_balcony-audio.mp3",
+        loop: true,
+      });
       setTimeout(() => {
         sceneTransition.fadeOut();
       }, 0);
@@ -275,128 +298,128 @@ class Overworld {
       this.map
         .startCutscene([
           { type: "chop", who: "hero", direction: "right", time: 2200 },
-          // {
-          //   type: "textMessage",
-          //   who: "Mum",
-          //   text: "Here, try this Didi!",
-          // },
-          // { type: "chop", who: "hero", direction: "right", time: 2200 },
-          // {
-          //   type: "textMessage",
-          //   who: "Jiejie",
-          //   text: "You always give the fatty piece of ro (meat) to Didi",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Didi",
-          //   direction: "left",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Didi",
-          //   direction: "left",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Didi",
-          //   direction: "left",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "up",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "up",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "up",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "up",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "up",
-          // },
-          // {
-          //   type: "textMessage",
-          //   who: "Mum",
-          //   text: "Because he is a growing boy.",
-          // },
-          // {
-          //   type: "stand",
-          //   who: "hero",
-          //   direction: "down",
-          // },
-          // {
-          //   type: "textMessage",
-          //   who: "Mum",
-          //   text: "Plus, we ladies have to watch our figures.",
-          // },
-          // {
-          //   type: "textMessage",
-          //   who: "Mum",
-          //   text: "I'm getting pun (fat) the older I get",
-          // },
-          // {
-          //   type: "textMessage",
-          //   who: "Jiejie",
-          //   text: "...",
-          // },
-          // {
-          //   type: "stand",
-          //   who: "hero",
-          //   direction: "right",
-          // },
-          // { type: "chop", who: "hero", direction: "right", time: 2200 },
-          // {
-          //   type: "textMessage",
-          //   who: "Mum",
-          //   text: "I have my hands full, can you cut up some fruit for the guests and pack some for Didi's Fruito tomorrow?",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "down",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "down",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "down",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "down",
-          // },
-          // {
-          //   type: "walk",
-          //   who: "Mum",
-          //   direction: "down",
-          // },
-          // { type: "chop", who: "hero", direction: "right", time: 3000 },
-          // {
-          //   type: "textMessage",
-          //   text: "I build my own walkls, brick by brick, made of expectations.",
-          // },
-          // {
-          //   type: "textMessage",
-          //   text: "Each step I take, each breath I draw, until I can give an answer.",
-          // },
-          // { type: "chop", who: "hero", direction: "right", time: 2200 },
+          {
+            type: "textMessage",
+            who: "Mum",
+            text: "Here, try this Didi!",
+          },
+          { type: "chop", who: "hero", direction: "right", time: 2200 },
+          {
+            type: "textMessage",
+            who: "Jiejie",
+            text: "You always give the fatty piece of ro (meat) to Didi",
+          },
+          {
+            type: "walk",
+            who: "Didi",
+            direction: "left",
+          },
+          {
+            type: "walk",
+            who: "Didi",
+            direction: "left",
+          },
+          {
+            type: "walk",
+            who: "Didi",
+            direction: "left",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "up",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "up",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "up",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "up",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "up",
+          },
+          {
+            type: "textMessage",
+            who: "Mum",
+            text: "Because he is a growing boy.",
+          },
+          {
+            type: "stand",
+            who: "hero",
+            direction: "down",
+          },
+          {
+            type: "textMessage",
+            who: "Mum",
+            text: "Plus, we ladies have to watch our figures.",
+          },
+          {
+            type: "textMessage",
+            who: "Mum",
+            text: "I'm getting pun (fat) the older I get",
+          },
+          {
+            type: "textMessage",
+            who: "Jiejie",
+            text: "...",
+          },
+          {
+            type: "stand",
+            who: "hero",
+            direction: "right",
+          },
+          { type: "chop", who: "hero", direction: "right", time: 2200 },
+          {
+            type: "textMessage",
+            who: "Mum",
+            text: "I have my hands full, can you cut up some fruit for the guests and pack some for Didi's Fruito tomorrow?",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "down",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "down",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "down",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "down",
+          },
+          {
+            type: "walk",
+            who: "Mum",
+            direction: "down",
+          },
+          { type: "chop", who: "hero", direction: "right", time: 3000 },
+          {
+            type: "textMessage",
+            text: "I build my own walkls, brick by brick, made of expectations.",
+          },
+          {
+            type: "textMessage",
+            text: "Each step I take, each breath I draw, until I can give an answer.",
+          },
+          { type: "chop", who: "hero", direction: "right", time: 2200 },
         ])
         .then(() => {
           this.questManager.startQuest("mediationQuest");
@@ -412,21 +435,46 @@ class Overworld {
     const gameObject = new Constructor(config);
     gameObject.id = config.id;
 
-    const type = config.type;
-
-    let instance;
-
-    if (type === "Person") {
-      instance = new window.Person(config);
-    } else {
-      throw new Error(`Unknown GameObject type: ${type}`);
-    }
-
     if (typeof gameObject.mount === "function") {
       gameObject.mount(this.map);
     }
     // Attach to the current map
     this.map.gameObjects[config.id] = gameObject;
+  }
+
+  showTitleScreen() {
+    this.map.isPaused = true;
+    this.titleScreen = new TitleScreen({
+      progress: this.progress,
+    });
+    this.titleScreen
+      .init(document.querySelector(".game-container"))
+      .then((useSaveFile) => {
+        // Optionally reset state here
+        let initialHeroState = null;
+        if (useSaveFile) {
+          this.progress.load();
+          initialHeroState = {
+            x: this.progress.startingHeroX,
+            y: this.progress.startingHeroY,
+            direction: this.progress.startingHeroDirection,
+          };
+        }
+        this.startMap(
+          this.progress.mapId,
+          window.playerState.character,
+          initialHeroState
+        );
+        this.map.isPaused = false;
+        // Re-bind controls if needed
+        this.bindActionInput();
+        this.bindHeroPositionCheck();
+        if (!this.directionInput) {
+          this.directionInput = new DirectionInput();
+          this.directionInput.init();
+        }
+        this.startGameLoop();
+      });
   }
 
   async init() {

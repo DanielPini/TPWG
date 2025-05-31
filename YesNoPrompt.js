@@ -81,6 +81,10 @@ class YesNoPrompt {
     this.createElement();
     container.appendChild(this.element);
     this.bindKeys();
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.pause === "function") {
+      questTimer.pause();
+    }
     // Position above and to the left of the text box
     const textBox = container.querySelector(".TextMessage");
     if (textBox) {
@@ -96,6 +100,10 @@ class YesNoPrompt {
   close() {
     if (this.element && this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
+    }
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.resume === "function") {
+      questTimer.resume();
     }
     this.unbindKeys();
   }

@@ -187,6 +187,18 @@ class QuestManager {
             return this.checkInventoryRequirement(questId, cond.items);
           } else if (cond.type === "flag") {
             return this.checkCustomEventTrigger(questId, cond.flag);
+          } else if (cond.type === "nerfsCollected") {
+            let count = 0;
+            if (cond.byType) {
+              count = playerState.inventory.filter(
+                (entry) => entry.type === cond.byType
+              ).length;
+            } else if (cond.byId) {
+              count = playerState.inventory.filter((entry) =>
+                cond.byId.includes(entry.id)
+              ).length;
+            }
+            return count >= (cond.count || 0);
           } else if (
             cond.type === "custom" &&
             typeof cond.check === "function"

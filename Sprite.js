@@ -52,6 +52,12 @@ class Sprite {
       "sit-up": [[2, 4]],
       "sit-left": [[3, 4]],
       "pick-up-down": [[0, 5]],
+      fail: [
+        [0, 8],
+        [1, 8],
+        [2, 8],
+        [3, 8],
+      ],
       "chop-right": [
         [0, 6],
         [1, 6],
@@ -67,10 +73,14 @@ class Sprite {
 
     //Reference the game object
     this.gameObject = config.gameObject;
+
+    this.freezeAnimation = false;
   }
 
   get frame() {
-    return this.animations[this.currentAnimation][this.currentAnimationFrame];
+    const frames = this.animations[this.currentAnimation];
+    if (!frames) return [0, 0];
+    return frames[this.currentAnimationFrame];
   }
 
   setAnimation(key) {
@@ -93,6 +103,7 @@ class Sprite {
   }
 
   updateAnimationProgress() {
+    if (this.freezeAnimation) return;
     //Downtick frame progress
     if (this.animationFrameProgress > 0) {
       this.animationFrameProgress -= 1;

@@ -1,0 +1,22 @@
+.EndGameMessage_content h2 {
+  font-size: 4px;
+  margin-bottom: 16px;
+}
+.EndGameMessage_content p {
+  font-size: 3px;
+}
+/* .EndGameMessage_ticket {
+  margin: 16px 0;
+} */
+.EndGameMessage button {
+  height: 3px;
+  width: 3px;
+  font-size: 1px;
+  margin: 8px 0;
+  padding: 8px 16px;
+  font-size: 4px;
+  border-radius: 6px;
+  border: 1px solid #888;
+  background: #eee;
+  cursor: pointer;
+}

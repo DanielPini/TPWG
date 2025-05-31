@@ -50,6 +50,10 @@ class TextMessage {
       this.revealingText.warpToDone();
       return;
     }
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.resume === "function") {
+      questTimer.resume();
+    }
     this.element.remove();
     this.actionListener?.unbind();
     if (this.autoCloseTimeout) clearTimeout(this.autoCloseTimeout);
@@ -63,6 +67,12 @@ class TextMessage {
     if (!container) {
       throw new Error("No .game-container found in the DOM for TextMessage!");
     }
+
+    const questTimer = window.overworld?.questTimer;
+    if (questTimer && typeof questTimer.pause === "function") {
+      questTimer.pause();
+    }
+
     this.createElement();
     container.appendChild(this.element);
     this.revealingText.init();

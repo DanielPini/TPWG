@@ -1110,7 +1110,604 @@ window.OverworldMaps = {
       });
     },
   },
+
+  BathroomMediation: {
+    createInstance(character) {
+      return new OverworldMap({
+        id: "BathroomMediation",
+        lowerSrc:
+          character === "sister"
+            ? "./images/maps/sister/Bathroom.png"
+            : "./images/maps/brother/Bathroom.png",
+
+        upperSrc: "",
+
+        configObjects: getConfigObjectsForBathroomMediation(character),
+        cutsceneSpaces: getCutsceneSpacesForBathroomMediation(character),
+        walls: (function () {
+          let walls = {};
+          [
+            // Top wall
+            "1, 3",
+            "2, 3",
+            "3, 3",
+            "4, 3",
+            "5, 3",
+            "6, 3",
+            "7, 3",
+            "8, 3",
+            // Right wall
+            "6, 4",
+            "6, 5",
+            "6, 6",
+            "6, 7",
+            "6, 8",
+            "6, 9",
+            "6, 10",
+            // Bottom wall
+            "1, 11",
+            "2, 11",
+            "3, 11",
+            "4, 11",
+            "5, 11",
+            "6, 11",
+            "7, 11",
+            "8, 11",
+            // Left wall
+            "0, 4",
+            "0, 5",
+            "0, 6",
+            "0, 7",
+            "-1, 8",
+            "0, 9",
+            "0, 10",
+            // Assets
+            // Shower
+            "5, 8",
+            "4, 8",
+            "4, 9",
+            // Dresser
+            "3, 9",
+            "2, 9",
+            "1, 9",
+            // Toilet
+            "4, 4",
+            // Bath
+            "2, 4",
+            "1, 4",
+          ].forEach((coord) => {
+            let [x, y] = coord.split(",");
+            walls[utils.asGridCoord(x, y)] = true;
+          });
+          return walls;
+        })(),
+      });
+    },
+  },
+
+  KidMediation: {
+    createInstance(character) {
+      return new OverworldMap({
+        id: "KidMediation",
+        lowerSrc:
+          character === "sister"
+            ? "./images/maps/sister/Kid.png"
+            : "./images/maps/brother/Kid.png",
+
+        upperSrc: "",
+
+        configObjects: getConfigObjectsForKidMediation(character),
+        cutsceneSpaces: getCutsceneSpacesForKidMediation(character),
+        walls: (function () {
+          let walls = {};
+          [
+            // Top wall
+            "1, 4",
+            "2, 4",
+            "3, 4",
+            "4, 4",
+            "5, 4",
+            "6, 4",
+            "7, 4",
+            "8, 4",
+            // Right wall
+            "9, 5",
+            "9, 6",
+            "9, 7",
+            "9, 8",
+            "9, 9",
+            "9, 10",
+            "9, 11",
+            "9, 12",
+            "9, 13",
+            "9, 14",
+            "9, 15",
+            // Bottom wall
+            "1, 16",
+            "2, 16",
+            "3, 16",
+            "4, 16",
+            "5, 16",
+            "6, 16",
+            "7, 16",
+            "8, 16",
+            // Left wall
+            "0, 5",
+            "0, 6",
+            "0, 7",
+            "0, 8",
+            "0, 9",
+            "0, 10",
+            "0, 11",
+            "0, 12",
+            "-1, 13",
+            "0, 14",
+            "0, 15",
+            // Assets
+            // Desk and chair
+            "6, 13",
+            "5, 14",
+            "6 ,14",
+            "7, 14",
+            "5, 15",
+            "6, 15",
+            "7, 15",
+            // Beds
+            // Left
+            "1, 5",
+            "2, 5",
+            "1, 6",
+            "2, 6",
+            "1, 7",
+            "2, 7",
+            // Right
+            "7, 5",
+            "8, 5",
+            "7, 6",
+            "8, 6",
+            "7, 7",
+            "8, 7",
+            // Chest
+            "4, 5",
+            "5, 5",
+          ].forEach((coord) => {
+            let [x, y] = coord.split(",");
+            walls[utils.asGridCoord(x, y)] = true;
+          });
+          return walls;
+        })(),
+      });
+    },
+  },
+
+  LaundryMediation: {
+    createInstance(character) {
+      return new OverworldMap({
+        id: "LaundryMediation",
+        lowerSrc:
+          character === "sister"
+            ? "./images/maps/sister/Laundry.png"
+            : "./images/maps/brother/Laundry.png",
+
+        upperSrc: "",
+
+        configObjects: getConfigObjectsForLaundryMediation(character),
+        cutsceneSpaces: getCutsceneSpacesForLaundryMediation(character),
+        walls: (function () {
+          let walls = {};
+          [
+            // Top wall
+            "0, 3",
+            "1, 3",
+            "2, 3",
+            "3, 3",
+            "4, 3",
+            // Right wall
+            "5, 4",
+            "5, 5",
+            "5, 6",
+            "5, 7",
+            "6, 8",
+            "5, 9",
+            // Bottom wall
+            "0, 10",
+            "1, 10",
+            "2, 10",
+            "3, 10",
+            "4, 10",
+            // Left wall
+            "-1, 4",
+            "-1, 5",
+            "-1, 6",
+            "-1, 7",
+            "-1, 8",
+            "-1, 9",
+            // Assets
+            // Ironing board
+            "0, 4",
+            "1, 4",
+            // Dryer
+            "2, 4",
+            // Washing machine
+            "4, 4",
+          ].forEach((coord) => {
+            let [x, y] = coord.split(",");
+            walls[utils.asGridCoord(x, y)] = true;
+          });
+          return walls;
+        })(),
+      });
+    },
+  },
+
+  MasterMediation: {
+    createInstance(character) {
+      return new OverworldMap({
+        id: "MasterMediation",
+        lowerSrc:
+          character === "sister"
+            ? "./images/maps/sister/Master.png"
+            : "./images/maps/brother/Master.png",
+
+        upperSrc: "",
+
+        configObjects: getConfigObjectsForMasterMediation(character),
+        cutsceneSpaces: getCutsceneSpacesForMasterMediation(character),
+        walls: (function () {
+          let walls = {};
+          [
+            // Top wall
+            "0, 3",
+            "1, 3",
+            "2, 3",
+            "3, 3",
+            "4, 3",
+            "5, 3",
+            "6, 3",
+            "7, 2",
+            "8, 3",
+            // Right wall
+            "9, 4",
+            "9, 5",
+            "9, 6",
+            "9, 7",
+            "9, 8",
+            "9, 9",
+            "9, 10",
+            "9, 11",
+            // Bottom wall
+            "0, 12",
+            "1, 12",
+            "2, 12",
+            "3, 12",
+            "4, 12",
+            "5, 12",
+            "6, 12",
+            "7, 12",
+            "8, 12",
+            // Left wall
+            "-1, 4",
+            "-1, 5",
+            "-1, 6",
+            "-1, 7",
+            "-1, 8",
+            "-1, 9",
+            "-1, 10",
+            "-1, 11",
+            // Assets
+            // Closet
+            "0, 4",
+            "1, 4",
+            "2, 4",
+            "3, 4",
+            "4, 4",
+            // Stools
+            // Upper
+            "5, 4",
+            // Lower
+            "2, 11",
+            // Bed
+            "3, 8",
+            "3, 9",
+            "3, 10",
+            "3, 11",
+            "4, 8",
+            "4, 9",
+            "4, 10",
+            "4, 11",
+            "5, 8",
+            "5, 9",
+            "5, 10",
+            "5, 11",
+          ].forEach((coord) => {
+            let [x, y] = coord.split(",");
+            walls[utils.asGridCoord(x, y)] = true;
+          });
+          return walls;
+        })(),
+      });
+    },
+  },
 };
+
+function getConfigObjectsForKidMediation(character) {
+  const sisterHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Sister.png`,
+      scale: 1,
+    },
+  };
+
+  const brotherHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Brother.png`,
+      scale: 1,
+    },
+  };
+
+  const sisterNPCs = {};
+
+  const brotherNPCs = {};
+
+  const shared = {};
+
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterHero : brotherHero),
+    ...(character === "sister" ? sisterNPCs : brotherNPCs),
+  };
+}
+
+function getCutsceneSpacesForKidMediation(character) {
+  const shared = {
+    /**
+     * Music
+     */
+    [utils.asGridCoord(0, 13)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "HomeMediation",
+            x: utils.withGrid(22),
+            y: utils.withGrid(17),
+            direction: "left",
+          },
+          {
+            type: "playMusic",
+            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+            loop: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  const sisterCutScenes = {};
+
+  const brotherCutScenes = {};
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterCutScenes : brotherCutScenes),
+  };
+}
+
+function getConfigObjectsForLaundryMediation(character) {
+  const sisterHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Sister.png`,
+      scale: 1,
+    },
+  };
+
+  const brotherHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Brother.png`,
+      scale: 1,
+    },
+  };
+
+  const sisterNPCs = {};
+
+  const brotherNPCs = {};
+
+  const shared = {};
+
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterHero : brotherHero),
+    ...(character === "sister" ? sisterNPCs : brotherNPCs),
+  };
+}
+
+function getCutsceneSpacesForLaundryMediation(character) {
+  const shared = {
+    [utils.asGridCoord(5, 8)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "HomeMediation",
+            x: utils.withGrid(18),
+            y: utils.withGrid(23),
+            direction: "right",
+          },
+          {
+            type: "playMusic",
+            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+            loop: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  const sisterCutScenes = {};
+
+  const brotherCutScenes = {};
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterCutScenes : brotherCutScenes),
+  };
+}
+
+function getConfigObjectsForMasterMediation(character) {
+  const sisterHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Sister.png`,
+      scale: 1,
+    },
+  };
+
+  const brotherHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Brother.png`,
+      scale: 1,
+    },
+  };
+
+  const sisterNPCs = {};
+
+  const brotherNPCs = {};
+
+  const shared = {};
+
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterHero : brotherHero),
+    ...(character === "sister" ? sisterNPCs : brotherNPCs),
+  };
+}
+
+function getCutsceneSpacesForMasterMediation(character) {
+  const shared = {
+    [utils.asGridCoord(7, 3)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "HomeMediation",
+            x: utils.withGrid(20),
+            y: utils.withGrid(25),
+            direction: "up",
+          },
+          {
+            type: "playMusic",
+            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+            loop: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  const sisterCutScenes = {};
+
+  const brotherCutScenes = {};
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterCutScenes : brotherCutScenes),
+  };
+}
+
+function getConfigObjectsForBathroomMediation(character) {
+  const sisterHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Sister.png`,
+      scale: 1,
+    },
+  };
+
+  const brotherHero = {
+    hero: {
+      type: "Person",
+      isPlayerControlled: true,
+      x: utils.withGrid(1),
+      y: utils.withGrid(9),
+      direction: "right",
+      src: `./images/characters/people/Brother.png`,
+      scale: 1,
+    },
+  };
+
+  const sisterNPCs = {};
+
+  const brotherNPCs = {};
+
+  const shared = {};
+
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterHero : brotherHero),
+    ...(character === "sister" ? sisterNPCs : brotherNPCs),
+  };
+}
+
+function getCutsceneSpacesForBathroomMediation(character) {
+  const shared = {
+    [utils.asGridCoord(0, 8)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "HomeMediation",
+            x: utils.withGrid(22),
+            y: utils.withGrid(23),
+            direction: "left",
+          },
+          {
+            type: "playMusic",
+            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+            loop: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  const sisterCutScenes = {};
+
+  const brotherCutScenes = {};
+  return {
+    ...shared,
+    ...(character === "sister" ? sisterCutScenes : brotherCutScenes),
+  };
+}
 
 function getConfigObjectsForChop(character) {
   return {
@@ -1602,7 +2199,7 @@ function getConfigObjectsForHome(character) {
               text: "...and I think you're mature enough now to see things from other people's perspective.",
               who: "Baba",
             },
-            { type: "storyFlag", flag: "SISTER_UNLOCKED" },
+            { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
             { type: "unlockSister" },
             {
               type: "textMessage",
@@ -1611,6 +2208,10 @@ function getConfigObjectsForHome(character) {
             {
               type: "textMessage",
               text: "* Continue with Jiejie's character to experience the second half of the game *",
+            },
+            {
+              type: "textMessage",
+              text: "* Press Escape on the keyboard and navigate to change character to play as Jiejie *",
             },
           ],
         },
@@ -1644,77 +2245,77 @@ function getCutsceneSpacesForHome(character) {
     /**
      * Music
      */
-    [utils.asGridCoord(10, 25)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Kid room
-    [utils.asGridCoord(22, 17)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Bathroom
-    [utils.asGridCoord(22, 23)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from MasterBedroom
-    [utils.asGridCoord(20, 25)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Laundry
-    [utils.asGridCoord(18, 23)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entryway audio
-    [utils.asGridCoord(9, 18)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(10, 25)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/We_Song_entryway-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Kid room
+    // [utils.asGridCoord(22, 17)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Bathroom
+    // [utils.asGridCoord(22, 23)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from MasterBedroom
+    // [utils.asGridCoord(20, 25)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Laundry
+    // [utils.asGridCoord(18, 23)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entryway audio
+    // [utils.asGridCoord(9, 18)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/We_Song_entryway-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
 
     /**
      * ChangeMap
@@ -1870,7 +2471,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "You made it!",
+            text: "No mum, you already work so hard. Didi can handle it.",
             faceHero: "Jiejie",
           },
           { type: "stand", direction: "left", who: "Jiejie" },
@@ -1878,7 +2479,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "No mum, just let Didi do it. It'll be good for him to know how to.",
+            text: "Trust me. Just let Didi do it. It'll be good for him to know how to.",
           },
           {
             who: "Mum",
@@ -1895,7 +2496,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "Mum, you concentrate on the cooking, I'll make sure Didi gets it done",
+            text: "Mum, you concentrate on getting the house ready, I'll make sure Didi gets it done",
           },
           { type: "walk", who: "Mum", direction: "down" },
           { type: "walk", who: "Mum", direction: "down" },
@@ -1920,6 +2521,21 @@ function getCutsceneSpacesForHome(character) {
             who: "Jiejie",
             type: "textMessage",
             text: "Don't just stand there! Hurry up!",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
           },
           {
             type: "textMessage",
@@ -1952,6 +2568,9 @@ function getCutsceneSpacesForHome(character) {
           { type: "startQuest", questId: "fetchPlates" },
           { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
           { type: "startQuestTimer", questId: "fetchPlates" },
+          { type: "startQuest", questId: "fetchPlates" },
+          { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
+          { type: "startQuestTimer", questId: "fetchPlates" },
         ],
       },
     ],
@@ -1970,7 +2589,6 @@ function getConfigObjectsForHomeMediation(character) {
       x: utils.withGrid(2),
       y: utils.withGrid(7),
       direction: "up",
-      isSitting: true,
       src: `./images/characters/people/Sister.png`,
       scale: 1,
     },
@@ -2446,77 +3064,77 @@ function getCutsceneSpacesForHomeMediation(character) {
     /**
      * Music
      */
-    [utils.asGridCoord(10, 25)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Kid room
-    [utils.asGridCoord(22, 17)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Bathroom
-    [utils.asGridCoord(22, 23)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from MasterBedroom
-    [utils.asGridCoord(20, 25)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entering from Laundry
-    [utils.asGridCoord(18, 23)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
-    // Entryway audio
-    [utils.asGridCoord(9, 18)]: [
-      {
-        events: [
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(10, 25)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/We_Song_entryway-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Kid room
+    // [utils.asGridCoord(22, 17)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Bathroom
+    // [utils.asGridCoord(22, 23)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from MasterBedroom
+    // [utils.asGridCoord(20, 25)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entering from Laundry
+    // [utils.asGridCoord(18, 23)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
+    // // Entryway audio
+    // [utils.asGridCoord(9, 18)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/We_Song_entryway-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
 
     /**
      * ChangeMap
@@ -2526,7 +3144,7 @@ function getCutsceneSpacesForHomeMediation(character) {
         events: [
           {
             type: "changeMap",
-            map: "Kid",
+            map: "KidMediation",
             x: utils.withGrid(0),
             y: utils.withGrid(13),
             direction: "right",
@@ -2544,7 +3162,7 @@ function getCutsceneSpacesForHomeMediation(character) {
         events: [
           {
             type: "changeMap",
-            map: "Bathroom",
+            map: "BathroomMediation",
             x: utils.withGrid(0),
             y: utils.withGrid(8),
             direction: "right",
@@ -2562,7 +3180,7 @@ function getCutsceneSpacesForHomeMediation(character) {
         events: [
           {
             type: "changeMap",
-            map: "Master",
+            map: "MasterMediation",
             x: utils.withGrid(7),
             y: utils.withGrid(3),
             direction: "down",
@@ -2580,7 +3198,7 @@ function getCutsceneSpacesForHomeMediation(character) {
         events: [
           {
             type: "changeMap",
-            map: "Laundry",
+            map: "LaundryMediation",
             x: utils.withGrid(5),
             y: utils.withGrid(8),
             direction: "left",
@@ -2672,7 +3290,7 @@ function getCutsceneSpacesForHomeMediation(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "You made it!",
+            text: "No mum, you already work so hard. Didi can handle it.",
             faceHero: "Jiejie",
           },
           { type: "stand", direction: "left", who: "Jiejie" },
@@ -2680,7 +3298,7 @@ function getCutsceneSpacesForHomeMediation(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "No mum, just let Didi do it. It'll be good for him to know how to.",
+            text: "Trust me. Just let Didi do it. It'll be good for him to know how to.",
           },
           {
             who: "Mum",
@@ -2697,7 +3315,7 @@ function getCutsceneSpacesForHomeMediation(character) {
           {
             who: "Jiejie",
             type: "textMessage",
-            text: "Mum, you concentrate on the cooking, I'll make sure Didi gets it done",
+            text: "Mum, you concentrate on getting the house ready, I'll make sure Didi gets it done",
           },
           { type: "walk", who: "Mum", direction: "down" },
           { type: "walk", who: "Mum", direction: "down" },
@@ -2722,6 +3340,21 @@ function getCutsceneSpacesForHomeMediation(character) {
             who: "Jiejie",
             type: "textMessage",
             text: "Don't just stand there! Hurry up!",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
           },
           {
             type: "textMessage",
@@ -2807,24 +3440,24 @@ function getCutsceneSpacesForKid(character) {
     /**
      * Music
      */
-    [utils.asGridCoord(0, 13)]: [
-      {
-        events: [
-          {
-            type: "changeMap",
-            map: "Home",
-            x: utils.withGrid(22),
-            y: utils.withGrid(17),
-            direction: "left",
-          },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(0, 13)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "changeMap",
+    //         map: "Home",
+    //         x: utils.withGrid(22),
+    //         y: utils.withGrid(17),
+    //         direction: "left",
+    //       },
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
   };
 
   const sisterCutScenes = {};
@@ -2876,24 +3509,24 @@ function getConfigObjectsForLaundry(character) {
 
 function getCutsceneSpacesForLaundry(character) {
   const shared = {
-    [utils.asGridCoord(5, 8)]: [
-      {
-        events: [
-          {
-            type: "changeMap",
-            map: "Home",
-            x: utils.withGrid(18),
-            y: utils.withGrid(23),
-            direction: "right",
-          },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(5, 8)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "changeMap",
+    //         map: "Home",
+    //         x: utils.withGrid(18),
+    //         y: utils.withGrid(23),
+    //         direction: "right",
+    //       },
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
   };
 
   const sisterCutScenes = {};
@@ -2945,24 +3578,24 @@ function getConfigObjectsForMaster(character) {
 
 function getCutsceneSpacesForMaster(character) {
   const shared = {
-    [utils.asGridCoord(7, 3)]: [
-      {
-        events: [
-          {
-            type: "changeMap",
-            map: "Home",
-            x: utils.withGrid(20),
-            y: utils.withGrid(25),
-            direction: "up",
-          },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(7, 3)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "changeMap",
+    //         map: "Home",
+    //         x: utils.withGrid(20),
+    //         y: utils.withGrid(25),
+    //         direction: "up",
+    //       },
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
   };
 
   const sisterCutScenes = {};
@@ -3014,24 +3647,24 @@ function getConfigObjectsForBathroom(character) {
 
 function getCutsceneSpacesForBathroom(character) {
   const shared = {
-    [utils.asGridCoord(0, 8)]: [
-      {
-        events: [
-          {
-            type: "changeMap",
-            map: "Home",
-            x: utils.withGrid(22),
-            y: utils.withGrid(23),
-            direction: "left",
-          },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
-        ],
-      },
-    ],
+    // [utils.asGridCoord(0, 8)]: [
+    //   {
+    //     events: [
+    //       {
+    //         type: "changeMap",
+    //         map: "Home",
+    //         x: utils.withGrid(22),
+    //         y: utils.withGrid(23),
+    //         direction: "left",
+    //       },
+    //       {
+    //         type: "playMusic",
+    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+    //         loop: true,
+    //       },
+    //     ],
+    //   },
+    // ],
   };
 
   const sisterCutScenes = {};

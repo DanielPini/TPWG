@@ -51,6 +51,22 @@ class QuestTimer {
     }, 250);
   }
 
+  refresh() {
+    // Re-append the timer element to the DOM if needed
+    const container = document.querySelector(".game-container");
+    if (this.element && container && !container.contains(this.element)) {
+      container.appendChild(this.element);
+    }
+    // Force update the display
+    if (this.startTime && this.duration) {
+      const elapsed = Date.now() - this.startTime + this.elapsedBeforePause;
+      const remaining = Math.max(0, this.duration - elapsed);
+      const seconds = Math.ceil(remaining / 1000);
+      this.element.textContent = `Time left: ${seconds}s`;
+      this.element.style.display = "block";
+    }
+  }
+
   pause() {
     if (!this.isPaused) {
       this.isPaused = true;
