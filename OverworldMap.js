@@ -2063,7 +2063,6 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "left", time: 1200 },
         { type: "walk", direction: "down" },
         { type: "walk", direction: "down" },
-        { type: "walk", direction: "down" },
         { type: "stand", direction: "left", time: 1200 },
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
@@ -2084,7 +2083,6 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
-        { type: "walk", direction: "up" },
         { type: "walk", direction: "up" },
         { type: "walk", direction: "up" },
         { type: "stand", direction: "left", time: 1200 },
@@ -2187,31 +2185,114 @@ function getConfigObjectsForHome(character) {
           ],
         },
         {
+          required: ["FETCH_NERFS_QUEST"],
+          disqualify: ["NERFS_COLLECTED"],
+          events: [
+            {
+              type: "condition",
+              conditions: [{ type: "nerfsCollected", count: 25 }],
+              onSuccess: [
+                { type: "addStoryFlag", flag: "NERFS_COLLECTED" },
+                {
+                  type: "textMessage",
+                  text: "Well done! Don't forget to clean up when you play in the future",
+                  who: "Baba",
+                },
+                {
+                  type: "textMessage",
+                  text: "...and I think you're mature enough now to see things from other people's perspective.",
+                  who: "Baba",
+                },
+                { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
+                { type: "unlockSister" },
+                {
+                  type: "textMessage",
+                  text: "* Jiejie is now playable through the Pause Menu (press Escape) *",
+                },
+                {
+                  type: "textMessage",
+                  text: "* Continue with Jiejie's character to experience the second half of the game *",
+                },
+              ],
+              onFail: [
+                {
+                  type: "textMessage",
+                  text: "You haven't picked up all the Nerfs yet! Keep looking.",
+                  who: "Baba",
+                },
+              ],
+            },
+          ],
+        },
+        {
           required: ["NERFS_COLLECTED"],
+          disqualify: ["ASKED_TO_PLAY_AS_SISTER"],
           events: [
             {
               type: "textMessage",
-              text: "Well done! Don't forget to clean up when you play in the future",
+              text: "Didi, you did a good job, but do you ever think about how tough it is for your sister?",
               who: "Baba",
             },
             {
               type: "textMessage",
-              text: "...and I think you're mature enough now to see things from other people's perspective.",
+              text: "You seem dismissive, but let me show you.",
               who: "Baba",
             },
-            { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
-            { type: "unlockSister" },
+            {
+              type: "yesNoPrompt",
+              text: "Play as Jiejie?",
+              onYes: [
+                { type: "addStoryFlag", flag: "ASKED_TO_PLAY_AS_SISTER" },
+                { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
+                { type: "unlockSister" },
+                {
+                  type: "textMessage",
+                  text: "You are now playing as Jiejie! Experience her perspective.",
+                  who: "Baba",
+                },
+                // Optionally trigger the character switch or cutscene here
+                { type: "changeCharacter", character: "sister" },
+              ],
+              onNo: [
+                { type: "addStoryFlag", flag: "ASKED_TO_PLAY_AS_SISTER" },
+                {
+                  type: "textMessage",
+                  text: "Come back to me when you're ready to walk a mile in her shoes.",
+                  who: "Baba",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          required: ["ASKED_TO_PLAY_AS_SISTER"],
+          disqualify: ["SISTER_UNLOCKED"],
+          events: [
             {
               type: "textMessage",
-              text: "* Jiejie is now playable through the Pause Menu (press Escape) *",
+              text: "Are you ready to see things from your sister's perspective?",
+              who: "Baba",
             },
             {
-              type: "textMessage",
-              text: "* Continue with Jiejie's character to experience the second half of the game *",
-            },
-            {
-              type: "textMessage",
-              text: "* Press Escape on the keyboard and navigate to change character to play as Jiejie *",
+              type: "yesNoPrompt",
+              text: "Play as Jiejie?",
+              onYes: [
+                { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
+                { type: "unlockSister" },
+                {
+                  type: "textMessage",
+                  text: "You are now playing as Jiejie! Experience her perspective.",
+                  who: "Baba",
+                },
+                // Optionally trigger the character switch or cutscene here
+              ],
+              onNo: [
+                {
+                  type: "textMessage",
+                  text: "Come back to me when you're ready to walk a mile in her shoes.",
+                  who: "Baba",
+                },
+              ],
             },
           ],
         },
@@ -2429,7 +2510,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Mum",
             type: "textMessage",
-            text: "... and also in case they get lost on teh way here which is really 30 minutes because we need to tidy up the house...",
+            text: "... and also in case they get lost on the way here which is really 30 minutes because we need to tidy up the house...",
             faceHero: "Mum",
           },
           {
@@ -2451,7 +2532,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Mum",
             type: "textMessage",
-            text: "And no one helps me around the house anymore. I have to do everything.",
+            text: "And no one helps me around the house anymore. I have to do EVERYTHING.",
             faceHero: "Mum",
           },
           {
@@ -3149,11 +3230,11 @@ function getCutsceneSpacesForHomeMediation(character) {
             y: utils.withGrid(13),
             direction: "right",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Timestables_kid-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Timestables_kid-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -3167,11 +3248,11 @@ function getCutsceneSpacesForHomeMediation(character) {
             y: utils.withGrid(8),
             direction: "right",
           },
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/We_Song_entryway-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -3185,11 +3266,11 @@ function getCutsceneSpacesForHomeMediation(character) {
             y: utils.withGrid(3),
             direction: "down",
           },
-          {
-            type: "playMusic",
-            src: "./audio/JieJie_balcony-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/JieJie_balcony-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -3215,182 +3296,7 @@ function getCutsceneSpacesForHomeMediation(character) {
 
   const sisterCutScenes = {};
 
-  const brotherCutScenes = {
-    // First entrance
-    [utils.asGridCoord(19, 10)]: [
-      {
-        triggerOnLoad: true,
-        disqualify: ["SEEN_INTRO"],
-        events: [
-          { type: "addStoryFlag", flag: "SEEN_INTRO" },
-          { type: "walk", who: "Mum", direction: "up" },
-          { type: "walk", who: "Mum", direction: "up" },
-          { type: "walk", who: "Mum", direction: "up" },
-          { type: "walk", who: "Mum", direction: "up" },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "Guests are arriving!",
-            faceHero: "Mum",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "We have exactly 1 hour and 12 minutes to get ready and if we round that down...!",
-            faceHero: "Mum",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "We really only have 1 hour, which means 60 minutes, whih is really 45 minutes if we think about plating...",
-            faceHero: "Mum",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "... and also in case they get lost on teh way here which is really 30 minutes because we need to tidy up the house...",
-            faceHero: "Mum",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "... WHICH IS NOT ENOUGH TIME!!!",
-            faceHero: "Mum",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "...",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "How the heck did we get from 1 hour and 12 minutes down to 30 minutes...",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "And no one helps me around the house anymore. I have to do everything.",
-            faceHero: "Mum",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "I can set up the table-",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "But you never do it right. Ayaaaaaa just forget, I'll do it.",
-            faceHero: "Mum",
-          },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          { type: "walk", who: "Jiejie", direction: "up" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "No mum, you already work so hard. Didi can handle it.",
-            faceHero: "Jiejie",
-          },
-          { type: "stand", direction: "left", who: "Jiejie" },
-          { type: "stand", direction: "right", who: "Mum" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Trust me. Just let Didi do it. It'll be good for him to know how to.",
-          },
-          {
-            who: "Mum",
-            type: "textMessage",
-            text: "But if he doesn't do it right, I'll have to redo it anyway and that's so much time wasted and we only have 3 minutes!",
-            faceHero: "Mum",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "How did we get from 30 minutes to 3 minutes?",
-          },
-          { type: "stand", direction: "up", who: "Jiejie" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Mum, you concentrate on getting the house ready, I'll make sure Didi gets it done",
-          },
-          { type: "walk", who: "Mum", direction: "down" },
-          { type: "walk", who: "Mum", direction: "down" },
-          { type: "walk", who: "Mum", direction: "down" },
-          { type: "walk", who: "Mum", direction: "down" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "I'm going to count to 3, and you must finish setting the table!",
-          },
-          { type: "stand", direction: "left", who: "Jiejie" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "I want all of the chopsticks and plates set on the dining room table before I get to san, or there'll be trouble!",
-          },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "walk", who: "Jiejie", direction: "down" },
-          { type: "stand", direction: "down", who: "hero" },
-          {
-            who: "Jiejie",
-            type: "textMessage",
-            text: "Don't just stand there! Hurry up!",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "...",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "...",
-          },
-          {
-            who: "Didi",
-            type: "textMessage",
-            text: "...",
-          },
-          {
-            type: "textMessage",
-            text: "San is a very scary number!",
-          },
-          {
-            type: "textMessage",
-            text: "You never want them to count to three",
-          },
-          {
-            type: "textMessage",
-            text: "Slam the door or get low scores",
-          },
-          {
-            type: "textMessage",
-            text: "You'll be dead as 四 (the number 4)",
-          },
-          {
-            type: "textMessage",
-            text: "* Help Didi dodge trouble by having him set the dining table in record time, before Jiejie counts to 3 *",
-          },
-          {
-            type: "textMessage",
-            text: "* New Quest: Set the table *",
-          },
-          {
-            type: "textMessage",
-            text: "* Grab all 8 plates and all 8 sets of chopsticks and bring them to the table *",
-          },
-          { type: "startQuest", questId: "fetchPlates" },
-          { type: "addStoryFlag", flag: "FETCH_PLATES_QUEST" },
-          { type: "startQuestTimer", questId: "fetchPlates" },
-        ],
-      },
-    ],
-  };
+  const brotherCutScenes = {};
   return {
     ...shared,
     ...(character === "sister" ? sisterCutScenes : brotherCutScenes),
@@ -3437,27 +3343,27 @@ function getConfigObjectsForKid(character) {
 
 function getCutsceneSpacesForKid(character) {
   const shared = {
-    /**
-     * Music
-     */
-    // [utils.asGridCoord(0, 13)]: [
-    //   {
-    //     events: [
-    //       {
-    //         type: "changeMap",
-    //         map: "Home",
-    //         x: utils.withGrid(22),
-    //         y: utils.withGrid(17),
-    //         direction: "left",
-    //       },
-    //       {
-    //         type: "playMusic",
-    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-    //         loop: true,
-    //       },
-    //     ],
-    //   },
-    // ],
+    [utils.asGridCoord(0, 13)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "Home",
+            x: utils.withGrid(22),
+            y: utils.withGrid(17),
+            direction: "left",
+          },
+          /**
+           * Music
+           */
+          //       {
+          //         type: "playMusic",
+          //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //         loop: true,
+          //       },
+        ],
+      },
+    ],
   };
 
   const sisterCutScenes = {};
@@ -3509,24 +3415,24 @@ function getConfigObjectsForLaundry(character) {
 
 function getCutsceneSpacesForLaundry(character) {
   const shared = {
-    // [utils.asGridCoord(5, 8)]: [
-    //   {
-    //     events: [
-    //       {
-    //         type: "changeMap",
-    //         map: "Home",
-    //         x: utils.withGrid(18),
-    //         y: utils.withGrid(23),
-    //         direction: "right",
-    //       },
-    //       {
-    //         type: "playMusic",
-    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-    //         loop: true,
-    //       },
-    //     ],
-    //   },
-    // ],
+    [utils.asGridCoord(5, 8)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "Home",
+            x: utils.withGrid(18),
+            y: utils.withGrid(23),
+            direction: "right",
+          },
+          //       {
+          //         type: "playMusic",
+          //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //         loop: true,
+          //       },
+        ],
+      },
+    ],
   };
 
   const sisterCutScenes = {};
@@ -3578,24 +3484,24 @@ function getConfigObjectsForMaster(character) {
 
 function getCutsceneSpacesForMaster(character) {
   const shared = {
-    // [utils.asGridCoord(7, 3)]: [
-    //   {
-    //     events: [
-    //       {
-    //         type: "changeMap",
-    //         map: "Home",
-    //         x: utils.withGrid(20),
-    //         y: utils.withGrid(25),
-    //         direction: "up",
-    //       },
-    //       {
-    //         type: "playMusic",
-    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-    //         loop: true,
-    //       },
-    //     ],
-    //   },
-    // ],
+    [utils.asGridCoord(7, 3)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "Home",
+            x: utils.withGrid(20),
+            y: utils.withGrid(25),
+            direction: "up",
+          },
+          //       {
+          //         type: "playMusic",
+          //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //         loop: true,
+          //       },
+        ],
+      },
+    ],
   };
 
   const sisterCutScenes = {};
@@ -3647,24 +3553,24 @@ function getConfigObjectsForBathroom(character) {
 
 function getCutsceneSpacesForBathroom(character) {
   const shared = {
-    // [utils.asGridCoord(0, 8)]: [
-    //   {
-    //     events: [
-    //       {
-    //         type: "changeMap",
-    //         map: "Home",
-    //         x: utils.withGrid(22),
-    //         y: utils.withGrid(23),
-    //         direction: "left",
-    //       },
-    //       {
-    //         type: "playMusic",
-    //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-    //         loop: true,
-    //       },
-    //     ],
-    //   },
-    // ],
+    [utils.asGridCoord(0, 8)]: [
+      {
+        events: [
+          {
+            type: "changeMap",
+            map: "Home",
+            x: utils.withGrid(22),
+            y: utils.withGrid(23),
+            direction: "left",
+          },
+          //       {
+          //         type: "playMusic",
+          //         src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //         loop: true,
+          //       },
+        ],
+      },
+    ],
   };
 
   const sisterCutScenes = {};

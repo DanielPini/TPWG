@@ -6,6 +6,8 @@ class EndGameMessage {
   }
 
   createElement() {
+    const currentTime = new Date.now();
+    const code = currentTime.splice(currentTime.length - 8);
     this.element = document.createElement("div");
     this.element.classList.add("WelcomeMessage");
     this.element.innerHTML = `
@@ -16,7 +18,8 @@ class EndGameMessage {
           As thanks, please enjoy this discount ticket to the opera.
         </p>
         <div class="EndGameMessage_ticket">
-          <img src="./images/opera_ticket.png" alt="Opera Discount Ticket" style="max-width:200px;"/>
+          <img src="./images/TPWG_premiere" alt="Opera Discount Ticket" style="max-width:200px;"/>
+          <p>Discount code: FA_TPWGGAME <br/>Number: ${code}</p>
           <br/>
           <button class="EndGameMessage_print">Print Ticket</button>
         </div>

@@ -10,7 +10,7 @@
 
 .TitleScreen_logo {
   display: block;
-  margin: 5px auto;
+  margin: 20px auto;
   width: 96px;
   image-rendering: pixelated;
 }

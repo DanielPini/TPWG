@@ -104,12 +104,6 @@ class MediationQuestRunner {
       this.questArrow.hide();
       this.questArrow = null;
     }
-    console.log(
-      "Current map:",
-      this.map.id,
-      "Arrow target map:",
-      step.arrowTarget?.map
-    );
     if (
       step.arrowTarget &&
       (!step.arrowTarget.map || step.arrowTarget.map === this.map.id)
@@ -334,7 +328,6 @@ class MediationQuestRunner {
   //   this.clearLegTimer();
   //   this.clearStepTimer();
   //   if (this.questArrow) this.questArrow.hide();
-  //   console.log("Movement disabled");
   //   const hero = this.map.gameObjects.hero;
   //   if (hero && typeof hero.playFailAnimation === "function") {
   //     hero.playFailAnimation();
@@ -344,7 +337,6 @@ class MediationQuestRunner {
   //     const totalDuration = frames * frameDuration;
 
   //     setTimeout(() => {
-  //       console.log("Movement reenabled");
   //       new TextMessage({
   //         text: "You failed the quest!",
   //         onComplete: () => {
@@ -405,7 +397,6 @@ class MediationQuestRunner {
     this.clearLegTimer();
     this.clearStepTimer();
     if (this.questArrow) this.questArrow.hide();
-    console.log("Movement disabled");
     const hero = this.map.gameObjects.hero;
     if (hero && typeof hero.playFailAnimation === "function") {
       hero.playFailAnimation();
@@ -415,7 +406,6 @@ class MediationQuestRunner {
       const totalDuration = frames * frameDuration;
 
       setTimeout(() => {
-        console.log("Movement reenabled");
         new TextMessage({
           text: "You failed the quest!",
           onComplete: () => {

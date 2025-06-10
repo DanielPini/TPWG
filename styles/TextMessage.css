@@ -1,12 +1,17 @@
+* {
+  box-sizing: border-box;
+}
 .TextMessage {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 36px;
+  left: 50px;
+  right: 50px;
+  bottom: 2px;
+  height: 42px;
   padding: 8px;
+  line-height: 1.5;
   background: var(--menu-background);
-  border-top: 1px solid var(--menu-border-color);
+  border: 1px solid var(--menu-border-color);
+  border-radius: 3px;
   color: var(--menu-font-color);
 }
 .TextMessage_p {
@@ -36,12 +41,19 @@
 }
 .TextMessage_nameplate {
   position: absolute;
-  left: 0;
-  bottom: 36px;
+  left: -10px;
+  bottom: 34px;
   height: 17px;
   line-height: 1.5;
   font-size: 6px;
   padding: 4px;
   background: var(--menu-background);
   border: 1px solid var(--menu-border-color);
+  border-radius: 3px;
+}
+
+.TextMessage_button img.active {
+  filter: brightness(0.6);
+  transform: scale(0.8);
+  transition: all 0.1s;
 }

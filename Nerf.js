@@ -14,20 +14,7 @@ class Nerf extends GameObject {
     this.storyFlag = config.storyFlag;
     this.talking = [
       {
-        required: [this.storyFlag],
         events: [
-          {
-            type: "textMessage",
-            text: "You already picked up this Nerf bullet.",
-          },
-        ],
-      },
-      {
-        events: [
-          {
-            type: "textMessage",
-            text: "You found a stray Nerf bullet!",
-          },
           {
             type: "takeItem",
             item: this,

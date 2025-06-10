@@ -19,20 +19,7 @@ class NerfPile extends GameObject {
     this.storyFlag = config.storyFlag;
     this.talking = [
       {
-        required: [this.storyFlag],
         events: [
-          {
-            type: "textMessage",
-            text: "You already picked up this Nerf bullet.",
-          },
-        ],
-      },
-      {
-        events: [
-          {
-            type: "textMessage",
-            text: "You found a pile of Nerf bullets!",
-          },
           {
             type: "takeItem",
             item: this,

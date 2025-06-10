@@ -10,9 +10,11 @@ class QuestTimer {
     this.startTime = null;
     this.elapsedBeforePause = 0;
     this.duration = 0;
+    this.milestoneTimeouts = [];
   }
 
   start(questId, duration, milestones = []) {
+    this.stop();
     this.questId = questId;
     this.duration = duration;
     this.startTime = Date.now();
@@ -30,6 +32,13 @@ class QuestTimer {
       const remaining = Math.max(0, this.duration - elapsed);
       const seconds = Math.ceil(remaining / 1000);
       this.element.textContent = `Time left: ${seconds}s`;
+      this.element.style.padding =
+        this.element.textContent === "" ? "" : "4px 8px";
+      this.element.style.border =
+        this.element.textContent === ""
+          ? ""
+          : "1px solid var(--menu-border-color)";
+      console.log(this.element.style.padding);
 
       // Check milestones
       this.milestones.forEach((milestone) => {
@@ -86,12 +95,21 @@ class QuestTimer {
   }
 
   stop() {
-    clearInterval(this.interval);
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+    // Clear any milestone timeouts if you ever add them
+    if (this.milestoneTimeouts) {
+      this.milestoneTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+      this.milestoneTimeouts = [];
+    }
     this.element.style.display = "none";
     this.questId = null;
     this.startTime = null;
     this.elapsedBeforePause = 0;
     this.duration = 0;
+    this.milestones = [];
   }
 
   createElement() {

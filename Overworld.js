@@ -180,7 +180,6 @@ class Overworld {
         hero.direction = "up";
       }
       this.map.isPaused = false; // Ensure game loop is running
-      console.log(this.map.isPaused);
 
       const runner = new MediationQuestRunner({
         quest,
@@ -201,55 +200,61 @@ class Overworld {
     });
   }
 
-  startChopFruitQuest(quest) {
-    const sceneTransition = new SceneTransition();
-    const originalMapId = this.progress.mapId;
-    const hero = this.map.gameObjects.hero;
-    const originalHeroState = hero
-      ? { x: hero.x, y: hero.y, direction: hero.direction }
-      : null;
+  startChopFruitQuest(quest, afterReturnCutscene) {
+    return new Promise((resolve) => {
+      const sceneTransition = new SceneTransition();
+      const originalMapId = this.progress.mapId;
+      const hero = this.map.gameObjects.hero;
+      const originalHeroState = hero
+        ? { x: hero.x, y: hero.y, direction: hero.direction }
+        : null;
 
-    sceneTransition.init(document.querySelector(".game-container"), () => {
-      this.startMap("ChopRoom", "sister");
-      this.inChopFruitRoom = true;
-      const chopRoom = new ChopFruitRoom({
-        quest,
-        onComplete: () => {
-          this.map.isPaused = false;
-          this.questManager.completeQuest("chopFruit");
-          // Transition back to the original map
-          const returnTransition = new SceneTransition();
-          returnTransition.init(
-            document.querySelector(".game-container"),
-            () => {
-              this.startMap(
-                originalMapId,
-                window.playerState.character,
-                originalHeroState
-              );
-              setTimeout(() => {
-                returnTransition.fadeOut();
-                this.inChopFruitRoom = false;
-                this.questManager.startQuest("mediationQuest");
-              }, 0);
-              // requestAnimationFrame(() => {
-              //   returnTransition.fadeOut();
-              // });
-            }
-          );
-        },
+      sceneTransition.init(document.querySelector(".game-container"), () => {
+        this.startMap("ChopRoom", "sister");
+        this.inChopFruitRoom = true;
+        const chopRoom = new ChopFruitRoom({
+          quest,
+          onComplete: (roomInstance) => {
+            this.map.isPaused = false;
+            this.questManager.completeQuest("chopFruit");
+            // Transition back to the original map
+            const returnTransition = new SceneTransition();
+            returnTransition.init(
+              document.querySelector(".game-container"),
+              async () => {
+                this.startMap(
+                  originalMapId,
+                  window.playerState.character,
+                  originalHeroState
+                );
+                setTimeout(async () => {
+                  returnTransition.fadeOut();
+                  if (
+                    roomInstance &&
+                    typeof roomInstance.cleanup === "function"
+                  ) {
+                    roomInstance.cleanup();
+                  }
+                  this.inChopFruitRoom = false;
+                  if (afterReturnCutscene) {
+                    await afterReturnCutscene();
+                  }
+                  resolve();
+                  // this.questManager.startQuest("mediationQuest");
+                }, 0);
+              }
+            );
+          },
+        });
+        chopRoom.start(document.querySelector(".game-container"));
+        this.map.handleMusicEvent({
+          src: "./audio/JieJie_balcony-audio.mp3",
+          loop: true,
+        });
+        setTimeout(() => {
+          sceneTransition.fadeOut();
+        }, 0);
       });
-      chopRoom.start(document.querySelector(".game-container"));
-      this.map.handleMusicEvent({
-        src: "./audio/JieJie_balcony-audio.mp3",
-        loop: true,
-      });
-      setTimeout(() => {
-        sceneTransition.fadeOut();
-      }, 0);
-      // requestAnimationFrame(() => {
-      //   sceneTransition.fadeOut();
-      // });
     });
   }
 
@@ -295,6 +300,7 @@ class Overworld {
       !playerState.storyFlags.SISTER_INTRO_CUTSCENE
     ) {
       playerState.storyFlags.SISTER_INTRO_CUTSCENE = true; // Prevent repeat
+
       this.map
         .startCutscene([
           { type: "chop", who: "hero", direction: "right", time: 2200 },
@@ -422,6 +428,79 @@ class Overworld {
           { type: "chop", who: "hero", direction: "right", time: 2200 },
         ])
         .then(() => {
+          return this.startChopFruitQuest(window.Quests.chopFruit, () => {
+            return this.map.startCutscene([
+              { type: "chop", who: "hero", direction: "right", time: 2200 },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "Even though he's a little pain, he's still my brother.",
+              },
+              { type: "chop", who: "hero", direction: "right", time: 700 },
+              {
+                type: "stand",
+                who: "hero",
+                direction: "down",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "Hey, Didi!!!",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "...",
+              },
+              {
+                type: "stand",
+                who: "hero",
+                direction: "left",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "OI!",
+              },
+              {
+                type: "textMessage",
+                who: "Didi",
+                text: "Yeah?",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "Your fruito is on the bench. Don't forget!",
+              },
+              {
+                type: "textMessage",
+                who: "Didi",
+                text: "Thanks, Jiejie!",
+              },
+              {
+                type: "stand",
+                who: "hero",
+                direction: "down",
+              },
+              {
+                type: "stand",
+                who: "hero",
+                direction: "right",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "Ah. He may be my brother, but he's still a little pain.",
+              },
+              {
+                type: "textMessage",
+                who: "Jiejie",
+                text: "I'm going to go play some piano. Take a break from being the big sister.",
+              },
+            ]);
+          });
+        })
+        .then(() => {
           this.questManager.startQuest("mediationQuest");
         });
     }
@@ -483,13 +562,6 @@ class Overworld {
     //Create a new Progress tracker
     this.progress = new Progress();
 
-    /**
-     * For Dev purposes
-     */
-    // this.startMap("Home", window.playerState.character);
-    // this.startChopFruitQuest(window.Quests.chopFruit);
-    // return;
-
     // Show the title screen
     this.titleScreen = new TitleScreen({
       progress: this.progress,
@@ -509,35 +581,55 @@ class Overworld {
     }
 
     //Load the HUD
-    // this.hud = new Hud();
-    // this.hud.init(container);
-    //Start the first map
-    this.startMap(this.progress.mapId, window.playerState.character);
+    this.hud = new Hud();
+    this.hud.init(container);
 
-    //Create controls
-    this.bindActionInput();
-    this.bindHeroPositionCheck();
-
-    this.directionInput = new DirectionInput();
-    this.directionInput.init();
-
+    // === FIX: Show WelcomeMessage BEFORE starting the map/game loop ===
     if (!playerState.storyFlags.SEEN_INTRO) {
       new WelcomeMessage({
-        map: this.map, // Pass the map instance
+        map: null, // Don't pass the map, or pass null to avoid pausing
         onComplete: () => {
-          playerState.storyFlags.SEEN_INTRO = true;
+          // playerState.storyFlags.SEEN_INTRO = true;
+          // Start the map and game loop
+          this.startMap(this.progress.mapId, window.playerState.character);
+          this.bindActionInput();
+          this.bindHeroPositionCheck();
+          this.directionInput = new DirectionInput();
+          this.directionInput.init();
           this.startGameLoop();
+          if (
+            this.progress.mapId === "Home" &&
+            window.playerState.character === "brother"
+          ) {
+            // Find the intro cutscene events for Home
+            const cutsceneSpaces =
+              window.OverworldMaps["Home"].cutsceneSpaces || {};
+            const introCoord = Object.keys(cutsceneSpaces).find((key) =>
+              cutsceneSpaces[key].some(
+                (e) =>
+                  e.triggerOnLoad &&
+                  (!e.disqualify || !e.disqualify.includes("SEEN_INTRO"))
+              )
+            );
+            if (introCoord) {
+              // Play the intro cutscene
+              const events = cutsceneSpaces[introCoord][0].events;
+              this.map.startCutscene(events);
+            }
+          }
         },
       }).init();
     } else {
+      //Start the first map
+      this.startMap(this.progress.mapId, window.playerState.character);
+      //Create controls
+      this.bindActionInput();
+      this.bindHeroPositionCheck();
+      this.directionInput = new DirectionInput();
+      this.directionInput.init();
       //Kick off the game!
       this.startGameLoop();
     }
-    // this.map.startCutscene([
-    //   // { type: "battle", enemyId: "beth" }
-    //   // { type: "changeMap", map: "DemoRoom"}
-    //   { type: "textMessage", text: "This is the very first message!" },
-    // ]);
   }
 }
 

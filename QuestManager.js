@@ -114,6 +114,15 @@ class QuestManager {
         this.startQuest(nextQuestId);
       }
     }
+    if (this.timers && this.timers[questId]) {
+      clearTimeout(this.timers[questId]);
+      delete this.timers[questId];
+    }
+    if (window.questTimer) {
+      window.questTimer.stop();
+    }
+    delete this.activeQuests[questId];
+    this.completedQuests.add(questId);
   }
 
   failQuest(questId) {

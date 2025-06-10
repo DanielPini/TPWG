@@ -82,7 +82,7 @@ const QUESTS = {
         text: "Errr and three quarters",
       },
       {
-        at: 0 * 1000,
+        at: 1,
         who: "Jiejie",
         text: "San!",
       },
@@ -124,6 +124,7 @@ const QUESTS = {
           !window.PLATE_NAMES.includes(item) &&
           !window.CHOPSTICK_NAMES.includes(item)
       );
+      utils.emitEvent("PlayerStateUpdated");
       playerState.pickedUpQuestObjects =
         playerState.pickedUpQuestObjects.filter(
           (item) =>
@@ -419,46 +420,22 @@ const QUESTS = {
     successConditions: [
       {
         type: "nerfsCollected",
-        byType: "Nerf",
-        count: 2,
+        count: 25,
       },
     ],
     onComplete(overworld) {
+      new TextMessage({
+        text: "* Quest complete: Pick up the nerfs left lying around the house *",
+      }).init();
       new TextMessage({
         who: "Didi",
         text: "Wow! That was a lot. I'd better treat myself to a video game! But Ba-ba wanted to see me first. ** Sigh **",
       }).init();
       playerState.storyFlags["NERFS_COLLECTED"] = true;
       playerState.inventory = playerState.inventory.filter(
-        (item) =>
-          ![
-            "Nerf1",
-            "Nerf2",
-            "Nerf3",
-            "Nerf4",
-            "Nerf5",
-            "Nerf6",
-            "Nerf7",
-            "Nerf8",
-            "Nerf9",
-            "Nerf10",
-            "Nerf11",
-            "Nerf12",
-            "Nerf13",
-            "Nerf14",
-            "Nerf15",
-            "Nerf16",
-            "Nerf17",
-            "Nerf18",
-            "Nerf19",
-            "Nerf20",
-            "Nerf21",
-            "Nerf22",
-            "Nerf23",
-            "Nerf24",
-            "Nerf25",
-          ].includes(item)
+        (item) => item !== "nerf"
       );
+      utils.emitEvent("PlayerStateUpdated");
       // Optionally, show a message or trigger something with the pile
       const quest = QUESTS["fetchNerfs"];
       if (quest.previousMusic) {
@@ -469,19 +446,19 @@ const QUESTS = {
       }
     },
     onFail(overworld) {
-      new TextMessage({
-        text: "You missed some Nerfs!",
-      }).init();
-      const quest = QUESTS["fetchNerfs"];
-      if (quest.previousMusic) {
-        overworld.map.handleMusicEvent({
-          src: quest.previousMusic,
-          loop: true,
-        });
-      }
+      // new TextMessage({
+      //   text: "You missed some Nerfs!",
+      // }).init();
+      // const quest = QUESTS["fetchNerfs"];
+      // if (quest.previousMusic) {
+      //   overworld.map.handleMusicEvent({
+      //     src: quest.previousMusic,
+      //     loop: true,
+      //   });
+      // }
     },
-    allowRetry: true,
-    despawnOnComplete: true,
+    // allowRetry: true,
+    // despawnOnComplete: true,
     // branches: {
     //   success: "reportToParent",
     //   fail: "apologiseToParent",
@@ -1106,7 +1083,7 @@ const QUESTS = {
               {
                 id: "Mum",
                 type: "Person",
-                x: utils.withGrid(6),
+                x: utils.withGrid(6), // 6, 13, but meeting before the table
                 y: utils.withGrid(13),
                 src: "./images/characters/people/Mum.png",
                 direction: "right",
@@ -1115,7 +1092,7 @@ const QUESTS = {
               {
                 id: "Baba",
                 type: "Person",
-                x: utils.withGrid(12),
+                x: utils.withGrid(12), // 12, 13, but meeting before the table
                 y: utils.withGrid(13),
                 src: "./images/characters/people/Ba-ba.png",
                 direction: "left",
@@ -1124,7 +1101,7 @@ const QUESTS = {
               {
                 id: "Didi",
                 type: "Person",
-                x: utils.withGrid(7),
+                x: utils.withGrid(7), // 7, 15, already in his seat
                 y: utils.withGrid(15),
                 src: "./images/characters/people/Brother.png",
                 talking: [],
@@ -1132,21 +1109,23 @@ const QUESTS = {
               {
                 id: "NPC1",
                 type: "Person",
-                x: utils.withGrid(7),
+                x: utils.withGrid(7), // 7, 11, but meeting before the table
                 y: utils.withGrid(11),
-                src: "./images/characters/people/erio.png",
+                src: "./images/characters/people/Guest1.png",
                 talking: [],
               },
               {
                 id: "NPC2",
                 type: "Person",
-                x: utils.withGrid(11),
+                x: utils.withGrid(11), // 11, 11 but meeting before the table.
                 y: utils.withGrid(11),
-                src: "./images/characters/people/hero.png",
+                src: "./images/characters/people/Guest2.png",
                 talking: [],
               },
             ],
             cutscene: [
+              { type: "sit", direction: "down", who: "NPC1" },
+              { type: "sit", direction: "down", who: "NPC2" },
               { type: "sit", direction: "left", who: "Baba" },
               { type: "sit", direction: "right", who: "Mum" },
               { type: "sit", direction: "up", who: "Didi" },
@@ -1169,6 +1148,7 @@ const QUESTS = {
       overworld.startMediationQuest(this);
     },
     onComplete(overworld) {
+      console.log("Quest Complete. EndGameMessage shown");
       overworld.map.handleMusicEvent({
         src: "./audio/JieJie_balcony-audio.mp3",
         loop: true,

@@ -167,7 +167,12 @@ class ChopFruitRoom {
     this.finished = true;
     window.removeEventListener("keydown", this.handleKeyDown);
     window.removeEventListener("keyup", this.handleKeyUp);
-    this.container.remove();
-    this.onComplete && this.onComplete();
+    if (this.onComplete) this.onComplete(this);
+  }
+
+  cleanup() {
+    if (this.container && this.container.parentNode) {
+      this.container.parentNode.removeChild(this.container);
+    }
   }
 }

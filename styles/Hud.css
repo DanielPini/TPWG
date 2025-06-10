@@ -1,7 +1,11 @@
 .Hud {
   position: absolute;
-  left:2px;
-  top:10px;
+  left: 2px;
+  top: 5px;
+  background: var(--menu-background);
+  border: 1px solid var(--menu-border-color);
+  border-radius: 3px;
+  color: var(--menu-font-color);
   image-rendering: pixelated;
 }
 
@@ -11,5 +15,12 @@
 }
 
 .Hud .Combatant_type {
-  display:none;
+  display: none;
+}
+
+.plates-text,
+.nerfs-text,
+.chopsticks-text {
+  font-size: 5px;
+  padding: 4px;
 }

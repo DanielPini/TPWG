@@ -220,7 +220,6 @@ class Person extends GameObject {
       return;
     } else if (this.isChopping) {
       this.sprite.setAnimation("chop-right");
-      console.log("Chopping");
       return;
     } else {
       this.sprite.setAnimation("idle-" + this.direction);

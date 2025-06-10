@@ -25,8 +25,10 @@ class TextMessage {
         this.name ? `<div class="TextMessage_nameplate">${this.name}</div>` : ""
       }
       <p class="TextMessage_p"></p>
-      <button class="TextMessage_button">Next</button>
+      <button class="TextMessage_button"><img src="./images/icons/down-arrow.png" /></button>
     `;
+
+    this.arrowImg = this.element.querySelector(".TextMessage_button img");
 
     //Init the typewriter effect
     this.revealingText = new RevealingText({
@@ -47,17 +49,29 @@ class TextMessage {
   done() {
     // Only warp to done if revealingText exists and isn't done yet
     if (this.revealingText && !this.revealingText.isDone) {
-      this.revealingText.warpToDone();
+      if (this.arrowImg) {
+        this.arrowImg.classList.add("active");
+        setTimeout(() => {
+          if (this.arrowImg) this.arrowImg.classList.remove("active");
+          this.revealingText.warpToDone();
+        }, 150); // 150ms for a quick flash
+      }
       return;
     }
-    const questTimer = window.overworld?.questTimer;
-    if (questTimer && typeof questTimer.resume === "function") {
-      questTimer.resume();
+    if (this.arrowImg) {
+      this.arrowImg.classList.add("active");
+      setTimeout(() => {
+        if (this.arrowImg) this.arrowImg.classList.remove("active");
+        const questTimer = window.overworld?.questTimer;
+        if (questTimer && typeof questTimer.resume === "function") {
+          questTimer.resume();
+        }
+        this.element.remove();
+        this.actionListener?.unbind();
+        if (this.autoCloseTimeout) clearTimeout(this.autoCloseTimeout);
+        if (this.onComplete) this.onComplete();
+      }, 150); // 150ms for a quick flash
     }
-    this.element.remove();
-    this.actionListener?.unbind();
-    if (this.autoCloseTimeout) clearTimeout(this.autoCloseTimeout);
-    if (this.onComplete) this.onComplete();
   }
 
   init(container) {

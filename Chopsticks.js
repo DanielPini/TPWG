@@ -21,10 +21,6 @@ class Chopsticks extends GameObject {
       {
         events: [
           {
-            type: "textMessage",
-            text: "These are the chopsticks for the table",
-          },
-          {
             type: "takeItem",
             item: this,
             itemName: "CHOPSTICKS",

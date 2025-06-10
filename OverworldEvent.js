@@ -99,7 +99,10 @@ class OverworldEvent {
       startTime: performance.now(),
       duration: this.event.time || 400,
     };
-    //Set up a handler to complete when correct person is done sitting, then resolve the event
+
+    utils.emitEvent("PlayerStateUpdated");
+
+    //Set up a handler to complete when correct person is done picking up, then resolve the event
     const completeHandler = (e) => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener("PersonPickUpComplete", completeHandler);
@@ -152,6 +155,7 @@ class OverworldEvent {
   completeQuest(resolve) {
     const questId = this.event.questId;
     this.map.overworld.questManager.completeQuest(questId);
+    utils.emitEvent("PlayerStateUpdated");
     resolve();
   }
 
@@ -385,6 +389,30 @@ class OverworldEvent {
     resolve();
   }
 
+  yesNoPrompt(resolve) {
+    new YesNoPrompt({
+      text: this.event.text,
+      onComplete: (result) => {
+        const eventsToRun = result ? this.event.onYes : this.event.onNo;
+        if (eventsToRun && eventsToRun.length) {
+          this.map.startCutscene(eventsToRun).then(resolve);
+        } else {
+          resolve();
+        }
+      },
+    }).init(document.querySelector(".game-container"));
+  }
+
+  changeCharacter(resolve) {
+    window.playerState.changeCharacter();
+    // Reload the map to update the hero sprite and state
+    this.map.overworld.startMap(
+      this.map.overworld.progress.mapId,
+      window.playerState.character
+    );
+    resolve();
+  }
+
   condition(resolve) {
     const conditions = this.event.conditions || [];
     const allMet = conditions.every((cond) => {
@@ -392,21 +420,8 @@ class OverworldEvent {
         return cond.items.every((item) => playerState.inventory.includes(item));
       }
       if (cond.type === "nerfsCollected") {
-        // If your inventory stores ids, but you want to count by type:
-        // You need a way to map ids to types. If you store objects, just check type.
         let count = 0;
-        if (cond.byType) {
-          // Inventory stores ids, so look up the type for each id
-          count = playerState.inventory.filter((id) => {
-            const obj = this.map.gameObjects[id];
-            return obj && obj.type === cond.byType;
-          }).length;
-        } else if (cond.byId) {
-          // Count specific ids
-          count = playerState.inventory.filter((id) =>
-            cond.byId.includes(id)
-          ).length;
-        }
+        count = playerState.inventory.filter((name) => name === "nerf").length;
         return count >= (cond.count || 0);
       }
       if (cond.type === "tableSet") {
@@ -424,6 +439,7 @@ class OverworldEvent {
           chopstickCount >= (cond.chopsticks || 0)
         );
       }
+      utils.emitEvent("PlayerStateUpdated");
       if (cond.type === "storyFlag") {
         return !!playerState.storyFlags[cond.flag];
       }
@@ -459,7 +475,7 @@ class OverworldEvent {
         resolve();
       },
     });
-    message.init(document.querySelector(".game-conatiner"));
+    message.init(document.querySelector(".game-container"));
   }
 
   takeItem(resolve) {
@@ -472,10 +488,15 @@ class OverworldEvent {
     } else if (item.type === "Chopsticks") {
       // Add two "plate entries for each plate picked up"
       window.playerState.inventory.push("chopstick", "chopstick");
+    } else if (item.type === "Nerf" || item.type === "NerfPile") {
+      // Add two "plate entries for each plate picked up"
+      window.playerState.inventory.push("nerf");
     } else {
-      window.playerState.inventory.push({ id: item.id, type: item.type });
+      window.playerState.inventory.push({
+        id: this.event.item.id,
+        type: this.event.item.type,
+      });
     }
-    console.log("Item:", this.event.item, "Inventory:", playerState.inventory);
     window.playerState.pickedUpQuestObjects.push(item.id);
 
     const message = new TextMessage({
@@ -485,6 +506,7 @@ class OverworldEvent {
         resolve();
       },
     });
+    utils.emitEvent("PlayerStateUpdated");
     message.init(document.querySelector(".game-container"));
   }
 

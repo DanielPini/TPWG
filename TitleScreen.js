@@ -47,17 +47,17 @@ class TitleScreen {
           resolve();
         },
       },
-      safeFile
-        ? {
-            label: "Continue Game",
-            description: "Resume your adventure",
-            handler: () => {
-              this.close();
-              this.startMusic(musicSrc);
-              resolve(safeFile);
-            },
-          }
-        : null,
+      // safeFile
+      //   ? {
+      //       label: "Continue Game",
+      //       description: "Resume your adventure",
+      //       handler: () => {
+      //         this.close();
+      //         this.startMusic(musicSrc);
+      //         resolve(safeFile);
+      //       },
+      //     }
+      //   : null,
     ].filter((v) => v);
   }
 

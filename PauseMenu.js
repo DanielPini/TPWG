@@ -16,21 +16,21 @@ class PauseMenu {
             this.keyboardMenu.setOptions(this.getSoundOptions());
           },
         },
-        {
-          label: "Change Player",
-          description: "Change the player character",
-          handler: () => {
-            this.keyboardMenu.setOptions(this.getCharacterOptions());
-          },
-        },
-        {
-          label: "Save",
-          description: "Save your progress",
-          handler: () => {
-            this.progress.save();
-            this.close();
-          },
-        },
+        // {
+        //   label: "Change Player",
+        //   description: "Change the player character",
+        //   handler: () => {
+        //     this.keyboardMenu.setOptions(this.getCharacterOptions());
+        //   },
+        // },
+        // {
+        //   label: "Save",
+        //   description: "Save your progress",
+        //   handler: () => {
+        //     this.progress.save();
+        //     this.close();
+        //   },
+        // },
         {
           label: "Close",
           description: "Close the pause menu",
@@ -41,42 +41,42 @@ class PauseMenu {
       ];
     }
 
-    //Case 2: Show the options for just one pizza (by id)
-    const unequipped = Object.keys(playerState.pizzas)
-      .filter((id) => {
-        return playerState.lineup.indexOf(id) === -1;
-      })
-      .map((id) => {
-        const { pizzaId } = playerState.pizzas[id];
-        const base = Pizzas[pizzaId];
-        return {
-          label: `Swap for ${base.name}`,
-          description: base.description,
-          handler: () => {
-            playerState.swapLineup(pageKey, id);
-            this.keyboardMenu.setOptions(this.getOptions("root"));
-          },
-        };
-      });
+    // //Case 2: Show the options for just one pizza (by id)
+    // const unequipped = Object.keys(playerState.pizzas)
+    //   .filter((id) => {
+    //     return playerState.lineup.indexOf(id) === -1;
+    //   })
+    //   .map((id) => {
+    //     const { pizzaId } = playerState.pizzas[id];
+    //     const base = Pizzas[pizzaId];
+    //     return {
+    //       label: `Swap for ${base.name}`,
+    //       description: base.description,
+    //       handler: () => {
+    //         playerState.swapLineup(pageKey, id);
+    //         this.keyboardMenu.setOptions(this.getOptions("root"));
+    //       },
+    //     };
+    //   });
 
-    return [
-      ...unequipped,
-      {
-        label: "Move to front",
-        description: "Move this pizza to the front of the list",
-        handler: () => {
-          playerState.moveToFront(pageKey);
-          this.keyboardMenu.setOptions(this.getOptions("root"));
-        },
-      },
-      {
-        label: "Back",
-        description: "Back to root menu",
-        handler: () => {
-          this.keyboardMenu.setOptions(this.getOptions("root"));
-        },
-      },
-    ];
+    // return [
+    //   ...unequipped,
+    //   {
+    //     label: "Move to front",
+    //     description: "Move this pizza to the front of the list",
+    //     handler: () => {
+    //       playerState.moveToFront(pageKey);
+    //       this.keyboardMenu.setOptions(this.getOptions("root"));
+    //     },
+    //   },
+    //   {
+    //     label: "Back",
+    //     description: "Back to root menu",
+    //     handler: () => {
+    //       this.keyboardMenu.setOptions(this.getOptions("root"));
+    //     },
+    //   },
+    // ];
   }
 
   getSoundOptions() {

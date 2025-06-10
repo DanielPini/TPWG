@@ -14,15 +14,7 @@ class Plates extends GameObject {
 
     this.talking = [
       {
-        required: [this.storyFlag],
-        events: [{ type: "textMessage", text: "You have already used this." }],
-      },
-      {
         events: [
-          {
-            type: "textMessage",
-            text: "These are the plates for the table",
-          },
           {
             type: "takeItem",
             item: this,

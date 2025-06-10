@@ -19,18 +19,10 @@ class PlayerState {
       { actionId: "item_recoverHp", instanceId: "item3" },
     ];
     this.inventory = [];
-    this.developer = false;
     this.storyFlags = {
       SEEN_INTRO: false,
     };
-    this.sisterUnlocked = false;
-
-    if (!this.developer === true) {
-      return;
-    } else {
-      this.sisterUnlocked = true;
-      this.storyFlags = { SEEN_INTRO: true };
-    }
+    this.sisterUnlocked = true;
   }
 
   addPizza(pizzaId) {
