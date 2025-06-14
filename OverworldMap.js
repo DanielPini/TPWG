@@ -490,6 +490,8 @@ window.OverworldMaps = {
             // Sofa
             "5, 6",
             "7, 6",
+            // Plant
+            "0, 6",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -692,6 +694,8 @@ window.OverworldMaps = {
             // Sofa
             "5, 6",
             "7, 6",
+            // Plant
+            "0, 6",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -2055,28 +2059,21 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "left", time: 1200 },
         { type: "walk", direction: "left" },
         { type: "walk", direction: "left" },
-        { type: "walk", direction: "left" },
-        { type: "walk", direction: "left" },
         { type: "stand", direction: "left", time: 1200 },
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
         { type: "walk", direction: "down" },
-        { type: "walk", direction: "down" },
         { type: "stand", direction: "left", time: 1200 },
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
         { type: "walk", direction: "right" },
         { type: "walk", direction: "right" },
-        { type: "walk", direction: "right" },
-        { type: "walk", direction: "right" },
         { type: "stand", direction: "left", time: 1200 },
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
-        { type: "walk", direction: "left" },
-        { type: "walk", direction: "left" },
         { type: "walk", direction: "left" },
         { type: "walk", direction: "left" },
         { type: "stand", direction: "left", time: 1200 },
@@ -2084,13 +2081,10 @@ function getConfigObjectsForHome(character) {
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
         { type: "walk", direction: "up" },
-        { type: "walk", direction: "up" },
         { type: "stand", direction: "left", time: 1200 },
         { type: "stand", direction: "right", time: 800 },
         { type: "stand", direction: "up", time: 1500 },
         { type: "stand", direction: "left", time: 1200 },
-        { type: "walk", direction: "right" },
-        { type: "walk", direction: "right" },
         { type: "walk", direction: "right" },
         { type: "walk", direction: "right" },
       ],
@@ -2162,19 +2156,33 @@ function getConfigObjectsForHome(character) {
               type: "textMessage",
               text: "This was our playground...",
             },
+            { type: "walk", direction: "down", who: "hero" },
             { type: "textMessage", text: "Inside, the walls don't move." },
             {
+              who: "Didi",
               type: "textMessage",
               text: "So I turn them into something else.",
             },
-            { type: "textMessage", text: "A fort. A maze. A game." },
-            { type: "textMessage", text: "Until someone calls my name," },
-            { type: "textMessage", text: "and the spell breaks." },
+            {
+              who: "Didi",
+              type: "textMessage",
+              text: "A fort. A maze. A game.",
+            },
+            {
+              who: "Didi",
+              type: "textMessage",
+              text: "Until someone calls my name,",
+            },
+            { who: "Didi", type: "textMessage", text: "and the spell breaks." },
             { type: "stand", direction: "down", who: "Baba" },
+            {
+              type: "textMessage",
+              text: "Didi!",
+            },
             { type: "stand", direction: "up", who: "hero" },
             {
               type: "textMessage",
-              text: "Didi, stop daydreaming and get cleaning!",
+              text: "Stop daydreaming and get cleaning!",
             },
             {
               type: "textMessage",
@@ -2195,23 +2203,28 @@ function getConfigObjectsForHome(character) {
                 { type: "addStoryFlag", flag: "NERFS_COLLECTED" },
                 {
                   type: "textMessage",
-                  text: "Well done! Don't forget to clean up when you play in the future",
+                  text: "Well done!",
                   who: "Baba",
                 },
                 {
                   type: "textMessage",
-                  text: "...and I think you're mature enough now to see things from other people's perspective.",
+                  text: "Now the house is spotless!",
+                  who: "Baba",
+                },
+                {
+                  type: "textMessage",
+                  text: "I think you've proven you can think of other people.",
                   who: "Baba",
                 },
                 { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
                 { type: "unlockSister" },
                 {
                   type: "textMessage",
-                  text: "* Jiejie is now playable through the Pause Menu (press Escape) *",
+                  text: "* Jiejie is now playable *",
                 },
                 {
                   type: "textMessage",
-                  text: "* Continue with Jiejie's character to experience the second half of the game *",
+                  text: "* Continue with Jiejie's character to experience the second part of the game *",
                 },
               ],
               onFail: [
@@ -2230,7 +2243,7 @@ function getConfigObjectsForHome(character) {
           events: [
             {
               type: "textMessage",
-              text: "Didi, you did a good job, but do you ever think about how tough it is for your sister?",
+              text: "Didi, you did a good job, but do you know how tough it is for your sister?",
               who: "Baba",
             },
             {
@@ -2243,8 +2256,6 @@ function getConfigObjectsForHome(character) {
               text: "Play as Jiejie?",
               onYes: [
                 { type: "addStoryFlag", flag: "ASKED_TO_PLAY_AS_SISTER" },
-                { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
-                { type: "unlockSister" },
                 {
                   type: "textMessage",
                   text: "You are now playing as Jiejie! Experience her perspective.",
@@ -2266,7 +2277,6 @@ function getConfigObjectsForHome(character) {
         },
         {
           required: ["ASKED_TO_PLAY_AS_SISTER"],
-          disqualify: ["SISTER_UNLOCKED"],
           events: [
             {
               type: "textMessage",
@@ -2277,14 +2287,13 @@ function getConfigObjectsForHome(character) {
               type: "yesNoPrompt",
               text: "Play as Jiejie?",
               onYes: [
-                { type: "addStoryFlag", flag: "SISTER_UNLOCKED" },
-                { type: "unlockSister" },
                 {
                   type: "textMessage",
                   text: "You are now playing as Jiejie! Experience her perspective.",
                   who: "Baba",
                 },
                 // Optionally trigger the character switch or cutscene here
+                { type: "changeCharacter", character: "sister" },
               ],
               onNo: [
                 {
@@ -2504,7 +2513,7 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Mum",
             type: "textMessage",
-            text: "We really only have 1 hour, which means 60 minutes, whih is really 45 minutes if we think about plating...",
+            text: "We really only have 1 hour, which means 60 minutes, which is really 45 minutes if we think about plating...",
             faceHero: "Mum",
           },
           {
@@ -2565,19 +2574,39 @@ function getCutsceneSpacesForHome(character) {
           {
             who: "Mum",
             type: "textMessage",
-            text: "But if he doesn't do it right, I'll have to redo it anyway and that's so much time wasted and we only have 3 minutes!",
+            text: "But if he doesn't do it right, I'll have to redo it -- and we only have 3 minutes!",
             faceHero: "Mum",
           },
           {
             who: "Didi",
             type: "textMessage",
-            text: "How did we get from 30 minutes to 3 minutes?",
+            text: "... 3 minutes down from 112? How?? ( • ᴖ • ｡)",
           },
           { type: "stand", direction: "up", who: "Jiejie" },
           {
             who: "Jiejie",
             type: "textMessage",
             text: "Mum, you concentrate on getting the house ready, I'll make sure Didi gets it done",
+          },
+          {
+            who: "Mum",
+            type: "stand",
+            direction: "right",
+          },
+          {
+            who: "Mum",
+            type: "stand",
+            direction: "down",
+          },
+          {
+            who: "Mum",
+            type: "stand",
+            direction: "right",
+          },
+          {
+            who: "Mum",
+            type: "textMessage",
+            text: "I'll count on you this time. But let me know if he breaks anything!! (¬_¬\")",
           },
           { type: "walk", who: "Mum", direction: "down" },
           { type: "walk", who: "Mum", direction: "down" },
@@ -2600,6 +2629,11 @@ function getCutsceneSpacesForHome(character) {
           { type: "stand", direction: "down", who: "hero" },
           {
             who: "Jiejie",
+            type: "stand",
+            direction: "up",
+          },
+          {
+            who: "Jiejie",
             type: "textMessage",
             text: "Don't just stand there! Hurry up!",
           },
@@ -2609,9 +2643,9 @@ function getCutsceneSpacesForHome(character) {
             text: "...",
           },
           {
-            who: "Didi",
-            type: "textMessage",
-            text: "...",
+            who: "hero",
+            type: "stand",
+            direction: "left",
           },
           {
             who: "Didi",
@@ -2619,18 +2653,37 @@ function getCutsceneSpacesForHome(character) {
             text: "...",
           },
           {
+            who: "hero",
+            type: "stand",
+            direction: "down",
+          },
+          {
+            who: "Didi",
+            type: "textMessage",
+            text: "...",
+          },
+          {
+            who: "hero",
+            type: "stand",
+            direction: "left",
+          },
+          {
+            who: "Didi",
             type: "textMessage",
             text: "San is a very scary number!",
           },
           {
+            who: "Didi",
             type: "textMessage",
             text: "You never want them to count to three",
           },
           {
+            who: "Didi",
             type: "textMessage",
             text: "Slam the door or get low scores",
           },
           {
+            who: "Didi",
             type: "textMessage",
             text: "You'll be dead as 四 (the number 4)",
           },
@@ -2693,7 +2746,18 @@ function getConfigObjectsForHomeMediation(character) {
       x: utils.withGrid(18),
       y: utils.withGrid(17),
       src: "./images/characters/people/Brother.png",
-      behaviorLoop: [],
+      behaviorLoop: [
+        { type: "stand", direction: "down", who: "Didi", time: 200 },
+        { type: "stand", direction: "left", who: "Didi", time: 2000 },
+        { type: "stand", direction: "down", who: "Didi", time: 700 },
+        { type: "walk", direction: "right", who: "Didi" },
+        { type: "walk", direction: "right", who: "Didi" },
+        { type: "stand", direction: "down", who: "Didi", time: 700 },
+        { type: "stand", direction: "up", who: "Didi", time: 300 },
+        { type: "stand", direction: "right", who: "Didi", time: 1000 },
+        { type: "walk", direction: "left", who: "Didi" },
+        { type: "walk", direction: "left", who: "Didi" },
+      ],
       talking: [
         {
           required: [],

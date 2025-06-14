@@ -35,28 +35,28 @@ const QUESTS = {
         type: "Chopsticks",
         map: "Home",
         x: utils.withGrid(21),
-        y: utils.withGrid(10),
+        y: utils.withGrid(11),
       },
       {
         id: "Chopstick B",
         type: "Chopsticks",
         map: "Home",
         x: utils.withGrid(21),
-        y: utils.withGrid(11),
+        y: utils.withGrid(12),
       },
       {
         id: "Chopstick C",
         type: "Chopsticks",
         map: "Home",
         x: utils.withGrid(21),
-        y: utils.withGrid(12),
+        y: utils.withGrid(13),
       },
       {
         id: "Chopstick D",
         type: "Chopsticks",
         map: "Home",
         x: utils.withGrid(21),
-        y: utils.withGrid(13),
+        y: utils.withGrid(14),
       },
     ],
     timer: 60 * 1000,
@@ -110,6 +110,15 @@ const QUESTS = {
         });
       }
       playerState.storyFlags["PLATES_COLLECTED"] = true;
+
+      // Persist table placements
+      const table = overworld.map.gameObjects["table"];
+      if (table) {
+        // Save a deep copy of placements to playerState
+        playerState.tablePlacements = JSON.parse(
+          JSON.stringify(table.placements)
+        );
+      }
     },
     onFail(overworld) {
       overworld.map.isPaused = false;
@@ -192,10 +201,6 @@ const QUESTS = {
     allowRetry: true,
     retryDelay: 2000,
     despawnOnComplete: true,
-    // branches: {
-    //   success: "helpBaba",
-    //   fail: "apologiseToMom",
-    // },
   },
   // helpBaba: {
   //   successConditions: [
@@ -216,7 +221,7 @@ const QUESTS = {
         type: "NerfPile",
         map: "Home",
         x: utils.withGrid(0),
-        y: utils.withGrid(6),
+        y: utils.withGrid(7),
       },
       {
         // Below the piano stool
@@ -348,7 +353,7 @@ const QUESTS = {
         id: "Nerf17",
         type: "Nerf",
         map: "Bathroom",
-        x: utils.withGrid(1),
+        x: utils.withGrid(4),
         y: utils.withGrid(4),
         frame: 2,
       },
@@ -356,8 +361,8 @@ const QUESTS = {
         id: "Nerf18",
         type: "NerfPile",
         map: "Bathroom",
-        x: utils.withGrid(4),
-        y: utils.withGrid(7),
+        x: utils.withGrid(5),
+        y: utils.withGrid(8),
         frame: 3,
       },
       {
@@ -373,7 +378,7 @@ const QUESTS = {
         type: "Nerf",
         map: "Master",
         x: utils.withGrid(0),
-        y: utils.withGrid(5),
+        y: utils.withGrid(6),
         frame: 1,
       },
       {
@@ -413,7 +418,7 @@ const QUESTS = {
         type: "NerfPile",
         map: "Laundry",
         x: utils.withGrid(0),
-        y: utils.withGrid(5),
+        y: utils.withGrid(6),
         frame: 3,
       },
     ],
@@ -445,24 +450,7 @@ const QUESTS = {
         });
       }
     },
-    onFail(overworld) {
-      // new TextMessage({
-      //   text: "You missed some Nerfs!",
-      // }).init();
-      // const quest = QUESTS["fetchNerfs"];
-      // if (quest.previousMusic) {
-      //   overworld.map.handleMusicEvent({
-      //     src: quest.previousMusic,
-      //     loop: true,
-      //   });
-      // }
-    },
-    // allowRetry: true,
-    // despawnOnComplete: true,
-    // branches: {
-    //   success: "reportToParent",
-    //   fail: "apologiseToParent",
-    // },
+    onFail(overworld) {},
   },
   chopFruit: {
     id: "chopFruit",
@@ -631,6 +619,11 @@ const QUESTS = {
             cutscene: [
               {
                 type: "stand",
+                direction: "up",
+                who: "hero",
+              },
+              {
+                type: "stand",
                 direction: "right",
                 who: "Baba",
               },
@@ -732,6 +725,26 @@ const QUESTS = {
                     text: "Let's work together and it will get done in no time.",
                     name: "Baba",
                   },
+                  {
+                    type: "stand",
+                    direction: "down",
+                    who: "Mum",
+                  },
+                  {
+                    type: "textMessage",
+                    text: "* Chuckle *",
+                    who: "Both",
+                  },
+                  {
+                    type: "textMessage",
+                    text: "Thanks for that Jiejie",
+                    who: "Mum",
+                  },
+                  {
+                    type: "textMessage",
+                    text: "Yeah. I think we let the stress get to us.",
+                    who: "Baba",
+                  },
                 ],
               },
               {
@@ -745,26 +758,6 @@ const QUESTS = {
               },
             ],
             afterChoiceCutscene: [
-              {
-                type: "stand",
-                direction: "down",
-                who: "Mum",
-              },
-              {
-                type: "textMessage",
-                text: "* Chuckle *",
-                who: "Both",
-              },
-              {
-                type: "textMessage",
-                text: "Thanks for that Jiejie",
-                who: "Mum",
-              },
-              {
-                type: "textMessage",
-                text: "Yeah. I think we let the stress get to us.",
-                who: "Baba",
-              },
               {
                 type: "stand",
                 direction: "down",
@@ -1066,13 +1059,6 @@ const QUESTS = {
                 direction: "up",
               },
             ],
-            // npcPositions: {
-            //   Didi: {
-            //     x: utils.withGrid(7),
-            //     y: utils.withGrid(15),
-            //     direction: "up",
-            //   },
-            // },
             arrowTarget: {
               x: utils.withGrid(9),
               y: utils.withGrid(11),

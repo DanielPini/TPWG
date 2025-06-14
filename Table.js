@@ -39,7 +39,15 @@ CHOPSTICKS_IMG.src = "./images/objects/Chopsticks.png";
 class Table extends GameObject {
   constructor(config) {
     super(config);
-    this.placements = config.placements || []; // [{type: "Plate", x, y}, ...]
+    if (
+      playerState.storyFlags["PLATES_COLLECTED"] &&
+      playerState.tablePlacements &&
+      Array.isArray(playerState.tablePlacements)
+    ) {
+      this.placements = JSON.parse(JSON.stringify(playerState.tablePlacements));
+    } else {
+      this.placements = config.placements || []; // [{type: "Plate", x, y}, ...]
+    }
     this.sprite = null;
   }
 
