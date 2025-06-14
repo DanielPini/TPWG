@@ -770,6 +770,9 @@ window.OverworldMaps = {
             // Bath
             "2, 4",
             "1, 4",
+            // Plants
+            "3, 4",
+            "5, 4",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -865,6 +868,8 @@ window.OverworldMaps = {
             // Chest
             "4, 5",
             "5, 5",
+            // Plant
+            "6, 5",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1016,6 +1021,14 @@ window.OverworldMaps = {
             "2, 4",
             // Washing machine
             "4, 4",
+            // Plant
+            "4, 9",
+            // Sink
+            "0, 9",
+            "0, 8",
+            // Washing baskets
+            "0, 5",
+            "0, 6",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1105,6 +1118,8 @@ window.OverworldMaps = {
             "5, 9",
             "5, 10",
             "5, 11",
+            // Plants
+            "0, 5",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1179,6 +1194,9 @@ window.OverworldMaps = {
             // Bath
             "2, 4",
             "1, 4",
+            // Plants
+            "3, 4",
+            "5, 4",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1274,6 +1292,8 @@ window.OverworldMaps = {
             // Chest
             "4, 5",
             "5, 5",
+            // Plant
+            "6, 5",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1334,6 +1354,14 @@ window.OverworldMaps = {
             "2, 4",
             // Washing machine
             "4, 4",
+            // Plant
+            "4, 9",
+            // Sink
+            "0, 9",
+            "0, 8",
+            // Washing baskets
+            "0, 5",
+            "0, 6",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
@@ -1423,6 +1451,8 @@ window.OverworldMaps = {
             "5, 9",
             "5, 10",
             "5, 11",
+            // Plants
+            "0, 5",
           ].forEach((coord) => {
             let [x, y] = coord.split(",");
             walls[utils.asGridCoord(x, y)] = true;
