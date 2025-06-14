@@ -507,8 +507,8 @@ window.OverworldMaps = {
         id: "HomeMediation",
         lowerSrc:
           character === "sister"
-            ? "./images/maps/sister/Living.png"
-            : "./images/maps/brother/Living.png",
+            ? "./images/maps/sister/LivingMediation.png"
+            : "./images/maps/brother/LivingMediation.png",
 
         upperSrc: "",
 
@@ -1517,11 +1517,11 @@ function getCutsceneSpacesForKidMediation(character) {
             y: utils.withGrid(17),
             direction: "left",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -1586,11 +1586,11 @@ function getCutsceneSpacesForLaundryMediation(character) {
             y: utils.withGrid(23),
             direction: "right",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -1655,11 +1655,11 @@ function getCutsceneSpacesForMasterMediation(character) {
             y: utils.withGrid(25),
             direction: "up",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -1724,11 +1724,11 @@ function getCutsceneSpacesForBathroomMediation(character) {
             y: utils.withGrid(23),
             direction: "left",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -2080,7 +2080,7 @@ function getConfigObjectsForHome(character) {
     Baba: {
       type: "Person",
       x: utils.withGrid(5),
-      y: utils.withGrid(12),
+      y: utils.withGrid(10),
       src: "./images/characters/people/Ba-ba.png",
       behaviorLoop: [
         { type: "stand", direction: "left", time: 1200 },
@@ -2187,7 +2187,11 @@ function getConfigObjectsForHome(character) {
               text: "This was our playground...",
             },
             { type: "walk", direction: "down", who: "hero" },
-            { type: "textMessage", text: "Inside, the walls don't move." },
+            {
+              type: "textMessage",
+              text: "Inside, the walls don't move.",
+              who: "Didi",
+            },
             {
               who: "Didi",
               type: "textMessage",
@@ -2206,11 +2210,13 @@ function getConfigObjectsForHome(character) {
             { who: "Didi", type: "textMessage", text: "and the spell breaks." },
             { type: "stand", direction: "down", who: "Baba" },
             {
+              who: "Baba",
               type: "textMessage",
               text: "Didi!",
             },
             { type: "stand", direction: "up", who: "hero" },
             {
+              who: "Baba",
               type: "textMessage",
               text: "Stop daydreaming and get cleaning!",
             },
@@ -2230,6 +2236,7 @@ function getConfigObjectsForHome(character) {
               type: "condition",
               conditions: [{ type: "nerfsCollected", count: 25 }],
               onSuccess: [
+                { type: "completeQuest", questId: "fetchNerfs" },
                 { type: "addStoryFlag", flag: "NERFS_COLLECTED" },
                 {
                   type: "textMessage",
@@ -2450,11 +2457,11 @@ function getCutsceneSpacesForHome(character) {
             y: utils.withGrid(13),
             direction: "right",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Timestables_kid-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Timestables_kid-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -2468,11 +2475,11 @@ function getCutsceneSpacesForHome(character) {
             y: utils.withGrid(8),
             direction: "right",
           },
-          {
-            type: "playMusic",
-            src: "./audio/We_Song_entryway-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/We_Song_entryway-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -2486,11 +2493,11 @@ function getCutsceneSpacesForHome(character) {
             y: utils.withGrid(3),
             direction: "down",
           },
-          {
-            type: "playMusic",
-            src: "./audio/JieJie_balcony-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/JieJie_balcony-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -2504,11 +2511,11 @@ function getCutsceneSpacesForHome(character) {
             y: utils.withGrid(8),
             direction: "left",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],
@@ -3378,11 +3385,11 @@ function getCutsceneSpacesForHomeMediation(character) {
             y: utils.withGrid(8),
             direction: "left",
           },
-          {
-            type: "playMusic",
-            src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
-            loop: true,
-          },
+          // {
+          //   type: "playMusic",
+          //   src: "./audio/Lao_Gan_Ma_kitchen-audio.mp3",
+          //   loop: true,
+          // },
         ],
       },
     ],

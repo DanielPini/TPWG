@@ -304,12 +304,16 @@ class Overworld {
       this.map
         .startCutscene([
           { type: "chop", who: "hero", direction: "right", time: 2200 },
+          { type: "stand", direction: "left", who: "Mum" },
           {
             type: "textMessage",
             who: "Mum",
             text: "Here, try this Didi!",
           },
+          { type: "stand", direction: "down", who: "hero" },
+          { type: "stand", direction: "down", who: "Mum" },
           { type: "chop", who: "hero", direction: "right", time: 2200 },
+          { type: "stand", direction: "down", who: "hero" },
           {
             type: "textMessage",
             who: "Jiejie",
@@ -356,6 +360,11 @@ class Overworld {
             direction: "up",
           },
           {
+            type: "stand",
+            who: "Mum",
+            direction: "right",
+          },
+          {
             type: "textMessage",
             who: "Mum",
             text: "Because he is a growing boy.",
@@ -363,6 +372,11 @@ class Overworld {
           {
             type: "stand",
             who: "hero",
+            direction: "left",
+          },
+          {
+            type: "stand",
+            who: "Mum",
             direction: "down",
           },
           {
@@ -376,6 +390,11 @@ class Overworld {
             text: "I'm getting pun (fat) the older I get",
           },
           {
+            type: "stand",
+            who: "Mum",
+            direction: "right",
+          },
+          {
             type: "textMessage",
             who: "Jiejie",
             text: "...",
@@ -383,7 +402,7 @@ class Overworld {
           {
             type: "stand",
             who: "hero",
-            direction: "right",
+            direction: "up",
           },
           { type: "chop", who: "hero", direction: "right", time: 2200 },
           {
@@ -402,6 +421,16 @@ class Overworld {
             direction: "down",
           },
           {
+            type: "stand",
+            who: "Mum",
+            direction: "right",
+          },
+          {
+            type: "stand",
+            who: "Mum",
+            direction: "up",
+          },
+          {
             type: "walk",
             who: "Mum",
             direction: "down",
@@ -418,10 +447,12 @@ class Overworld {
           },
           { type: "chop", who: "hero", direction: "right", time: 3000 },
           {
+            who: "Jiejie",
             type: "textMessage",
-            text: "I build my own walkls, brick by brick, made of expectations.",
+            text: "I build my own walls, brick by brick, made of expectations.",
           },
           {
+            who: "Jiejie",
             type: "textMessage",
             text: "Each step I take, each breath I draw, until I can give an answer.",
           },
@@ -431,6 +462,11 @@ class Overworld {
           return this.startChopFruitQuest(window.Quests.chopFruit, () => {
             return this.map.startCutscene([
               { type: "chop", who: "hero", direction: "right", time: 2200 },
+              {
+                type: "stand",
+                who: "hero",
+                direction: "down",
+              },
               {
                 type: "textMessage",
                 who: "Jiejie",

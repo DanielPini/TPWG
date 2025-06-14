@@ -236,10 +236,21 @@ class MediationQuestRunner {
 
       if (step.choices && step.choices.length) {
         await this.waitForChoice(step);
-        // If you want to run a cutscene after choices, add:
         if (step.afterChoiceCutscene && step.afterChoiceCutscene.length) {
           await this.map.startCutscene(step.afterChoiceCutscene);
         }
+        // --- Always advance after afterChoiceCutscene ---
+        if (stepIndex + 1 < leg.steps.length) {
+          this.gotoStep(stepIndex + 1);
+        } else {
+          this.clearLegTimer();
+          if (this.currentLeg + 1 < this.quest.legs.length) {
+            this.gotoLeg(this.currentLeg + 1);
+          } else {
+            this.complete();
+          }
+        }
+        return; // Prevent running waitForPlayerAt again
       }
 
       // Advance to next step or leg

@@ -203,9 +203,7 @@ class QuestManager {
                 (entry) => entry.type === cond.byType
               ).length;
             } else if (cond.byId) {
-              count = playerState.inventory.filter((entry) =>
-                cond.byId.includes(entry.id)
-              ).length;
+              count = ((entry) => cond.byId.includes(entry.id)).length;
             }
             return count >= (cond.count || 0);
           } else if (

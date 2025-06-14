@@ -418,7 +418,7 @@ const QUESTS = {
         type: "NerfPile",
         map: "Laundry",
         x: utils.withGrid(0),
-        y: utils.withGrid(6),
+        y: utils.withGrid(7),
         frame: 3,
       },
     ],
@@ -472,19 +472,19 @@ const QUESTS = {
       },
       {
         name: "Jiejie",
-        text: "* Mum is so beautiful, if she thinks she’s fat, what does that mean for me? *",
+        text: "Mum is so beautiful, if she thinks she’s fat, what does that mean for me? Do I even have a chance?",
       },
       {
         name: "Jiejie",
-        text: "* Hmm, let's make this a delicious Fruito for Didi. *",
+        text: "Hmm, let's make this a delicious Fruito for Didi. Maybe mum will see how hard I'm working, too.",
       },
       {
         name: "Jiejie",
-        text: "* Have I been too harsh with him? But mum wanted everything to be done quickly... *",
+        text: "Have I been too harsh with him? But mum wanted everything to be done quickly...",
       },
       {
         name: "Jiejie",
-        text: "* No... Mum was really stressed... We need to lay down some rules in this house. But the look on his face... *",
+        text: "No... Mum was really stressed... We need to lay down some rules in this house. But the look on his face...",
       },
     ],
     onStart(overworld) {
@@ -542,11 +542,6 @@ const QUESTS = {
                 type: "walk",
                 direction: "down",
                 who: "hero",
-              },
-              {
-                type: "playMusic",
-                src: "./audio/Barangaroo_Baby_dining-audio.mp3",
-                loop: true,
               },
               {
                 type: "textMessage",
@@ -617,11 +612,6 @@ const QUESTS = {
               map: "MasterMediation",
             },
             cutscene: [
-              {
-                type: "stand",
-                direction: "up",
-                who: "hero",
-              },
               {
                 type: "stand",
                 direction: "right",
@@ -708,7 +698,19 @@ const QUESTS = {
                     name: "Mum",
                   },
                   {
-                    text: "I know how hard you work. We all see it. Thank you for what you do.",
+                    text: "You really think I don't see all you do?",
+                    name: "Baba",
+                  },
+                  {
+                    text: "Of course I see it. You do so much for this family.",
+                    name: "Baba",
+                  },
+                  {
+                    text: "I know how hard you work. We all do and we're grateful.",
+                    name: "Baba",
+                  },
+                  {
+                    text: "I'd just like you to know you don't have to do it all alone..",
                     name: "Baba",
                   },
                 ],
@@ -726,11 +728,6 @@ const QUESTS = {
                     name: "Baba",
                   },
                   {
-                    type: "stand",
-                    direction: "down",
-                    who: "Mum",
-                  },
-                  {
                     type: "textMessage",
                     text: "* Chuckle *",
                     who: "Both",
@@ -742,7 +739,7 @@ const QUESTS = {
                   },
                   {
                     type: "textMessage",
-                    text: "Yeah. I think we let the stress get to us.",
+                    text: "I think we let the stress get to us (ᵕ—ᴗ—)",
                     who: "Baba",
                   },
                 ],
@@ -752,8 +749,13 @@ const QUESTS = {
                 responses: [
                   { text: "Aaaaaah!", name: "Mum" },
                   { text: "Aaaaaah!", name: "Baba" },
+                  { text: "Aaaaaah!", name: "Jiejie" },
                   { text: "Aaaaaah!", name: "Mum" },
                   { text: "Aaaaaah!", name: "Baba" },
+                  { text: "Hmm!", name: "Mum" },
+                  { text: "Maybe we can get back to work now?", name: "Mum" },
+                  { text: "...", name: "Jiejie" },
+                  { text: "...", name: "Baba" },
                 ],
               },
             ],
@@ -783,25 +785,68 @@ const QUESTS = {
               map: "MasterMediation",
             },
             location: { x: utils.withGrid(7), y: utils.withGrid(3) },
-            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3", // <-- Use correct path
+            music: "./audio/Barangaroo_Baby_dining-audio.mp3", // <-- Use correct path
             cutscene: [
+              {
+                type: "playMusic",
+                src: "./audio/Barangaroo_Baby_dining-audio.mp3",
+                loop: true,
+              },
               {
                 type: "textMessage",
                 text: "Whew, that's one thing sorted!",
                 who: "Jiejie",
               },
               {
-                type: "textMessage",
-                text: "* The smell of acrid smoke billows from the kitchen *",
+                type: "stand",
+                direction: "right",
               },
               {
                 type: "textMessage",
-                text: "What now?!",
+                text: "* The acrid smoke billows from the kitchen *",
+              },
+              {
+                type: "stand",
+                direction: "down",
+              },
+              {
+                type: "textMessage",
+                text: "What now?! (III╥_╥⁠)",
+                who: "Jiejie",
+              },
+              {
+                type: "walk",
+                direction: "right",
+                who: "Jiejie",
+              },
+              {
+                type: "walk",
+                direction: "right",
+                who: "Jiejie",
+              },
+              {
+                type: "walk",
+                direction: "right",
+                who: "Jiejie",
+              },
+              {
+                type: "stand",
+                direction: "up",
+                who: "Jiejie",
+              },
+              {
+                type: "stand",
+                direction: "left",
                 who: "Jiejie",
               },
               {
                 type: "textMessage",
                 text: "Mum and Baba are occupied...",
+                who: "Jiejie",
+              },
+              {
+                type: "stand",
+                direction: "down",
                 who: "Jiejie",
               },
               {
@@ -838,7 +883,15 @@ const QUESTS = {
                     name: "Oven",
                   },
                   {
+                    text: "Hissssssssssss",
+                    name: "Oven",
+                  },
+                  {
                     text: "* Smoke dissipates *",
+                  },
+                  {
+                    text: "...",
+                    name: "Jiejie",
                   },
                   {
                     text: "Well, I'm not going to question that...",
@@ -851,6 +904,10 @@ const QUESTS = {
                 responses: [
                   {
                     text: "I heard that!",
+                    name: "Mum",
+                  },
+                  {
+                    text: "Don't waste food!",
                     name: "Mum",
                   },
                   {
@@ -867,6 +924,10 @@ const QUESTS = {
                   },
                   {
                     text: "And go check on Didi. He needs you to be a good influence, especially when we have guests coming over.",
+                    name: "Mum",
+                  },
+                  {
+                    text: "* Sigh *",
                     name: "Jiejie",
                   },
                 ],
@@ -898,7 +959,6 @@ const QUESTS = {
               map: "KidMediation",
             },
             location: { x: utils.withGrid(3), y: utils.withGrid(6) },
-            music: "./audio/Sounds_of_my_house_at_seven_living-audio.mp3",
             spawnNPCs: [
               {
                 id: "Didi",
@@ -917,6 +977,11 @@ const QUESTS = {
                 who: "Didi",
               },
               {
+                type: "stand",
+                direction: "left",
+                who: "Didi",
+              },
+              {
                 type: "textMessage",
                 text: "Didi, is that you?",
                 who: "Jiejie",
@@ -925,6 +990,11 @@ const QUESTS = {
                 type: "walk",
                 direction: "right",
                 who: "hero",
+              },
+              {
+                type: "stand",
+                direction: "down",
+                who: "Didi",
               },
               {
                 type: "stand",
@@ -950,6 +1020,13 @@ const QUESTS = {
                     name: "Jiejie",
                   },
                   { text: "Thanks, Jiejie...", name: "Didi" },
+                  { text: "Sometimes I can't wait to grow up.", name: "Didi" },
+                  {
+                    text: "But lately, it seems like it's just more and more work...",
+                    name: "Didi",
+                  },
+                  { text: "I'm glad I can come to you, though.", name: "Didi" },
+                  { text: "Thanks (◡ ‿ ◡ .)", name: "Didi" },
                 ],
               },
               {
@@ -957,7 +1034,7 @@ const QUESTS = {
                 responses: [
                   { text: "You need to be strong, Didi.", name: "Jiejie" },
                   {
-                    text: "Mum and Baba need us to be on our best behaviour, especially with the guests coming over.",
+                    text: "Mum and Baba need us, especially with the guests coming over.",
                     name: "Jiejie",
                   },
                   { text: "I guess...", name: "Didi" },
@@ -1110,6 +1187,11 @@ const QUESTS = {
               },
             ],
             cutscene: [
+              {
+                type: "playMusic",
+                src: "./audio/JieJie_balcony-audio.mp3",
+                loop: true,
+              },
               { type: "sit", direction: "down", who: "NPC1" },
               { type: "sit", direction: "down", who: "NPC2" },
               { type: "sit", direction: "left", who: "Baba" },
@@ -1123,8 +1205,32 @@ const QUESTS = {
               },
             ],
             dialogue: [
-              { text: "Dinner is ready! Let's all sit together.", name: "Mum" },
+              {
+                text: "Dinner is ready, So let's all sit together and eat!",
+                name: "Mum",
+              },
               { text: "Thank you for joining us.", name: "Baba" },
+              {
+                text: "It has been a big day, but hopefully you learned a bit about each other's perspectives.",
+                name: "Baba",
+              },
+              { text: "And ideally had some fun along the way.", name: "Mum" },
+              {
+                text: "This game is just a taste of what is in store with Christine Pan's The Parts We Give, the song cycle.",
+                name: "Mystery Guest 1",
+              },
+              {
+                text: "At the end of the game is a special reward which will give you an exclusive discount to go see the song cycle.",
+                name: "Mystery Guest 2",
+              },
+              {
+                text: "If you liked the game, please share it with your friends and family, and let us know what you thought.",
+                name: "Mystery Guest 2",
+              },
+              {
+                text: "This has truly been a labour of love, so we're thrilled to be able to share it with you!",
+                name: "Mystery Guest 1",
+              },
             ],
           },
         ],
