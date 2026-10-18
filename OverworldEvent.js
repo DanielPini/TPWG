@@ -354,17 +354,6 @@ class OverworldEvent {
     });
   }
 
-  battle(resolve) {
-    const battle = new Battle({
-      enemy: Enemies[this.event.enemyId],
-      arena: this.event.arena || null,
-      onComplete: (didWin) => {
-        resolve(didWin ? "WON_BATTLE" : "LOST_BATTLE");
-      },
-    });
-    battle.init(document.querySelector(".game-container"));
-  }
-
   playMusic(resolve) {
     this.map.handleMusicEvent(this.event);
     resolve();
@@ -453,16 +442,6 @@ class OverworldEvent {
     } else {
       resolve();
     }
-  }
-
-  craftingMenu(resolve) {
-    const menu = new CraftingMenu({
-      pizzas: this.event.pizzas,
-      onComplete: () => {
-        resolve();
-      },
-    });
-    menu.init(document.querySelector(".game-container"));
   }
 
   giveItem(resolve) {

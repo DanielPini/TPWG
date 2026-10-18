@@ -58,10 +58,3 @@
   font-size: 10px;
   margin: 0;
 }
-
-/* Battle specific */
-.Battle .KeyboardMenu {
-  right: 0;
-  bottom: 0;
-  width: 140px;
-}

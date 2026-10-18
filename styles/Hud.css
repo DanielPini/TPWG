@@ -9,15 +9,6 @@
   image-rendering: pixelated;
 }
 
-.Hud .Combatant {
-  position: relative;
-  margin-bottom: 10px;
-}
-
-.Hud .Combatant_type {
-  display: none;
-}
-
 .plates-text,
 .nerfs-text,
 .chopsticks-text {

@@ -4,7 +4,9 @@ class Progress {
     this.startingHeroX = 0;
     this.startingHeroY = 0;
     this.startingHeroDirection = "down";
-    this.saveFileKey = "PizzaLegends_SaveFile1";
+    this.saveFileKey = "TPWG_SaveFile1";
+    // Saves made before the rename are still loaded from the old key
+    this.legacySaveFileKey = "PizzaLegends_SaveFile1";
   }
 
   // Method to retrieve music based on the current map
@@ -30,9 +32,6 @@ class Progress {
         startingHeroY: this.startingHeroY,
         startingHeroDirection: this.startingHeroDirection,
         playerState: {
-          pizzas: playerState.pizzas,
-          lineup: playerState.lineup,
-          items: playerState.items,
           storyFlags: playerState.storyFlags,
         },
       })
@@ -44,7 +43,9 @@ class Progress {
       return null;
     }
 
-    const file = window.localStorage.getItem(this.saveFileKey);
+    const file =
+      window.localStorage.getItem(this.saveFileKey) ||
+      window.localStorage.getItem(this.legacySaveFileKey);
     if (!file) return null;
     try {
       const parsed = JSON.parse(file);

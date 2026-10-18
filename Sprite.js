@@ -2,20 +2,13 @@ class Sprite {
   constructor(config) {
     //Set up the image
     this.image = new Image();
-    this.image.src = config.src;
+    if (config.src) this.image.src = config.src;
     this.image.onload = () => {
       this.isLoaded = true;
     };
 
-    //Shadow
-    this.shadow = new Image();
+    //Shadow, drawn as an ellipse under the feet in draw()
     this.useShadow = config.useShadow !== undefined ? config.useShadow : true;
-    if (this.useShadow) {
-      this.shadow.src = "./images/characters/shadow.png";
-    }
-    this.shadow.onload = () => {
-      this.isShadowLoaded = true;
-    };
 
     //Configure Animation & Initial State
     this.animations = config.animations || {
@@ -133,8 +126,12 @@ class Sprite {
       translateY = 0;
     }
 
-    this.isShadowLoaded &&
-      ctx.drawImage(this.shadow, x + 2 + translateX, y + 4 + translateY);
+    if (this.useShadow) {
+      ctx.fillStyle = "rgba(34, 34, 34, 0.3)";
+      ctx.beginPath();
+      ctx.ellipse(x + 18 + translateX, y + 33 + translateY, 6, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     const [frameX, frameY] = this.frame;
 
@@ -178,7 +175,6 @@ class Sprite {
   remove() {
     this.isRemoved = true;
     this.image = null;
-    this.shadow = null;
     this.gameObject = null;
   }
 }
